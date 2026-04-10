@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andino Labs · AI Transformation Proposal</title>
+<style>
+  :root{
+    --bg:#070c18;--bg2:#0d1425;--bg3:#111c35;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+    --text:#f1f5f9;--mid:#94a3b8;--muted:#475569;
+    --tec:#06b6d4;
+    --cul:#a78bfa;
+    --con:#f59e0b;
+    --neb:#10b981;
+    --blue:#3b82f6;
+    --red:#ef4444;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6;}
+
+  .nav{position:sticky;top:0;z-index:100;background:rgba(7,12,24,.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:8px;overflow-x:auto;}
+  .nav-brand{font-size:13px;font-weight:700;color:var(--neb);letter-spacing:.06em;text-transform:uppercase;
+    padding:14px 0;margin-right:16px;white-space:nowrap;}
+  .tab-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:14px 14px;font-size:12.5px;
+    font-weight:600;letter-spacing:.04em;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--text);border-bottom-color:var(--blue);}
+
+  .section{display:none;padding:32px 28px 60px;max-width:1180px;margin:0 auto;}
+  .section.active{display:block;}
+
+  .hero{background:linear-gradient(135deg,#070c18 0%,#0a1628 50%,#091a2e 100%);
+    border-bottom:1px solid var(--border);padding:56px 28px 48px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+    width:600px;height:600px;background:radial-gradient(circle,rgba(16,185,129,.08) 0%,transparent 70%);pointer-events:none;}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,.1);
+    border:1px solid rgba(16,185,129,.25);border-radius:100px;padding:5px 14px;font-size:11px;
+    font-weight:700;color:var(--neb);letter-spacing:.07em;text-transform:uppercase;margin-bottom:22px;}
+  .hero-badge::before{content:'';width:6px;height:6px;background:var(--neb);border-radius:50%;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+  .hero-title{font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.15;
+    margin-bottom:18px;background:linear-gradient(135deg,#f1f5f9 30%,#94a3b8);-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-sub{font-size:16px;color:var(--mid);max-width:620px;margin:0 auto 32px;line-height:1.7;}
+  .hero-kpis{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;}
+  .kpi{text-align:center;}
+  .kpi-val{font-size:26px;font-weight:800;color:var(--text);}
+  .kpi-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+  .sec-title{font-size:22px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px;}
+  .sec-sub{font-size:14px;color:var(--mid);margin-bottom:28px;line-height:1.7;}
+  .divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
+
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;}}
+  @media(max-width:580px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+  .track-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;transition:transform .2s,box-shadow .2s;}
+  .track-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.35);}
+  .track-hdr{padding:22px 22px 16px;}
+  .track-icon{font-size:28px;margin-bottom:10px;}
+  .track-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:4px;}
+  .track-name{font-size:19px;font-weight:800;margin-bottom:6px;}
+  .track-desc{font-size:13px;color:var(--mid);line-height:1.6;}
+  .track-body{padding:16px 22px 20px;border-top:1px solid var(--border);}
+  .track-items{list-style:none;}
+  .track-items li{font-size:12.5px;color:var(--mid);padding:5px 0;display:flex;align-items:flex-start;gap:8px;}
+  .track-items li::before{content:'→';color:inherit;opacity:.5;flex-shrink:0;margin-top:1px;}
+  .pill{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+    border-radius:100px;padding:3px 10px;margin-top:12px;}
+
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0;}
+  .flow-box{background:var(--bg2);border:1.5px solid var(--border2);border-radius:10px;
+    padding:12px 16px;text-align:center;min-width:120px;}
+  .flow-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
+  .flow-name{font-size:13px;font-weight:700;}
+  .flow-arrow{color:var(--muted);font-size:18px;}
+
+  .detail-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+  .dc-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .dc-title span{font-size:16px;}
+
+  .step-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .step-list li{font-size:12.5px;color:var(--mid);padding-left:16px;position:relative;line-height:1.55;}
+  .step-list li::before{content:'·';position:absolute;left:4px;color:var(--blue);}
+
+  .spec-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .spec-list li{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--mid);}
+  .stag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+
+  .arch-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);
+    padding:20px;margin:24px 0;}
+  .arch-title{font-size:13px;font-weight:700;margin-bottom:16px;color:var(--mid);}
+  .arch-layers{display:flex;flex-direction:column;gap:8px;}
+  .arch-layer{display:flex;align-items:center;gap:12px;background:var(--bg3);border-radius:8px;padding:10px 14px;}
+  .arch-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+    border-radius:5px;padding:3px 10px;white-space:nowrap;flex-shrink:0;min-width:120px;text-align:center;}
+  .arch-cnt{font-size:12px;color:var(--mid);display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{background:rgba(255,255,255,.06);border-radius:5px;padding:3px 9px;font-size:11.5px;}
+
+  .info-box{border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.6;margin:20px 0;}
+
+  .dlv-box{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(59,130,246,.06));
+    border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:20px;margin:20px 0;}
+  .dlv-box h3{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--neb);}
+  .dlv-box p{font-size:13px;color:var(--mid);margin-bottom:14px;line-height:1.6;}
+  .dlv-items{display:flex;flex-direction:column;gap:6px;}
+  .d-item{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--mid);}
+  .dck{color:var(--neb);font-weight:700;flex-shrink:0;}
+
+  .mat-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:24px 0;}
+  .mat-level{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 14px;
+    text-align:center;position:relative;transition:transform .2s;}
+  .mat-level:hover{transform:translateY(-2px);}
+  .mat-num{font-size:22px;font-weight:900;margin-bottom:4px;}
+  .mat-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+  .mat-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+  .mat-badge{position:absolute;top:-8px;right:-8px;background:var(--neb);color:#000;
+    font-size:9px;font-weight:800;padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em;}
+  @media(max-width:700px){.mat-bar{grid-template-columns:1fr 1fr;}}
+
+  .roi-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;}
+  .roi-metric{display:flex;justify-content:space-between;align-items:center;
+    padding:8px 0;border-bottom:1px solid var(--border);}
+  .roi-metric:last-child{border-bottom:none;}
+  .roi-lbl{font-size:13px;color:var(--mid);}
+  .roi-val{font-size:15px;font-weight:800;color:var(--text);}
+
+  .neb-stack{background:var(--bg2);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);overflow:hidden;}
+  .neb-layer{display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--border);}
+  .neb-layer:last-child{border-bottom:none;}
+  .neb-lbl{min-width:160px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+    padding:4px 10px;border-radius:5px;text-align:center;}
+  .neb-cnt{display:flex;flex-wrap:wrap;gap:6px;}
+  .neb-chip{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:5px;
+    padding:3px 10px;font-size:11.5px;color:var(--neb);}
+
+  .cta-box{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(59,130,246,.08));
+    border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:28px;text-align:center;margin:28px 0;}
+  .cta-box h3{font-size:18px;font-weight:800;margin-bottom:8px;}
+  .cta-box p{color:var(--mid);font-size:14px;margin-bottom:18px;}
+  .cta-btn{display:inline-block;background:var(--neb);color:#000;font-weight:800;font-size:13px;
+    border-radius:8px;padding:10px 24px;text-decoration:none;letter-spacing:.04em;}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .fade-in{animation:fadeIn .35s ease both;}
+
+  .profile-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
+  .profile-role{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+    margin-bottom:6px;padding:3px 10px;border-radius:100px;display:inline-block;}
+  .profile-title{font-size:14px;font-weight:700;margin-bottom:10px;}
+  .profile-list{list-style:none;}
+  .profile-list li{font-size:12px;color:var(--mid);padding:4px 0;display:flex;gap:7px;}
+  .profile-list li::before{content:'→';opacity:.4;flex-shrink:0;}
+
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:28px;}
+  .problem-col{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;}
+  .problem-col.opp{border-color:rgba(16,185,129,.2);}
+  .col-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .col-items{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .col-items li{display:flex;gap:10px;font-size:13px;line-height:1.55;}
+  .col-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+
+  @media(max-width:580px){.problem-grid{grid-template-columns:1fr;} .flow{flex-direction:column;}}
+  code{background:rgba(255,255,255,.06);border-radius:4px;padding:1px 6px;font-size:12px;font-family:monospace;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+  <div class="hero-badge">🌌 Andino Labs · Commercial Proposal</div>
+  <h1 class="hero-title">Transform the way your team<br>builds software with AI</h1>
+  <p class="hero-sub">An integrated AI adoption program for software companies in LATAM — technology, culture, and consulting working together from day one.</p>
+  <div class="hero-kpis">
+    <div class="kpi"><div class="kpi-val">3</div><div class="kpi-lbl">Integrated tracks</div></div>
+    <div class="kpi"><div class="kpi-val">30+</div><div class="kpi-lbl">Devs minimum</div></div>
+    <div class="kpi"><div class="kpi-val">Nébula</div><div class="kpi-lbl">Proprietary platform</div></div>
+    <div class="kpi"><div class="kpi-val">LATAM</div><div class="kpi-lbl">Focus market</div></div>
+    <div class="kpi"><div class="kpi-val">100%</div><div class="kpi-lbl">AI SDLC covered</div></div>
+  </div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<div class="nav">
+  <div class="nav-brand">Andino Labs</div>
+  <button class="tab-btn active" onclick="showTab('overview',this)">📋 Overview</button>
+  <button class="tab-btn" onclick="showTab('tecnico',this)">🔧 Technical Track</button>
+  <button class="tab-btn" onclick="showTab('cultura',this)">🧠 Culture Track</button>
+  <button class="tab-btn" onclick="showTab('consultoria',this)">📊 Consulting Track</button>
+  <button class="tab-btn" onclick="showTab('nebula',this)">🌌 Nébula Platform</button>
+  <button class="tab-btn" onclick="showTab('diagnostico',this)">🎯 Assessment</button>
+  <button class="tab-btn" onclick="showTab('resultados',this)">📈 Results</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     OVERVIEW
+══════════════════════════════════════════ -->
+<div class="section active" id="tab-overview">
+
+  <div class="sec-title">The problem and the opportunity</div>
+  <div class="sec-sub">AI adoption in software teams across LATAM is shallow, uneven, and unstructured. Companies that change this first will build a competitive advantage that others simply can't catch up to.</div>
+
+  <div class="problem-grid">
+    <div class="problem-col">
+      <div class="col-label" style="color:var(--red)">⚡ The current problem</div>
+      <ul class="col-items">
+        <li><div class="col-dot" style="background:var(--red)"></div>Scattered AI use — Copilot here, ChatGPT there — no standard, no strategy</li>
+        <li><div class="col-dot" style="background:var(--red)"></div>Inconsistent prompts that are never shared or improved across the team</li>
+        <li><div class="col-dot" style="background:var(--red)"></div>No infrastructure: every dev uses their personal account, without codebase context</li>
+        <li><div class="col-dot" style="background:var(--red)"></div>Cultural resistance: senior devs who feel AI makes them less valuable</li>
+        <li><div class="col-dot" style="background:var(--red)"></div>No metrics: no way to measure whether AI is actually making an impact</li>
+        <li><div class="col-dot" style="background:var(--red)"></div>Oversized teams doing tasks that AI should already be automating</li>
+      </ul>
+    </div>
+    <div class="problem-col opp">
+      <div class="col-label" style="color:var(--neb)">🚀 The opportunity</div>
+      <ul class="col-items">
+        <li><div class="col-dot" style="background:var(--neb)"></div>Reduce the ticket-to-deploy cycle by 40–50% with agents integrated into CI/CD</li>
+        <li><div class="col-dot" style="background:var(--neb)"></div>Eliminate the QA and documentation bottleneck — 100% automated from day 1</li>
+        <li><div class="col-dot" style="background:var(--neb)"></div>Onboard new developers in less than 1 day — not weeks</li>
+        <li><div class="col-dot" style="background:var(--neb)"></div>The same team delivers 2–3× more features without hiring additional people</li>
+        <li><div class="col-dot" style="background:var(--neb)"></div>Measurable, board-ready ROI model from the very first month</li>
+        <li><div class="col-dot" style="background:var(--neb)"></div>The window for competitive advantage is now — 2025 is the year to pull ahead</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sec-title" style="font-size:18px;">The integrated program</div>
+  <div class="sec-sub">Three tracks running in parallel and reinforcing each other. Not technology alone, not culture alone, not consulting alone — all three together are what drives real, lasting change.</div>
+
+  <div class="grid-3" style="margin-bottom:28px;">
+
+    <div class="track-card fade-in">
+      <div class="track-hdr" style="background:linear-gradient(135deg,rgba(6,182,212,.1),rgba(6,182,212,.04));border-bottom:2px solid var(--tec);">
+        <div class="track-icon">🔧</div>
+        <div class="track-num" style="color:var(--tec)">Track 01</div>
+        <div class="track-name">Technical</div>
+        <div class="track-desc">The infrastructure, tools, and agents that put AI in every team member's hands — integrated into the real workflow, not bolted on as an add-on.</div>
+        <span class="pill" style="background:rgba(6,182,212,.15);color:var(--tec)">🎁 AI Dev Kit · Nébula</span>
+      </div>
+      <div class="track-body">
+        <ul class="track-items">
+          <li style="color:var(--tec)">Installable AI Dev Kit connected to the codebase</li>
+          <li style="color:var(--tec)">Prompt Library — 30+ prompts per role</li>
+          <li style="color:var(--tec)">CI/CD agents: Code Review, Testing, Docs, Security</li>
+          <li style="color:var(--tec)">CLI <code>aix</code> integrated into the git workflow</li>
+          <li style="color:var(--tec)">LLM Gateway + usage observability</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="track-card fade-in" style="animation-delay:.07s">
+      <div class="track-hdr" style="background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(167,139,250,.04));border-bottom:2px solid var(--cul);">
+        <div class="track-icon">🧠</div>
+        <div class="track-num" style="color:var(--cul)">Track 02</div>
+        <div class="track-name">Culture</div>
+        <div class="track-desc">The paradigm shift that turns developers from code writers into AI orchestrators. Without this, the tools get abandoned within weeks.</div>
+        <span class="pill" style="background:rgba(167,139,250,.15);color:var(--cul)">🎁 AI-Native Team</span>
+      </div>
+      <div class="track-body">
+        <ul class="track-items">
+          <li style="color:var(--cul)">Role-specific workshops: Dev, Tech Lead, QA, PM, CTO</li>
+          <li style="color:var(--cul)">AI-DLC rituals: Mob Elaboration, Mob Construction</li>
+          <li style="color:var(--cul)">Identity shift: from "I code" to "I orchestrate AI"</li>
+          <li style="color:var(--cul)">Adoption metrics and change management</li>
+          <li style="color:var(--cul)">Champions program to scale internally</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="track-card fade-in" style="animation-delay:.14s">
+      <div class="track-hdr" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));border-bottom:2px solid var(--con);">
+        <div class="track-icon">📊</div>
+        <div class="track-num" style="color:var(--con)">Track 03</div>
+        <div class="track-name">Consulting</div>
+        <div class="track-desc">A deep evaluation of the current team to identify what to optimize, what to automate, and how to restructure for maximum performance and delivery with AI.</div>
+        <span class="pill" style="background:rgba(245,158,11,.15);color:var(--con)">🎁 Optimization Roadmap</span>
+      </div>
+      <div class="track-body">
+        <ul class="track-items">
+          <li style="color:var(--con)">AI maturity diagnostic of the team</li>
+          <li style="color:var(--con)">Structure, roles and profiles evaluation</li>
+          <li style="color:var(--con)">Process analysis and waste mapping</li>
+          <li style="color:var(--con)">ROI model and efficiency projection</li>
+          <li style="color:var(--con)">Team optimization roadmap</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:18px;">🌌 Powered by Nébula</div>
+  <div class="sec-sub">Andino Labs' proprietary platform that makes all three tracks possible — multi-agent orchestration, multi-LLM routing, integrated across the full AI SDLC. Exclusive. Not available from any other provider.</div>
+
+  <div class="info-box" style="background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(59,130,246,.05));border:1px solid rgba(16,185,129,.2);">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center;">
+      <div><div style="font-size:22px;margin-bottom:6px;">🤖</div><div style="font-size:12px;font-weight:700;margin-bottom:4px;">Multi-Agent</div><div style="font-size:11px;color:var(--muted)">Specialized agents orchestrated to work in parallel</div></div>
+      <div><div style="font-size:22px;margin-bottom:6px;">🔀</div><div style="font-size:12px;font-weight:700;margin-bottom:4px;">Multi-LLM</div><div style="font-size:11px;color:var(--muted)">GPT-4o, Claude, Gemini, open source — the best model per task</div></div>
+      <div><div style="font-size:22px;margin-bottom:6px;">🔗</div><div style="font-size:12px;font-weight:700;margin-bottom:4px;">Full AI SDLC</div><div style="font-size:11px;color:var(--muted)">From Intent to Deployment Unit — one integrated framework</div></div>
+      <div><div style="font-size:22px;margin-bottom:6px;">🔒</div><div style="font-size:12px;font-weight:700;margin-bottom:4px;">Exclusive</div><div style="font-size:11px;color:var(--muted)">Only available through Andino Labs — not a market product</div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:18px;">🎯 Entry point based on your maturity</div>
+  <div class="sec-sub">The program is always a single integrated engagement — but the starting point is determined by your team's AI maturity level. The initial assessment defines the strategy.</div>
+
+  <div class="flow" style="justify-content:center;">
+    <div class="flow-box" style="border-color:var(--red);">
+      <div class="flow-label" style="color:var(--red)">Level 0–1</div>
+      <div class="flow-name" style="font-size:12px;">No AI or personal use</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--tec);">
+      <div class="flow-label" style="color:var(--tec)">Technical Start</div>
+      <div class="flow-name" style="font-size:12px;">Build from scratch</div>
+    </div>
+    <div class="flow-arrow" style="margin:0 20px;color:var(--border2);">|</div>
+    <div class="flow-box" style="border-color:var(--blue);">
+      <div class="flow-label" style="color:var(--blue)">Level 2–3</div>
+      <div class="flow-name" style="font-size:12px;">Partial adoption</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--con);">
+      <div class="flow-label" style="color:var(--con)">Consulting Start</div>
+      <div class="flow-name" style="font-size:12px;">Diagnose + accelerate</div>
+    </div>
+    <div class="flow-arrow" style="margin:0 20px;color:var(--border2);">|</div>
+    <div class="flow-box" style="border-color:var(--neb);">
+      <div class="flow-label" style="color:var(--neb)">Level 4</div>
+      <div class="flow-name" style="font-size:12px;">Advanced AI</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--neb);">
+      <div class="flow-label" style="color:var(--neb)">Nébula Start</div>
+      <div class="flow-name" style="font-size:12px;">Amplify what exists</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TECHNICAL TRACK
+══════════════════════════════════════════ -->
+<div class="section" id="tab-tecnico">
+  <div class="sec-title">🔧 Technical Track — AI Infrastructure for your team</div>
+  <div class="sec-sub">We build and deploy the complete technical infrastructure: from the AI Dev Kit to the CI/CD pipeline with agents. Powered by Andino Labs' Nébula platform.</div>
+
+  <div class="dlv-box" style="border-color:rgba(6,182,212,.3);background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(6,182,212,.03));">
+    <h3 style="color:var(--tec);">🎁 Main deliverable: AI Dev Kit</h3>
+    <p>An installable kit in under 10 minutes on any team machine. Connected to the codebase, integrated into the git flow, and ready to impact productivity from day 1.</p>
+    <div class="dlv-items">
+      <div class="d-item"><span class="dck" style="color:var(--tec)">✓</span> CLI <code>aix</code> with role-based commands integrated into the git workflow</div>
+      <div class="d-item"><span class="dck" style="color:var(--tec)">✓</span> Prompt Library — 30+ curated prompts by role (Dev, QA, Tech Lead, PM)</div>
+      <div class="d-item"><span class="dck" style="color:var(--tec)">✓</span> Context Engine — RAG connected to the team's codebase, docs, and tickets</div>
+      <div class="d-item"><span class="dck" style="color:var(--tec)">✓</span> Code Review, Testing, Docs, and Security agents in CI/CD</div>
+      <div class="d-item"><span class="dck" style="color:var(--tec)">✓</span> LLM Gateway with rate limiting, cost tracking, and model routing</div>
+      <div class="d-item"><span class="dck" style="color:var(--tec)">✓</span> Metrics dashboard: prompt usage, acceptance rates, velocity impact</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div class="detail-card">
+      <div class="dc-title"><span>🏗</span> Weeks 1–2 · Core Infrastructure</div>
+      <ul class="step-list">
+        <li>Set up the <code>ai-framework/</code> monorepo: prompts/, agents/, context/, cli/, docs/</li>
+        <li>Select and configure the LLM Gateway (Azure OpenAI, Anthropic, or self-hosted)</li>
+        <li>Deploy vector DB: pgvector, Chroma, or Pinecone based on existing infrastructure</li>
+        <li>Ingestion pipeline: codebase → intelligent chunking → embeddings → searchable index</li>
+        <li>CI/CD secrets and environment variables configured</li>
+        <li>Define the evaluation contract: what makes a prompt "good"?</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📝</span> Weeks 2–3 · Prompt Library + CLI</div>
+      <ul class="step-list">
+        <li><strong>Mob Elaboration:</strong> 2–3h workshop — AI proposes Intent decomposition, team validates</li>
+        <li>Build 30+ role-based prompts with structure: Role + Context + Instruction + Format + Examples</li>
+        <li>CLI <code>aix</code>: <code>aix review</code>, <code>aix gen-test</code>, <code>aix explain</code>, <code>aix gen-feature</code>, <code>aix gen-docs</code></li>
+        <li>A/B prompt evaluation: manual vs. AI-assisted (time + quality measured)</li>
+        <li>Prompts published as versioned YAML artifacts in the repository</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>🤖</span> Weeks 3–4 · Agents in CI/CD</div>
+      <ul class="step-list">
+        <li><strong>Code Review Agent:</strong> reads the diff + team standards → comments on the PR</li>
+        <li><strong>Testing Agent:</strong> generates unit tests from diff + module context</li>
+        <li><strong>Docs Agent:</strong> auto-updates technical docs and changelog on every merge to main</li>
+        <li><strong>Security Agent:</strong> OWASP Top 10 scan on every PR — blocks critical findings</li>
+        <li>Integration with GitHub Actions, GitLab CI, or Azure DevOps</li>
+        <li>Baseline metrics captured: coverage delta, PR cycle time, review time</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>🚀</span> Month 2+ · Scaffolding Agent (Spec2Code)</div>
+      <ul class="step-list">
+        <li>Input: ticket + spec → Output: scaffolded files, tests, migrations, API contracts</li>
+        <li>Integration with Jira or Linear: agent reads ticket context automatically</li>
+        <li>Follows the existing codebase patterns — no generic code generation</li>
+        <li>Framework v2: prompts tuned from 4–8 weeks of real acceptance data</li>
+        <li>New developers productive in less than 1 day using the framework</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="arch-box">
+    <div class="arch-title">🗄 Context Engine — Architecture (RAG)</div>
+    <div class="arch-layers">
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(6,182,212,.15);color:var(--tec)">SOURCES</div>
+        <div class="arch-cnt"><span class="chip">Source code</span><span class="chip">ADRs / Docs</span><span class="chip">Jira/Linear tickets</span><span class="chip">PR history</span><span class="chip">Coding standards</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(139,92,246,.15);color:var(--cul)">PROCESSING</div>
+        <div class="arch-cnt"><span class="chip">Intelligent chunking</span><span class="chip">text-embedding-3-large</span><span class="chip">Metadata tagging</span><span class="chip">Re-index on every merge</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(16,185,129,.15);color:var(--neb)">STORAGE</div>
+        <div class="arch-cnt"><span class="chip">pgvector (if on Postgres)</span><span class="chip">Chroma (self-hosted)</span><span class="chip">Pinecone (cloud)</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(245,158,11,.15);color:var(--con)">RETRIEVAL</div>
+        <div class="arch-cnt"><span class="chip">Similarity search</span><span class="chip">Re-ranking</span><span class="chip">Context injection to prompt</span><span class="chip">File-level context</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(59,130,246,.15);color:var(--blue)">OUTPUT</div>
+        <div class="arch-cnt"><span class="chip">CLI aix</span><span class="chip">IDE extension</span><span class="chip">CI/CD bot</span><span class="chip">Internal API</span><span class="chip">Slack bot</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2);">
+    <strong style="color:var(--tec)">💡 All powered by Nébula:</strong> Andino Labs' proprietary platform orchestrates the agents, manages the LLMs, administers the Context Engine, and measures impact — in a single integrated framework deployed inside the client's own infrastructure.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CULTURE TRACK
+══════════════════════════════════════════ -->
+<div class="section" id="tab-cultura">
+  <div class="sec-title">🧠 Culture Track — The paradigm shift</div>
+  <div class="sec-sub">Tools without the right mindset get abandoned within weeks. This track turns every team member into an AI orchestrator — through role-specific workshops, rituals, and a change management program designed for technical profiles.</div>
+
+  <div class="info-box" style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);margin-bottom:28px;">
+    <strong style="color:var(--cul)">The underlying problem:</strong> A senior developer with 10 years of experience feels AI makes them less valuable. A QA engineer believes testing agents will replace them. A CTO doesn't know how to measure AI's ROI. Without addressing this directly, any technical adoption fails.
+  </div>
+
+  <div class="sec-title" style="font-size:17px;">Role-based program</div>
+  <div class="sec-sub">Every role has its own fears, motivations, and relationship with AI. The Culture track designs a specific experience for each one.</div>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+
+    <div class="profile-card">
+      <div class="profile-role" style="background:rgba(6,182,212,.15);color:var(--tec)">Developer / Senior Dev</div>
+      <div class="profile-title">From "I write code" to "I design and orchestrate AI"</div>
+      <ul class="profile-list">
+        <li>Reframe: AI doesn't replace you — it multiplies your impact</li>
+        <li>Hands-on workshop: your first full Feature with the AI Dev Kit in &lt;2h</li>
+        <li>Mob Construction practice: building with AI as your pair programmer</li>
+        <li>How to review AI-generated code with senior-level judgment</li>
+        <li>Advanced prompt engineering for your specific stack</li>
+      </ul>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-role" style="background:rgba(16,185,129,.15);color:var(--neb)">Tech Lead / Architect</div>
+      <div class="profile-title">Orchestrating the team and AI in parallel</div>
+      <ul class="profile-list">
+        <li>AI-facilitated Mob Elaboration: how to prepare and run the session</li>
+        <li>Domain and Logical Design with AI — generated ADRs reviewed and validated</li>
+        <li>How to define quality standards for AI-generated code</li>
+        <li>Managing adoption in the team: champions, metrics, feedback loops</li>
+        <li>Governance: who approves what, which gates are mandatory</li>
+      </ul>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-role" style="background:rgba(245,158,11,.15);color:var(--con)">QA / Testing</div>
+      <div class="profile-title">The role evolves — it doesn't disappear</div>
+      <ul class="profile-list">
+        <li>From writing manual tests to supervising and improving the Testing Agent</li>
+        <li>How to define acceptance criteria that AI can validate automatically</li>
+        <li>Evaluating agent outputs: what to validate, accept, or reject</li>
+        <li>Designing AI-assisted testing strategies for complex scenarios</li>
+        <li>Quality metrics in the AI-native world: what to measure now</li>
+      </ul>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-role" style="background:rgba(167,139,250,.15);color:var(--cul)">Product Owner / PM</div>
+      <div class="profile-title">Specifying in the language AI understands</div>
+      <ul class="profile-list">
+        <li>How to write Intents and User Stories that maximize AI output quality</li>
+        <li>Participating in Mob Elaboration: your role in the decomposition session</li>
+        <li>New delivery cycles: Bolts instead of Sprints — how to plan</li>
+        <li>Delivery metrics in AI-native teams: velocity, throughput, quality</li>
+        <li>Communicating the transformation to stakeholders</li>
+      </ul>
+    </div>
+
+    <div class="profile-card" style="grid-column:1/-1;">
+      <div class="profile-role" style="background:rgba(239,68,68,.15);color:var(--red)">CTO / VP Engineering / Technology Director</div>
+      <div class="profile-title">Building the team's competitive advantage — and measuring it</div>
+      <ul class="profile-list">
+        <li>The AI-native organization model: structure, roles, and accountability</li>
+        <li>How to present AI ROI to the board and to clients</li>
+        <li>AI governance: usage policies, security, cost control, compliance</li>
+        <li>New SLAs possible with an AI-native team — a stronger value proposition for clients</li>
+        <li>How to lead cultural change without losing top talent</li>
+        <li>Team optimization roadmap for the next 6–12 months with AI</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">AI-DLC Rituals</div>
+  <div class="sec-sub">Rituals are the heart of cultural change. They replace slow, disconnected ceremonies with focused sessions where the team and AI work together.</div>
+
+  <div class="grid-2">
+    <div class="detail-card">
+      <div class="dc-title"><span>🎯</span> Mob Elaboration</div>
+      <ul class="step-list">
+        <li><strong>Duration:</strong> 2–3 hours (replaces weeks of planning)</li>
+        <li><strong>Participants:</strong> Product Owner, Tech Lead, senior devs, QA</li>
+        <li><strong>Dynamic:</strong> AI proposes Intent decomposition → team validates and corrects</li>
+        <li>Output: User Stories, NFRs, Units, and Bolts ready for construction</li>
+        <li>Team and AI are deeply aligned before a single line of code is written</li>
+        <li>First session facilitated by Andino Labs, then the team runs it independently</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>⚡</span> Mob Construction</div>
+      <ul class="step-list">
+        <li><strong>Duration:</strong> ongoing — replaces 2-week sprints with Bolts taking hours to days</li>
+        <li><strong>Dynamic:</strong> dev opens session → AI guides Domain Design → Logical Design → code + tests</li>
+        <li>Human review at every step — "AI proposes, human approves"</li>
+        <li>Deployment Units come out tested, documented, and secure before deploy</li>
+        <li>Each completed Bolt feeds back into the Context Engine — continuous improvement</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📊</span> AI-Driven Retro</div>
+      <ul class="step-list">
+        <li>30 minutes weekly with real data: prompt acceptance rates, cycle time, coverage</li>
+        <li>AI analyzes the data and proposes adjustments to the Prompt Library and agents</li>
+        <li>The team decides which changes to implement — data guides, humans decide</li>
+        <li>Continuous evolution: the framework improves with every iteration</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>🏆</span> Champions Program</div>
+      <ul class="step-list">
+        <li>1 AI Champion per squad or area — the internal reference for the rest of the team</li>
+        <li>Advanced training: how to improve prompts, evaluate agents, train the team</li>
+        <li>Direct feedback channel with Andino Labs to escalate questions and improvements</li>
+        <li>Champions build the internal capability so the company never depends on external support</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CONSULTING TRACK
+══════════════════════════════════════════ -->
+<div class="section" id="tab-consultoria">
+  <div class="sec-title">📊 Consulting Track — Team and process optimization</div>
+  <div class="sec-sub">We evaluate the current team through an AI lens: which roles add differential value, which processes can be automated, and how to restructure for maximum performance and delivery.</div>
+
+  <div class="dlv-box" style="border-color:rgba(245,158,11,.3);background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.03));">
+    <h3 style="color:var(--con);">🎁 Deliverable: Team Optimization Plan</h3>
+    <p>An executive document with the current-state diagnosis, the AI-optimized team model, the transition plan, and the projected ROI model — ready to present to the board.</p>
+    <div class="dlv-items">
+      <div class="d-item"><span class="dck" style="color:var(--con)">✓</span> Current-state report: process map, waste map, identified bottlenecks</div>
+      <div class="d-item"><span class="dck" style="color:var(--con)">✓</span> Structure analysis: roles, seniority, work distribution by type</div>
+      <div class="d-item"><span class="dck" style="color:var(--con)">✓</span> Optimized team model: which profiles to strengthen, which to redefine</div>
+      <div class="d-item"><span class="dck" style="color:var(--con)">✓</span> ROI projection: FTE equivalent savings or throughput increase</div>
+      <div class="d-item"><span class="dck" style="color:var(--con)">✓</span> Transition roadmap: 3–6 month plan with measurable milestones</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div class="detail-card">
+      <div class="dc-title"><span>🔍</span> Phase 1 · Deep diagnostic</div>
+      <ul class="step-list">
+        <li><strong>Process audit:</strong> map the full ticket → PR → review → QA → deploy lifecycle</li>
+        <li><strong>Structured interviews:</strong> 30 min per role — Tech Lead, seniors, QA, PM</li>
+        <li><strong>Historical metrics analysis:</strong> 90 days of cycle time, PR review time, defect rate, deployment frequency</li>
+        <li><strong>Stack inventory:</strong> languages, frameworks, CI/CD, cloud, test coverage</li>
+        <li><strong>FTE analysis:</strong> time per role — coding vs. review vs. docs vs. manual QA vs. meetings</li>
+        <li>Output: <em>Current-State Snapshot</em> with visual waste map</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📐</span> Phase 2 · Team analysis</div>
+      <ul class="step-list">
+        <li><strong>Profile evaluation:</strong> what each role does and how much of it AI can handle</li>
+        <li><strong>Identify automatable tasks:</strong> testing, code review, documentation, scaffolding — ranked by impact</li>
+        <li><strong>Seniority vs. value analysis:</strong> is the current mix optimal with AI?</li>
+        <li><strong>Delivery bottlenecks:</strong> where work accumulates, where the most waste occurs</li>
+        <li>Output: <em>Team Analysis Report</em> with prioritized opportunities</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>💡</span> Phase 3 · Optimized model</div>
+      <ul class="step-list">
+        <li><strong>Recommended structure:</strong> target team with roles redefined for the AI-native world</li>
+        <li><strong>Emerging new profiles:</strong> AI Champion, Prompt Engineer, AI QA Specialist</li>
+        <li><strong>Responsibility redistribution:</strong> what humans do, what AI does, who reviews</li>
+        <li><strong>Upskilling plan:</strong> what each person needs to learn for the future model</li>
+        <li>Output: <em>Target Operating Model</em> for the AI-native team</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📈</span> Phase 4 · ROI model</div>
+      <ul class="step-list">
+        <li><strong>Efficiency calculation:</strong> time saved per task × frequency × cost per hour</li>
+        <li><strong>FTE equivalent:</strong> how many FTEs does automation free up for higher-value work?</li>
+        <li><strong>Throughput delta:</strong> how many more features can the same team deliver?</li>
+        <li><strong>Cost vs. benefit:</strong> program investment vs. value generated in 6–12 months</li>
+        <li>Output: <em>ROI Model</em> presentable to board and clients</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">Metrics framework</div>
+  <div class="sec-sub">The metrics we use to measure the real impact of the program on the team.</div>
+
+  <div class="grid-2">
+    <div class="roi-card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--con)">📉 Delivery Efficiency</div>
+      <div class="roi-metric"><span class="roi-lbl">Ticket → deploy cycle time</span><span class="roi-val" style="color:var(--neb)">−40–50%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Code review time</span><span class="roi-val" style="color:var(--neb)">−70%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Automated test coverage</span><span class="roi-val" style="color:var(--neb)">+60–80%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Technical documentation up to date</span><span class="roi-val" style="color:var(--neb)">100% auto</span></div>
+      <div class="roi-metric"><span class="roi-lbl">New dev onboarding time</span><span class="roi-val" style="color:var(--neb)">&lt;1 day</span></div>
+    </div>
+    <div class="roi-card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--con)">💰 Team Efficiency</div>
+      <div class="roi-metric"><span class="roi-lbl">FTE freed (same output)</span><span class="roi-val" style="color:var(--neb)">30–40%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Features delivered per sprint</span><span class="roi-val" style="color:var(--neb)">2–3×</span></div>
+      <div class="roi-metric"><span class="roi-lbl">AI adoption rate (team)</span><span class="roi-val" style="color:var(--neb)">&gt;80% by month 2</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Defect rate reduction</span><span class="roi-val" style="color:var(--neb)">−50%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Program ROI</span><span class="roi-val" style="color:var(--neb)">5–8× in 6 months</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     NÉBULA PLATFORM
+══════════════════════════════════════════ -->
+<div class="section" id="tab-nebula">
+  <div class="sec-title">🌌 Nébula Platform — Andino Labs' exclusive advantage</div>
+  <div class="sec-sub">Nébula is Andino Labs' proprietary platform that integrates every stage of the AI SDLC in a unified framework with multi-agent and multi-LLM orchestration. It's not a market product — it's the engine that makes all three tracks possible.</div>
+
+  <div class="info-box" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(6,182,212,.06));border:1px solid rgba(16,185,129,.25);margin-bottom:28px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+      <span style="font-size:24px;">🔒</span>
+      <div>
+        <div style="font-weight:800;font-size:15px;">Exclusive to Andino Labs</div>
+        <div style="color:var(--mid);font-size:13px;">Not on any marketplace. Not licensed separately. It's the central infrastructure that differentiates the program.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px;">
+      <div style="text-align:center;padding:12px;background:rgba(0,0,0,.2);border-radius:8px;">
+        <div style="font-size:20px;margin-bottom:6px;">🤖</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Multi-Agent</div>
+        <div style="font-size:11px;color:var(--muted)">Specialized agents that collaborate — not isolated prompts</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(0,0,0,.2);border-radius:8px;">
+        <div style="font-size:20px;margin-bottom:6px;">🔀</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Multi-LLM</div>
+        <div style="font-size:11px;color:var(--muted)">Dynamic selection of the optimal model by task and cost</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(0,0,0,.2);border-radius:8px;">
+        <div style="font-size:20px;margin-bottom:6px;">🔗</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Full AI SDLC</div>
+        <div style="font-size:11px;color:var(--muted)">Intent → Unit → Bolt → Design → Code → Deploy — all integrated</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="neb-stack" style="margin-bottom:28px;">
+    <div style="padding:14px 20px;border-bottom:1px solid rgba(16,185,129,.2);background:rgba(16,185,129,.05);">
+      <div style="font-size:12px;font-weight:700;color:var(--neb);">🌌 NÉBULA — AI SDLC FRAMEWORK</div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(6,182,212,.15);color:var(--tec)">INTERFACES</div>
+      <div class="neb-cnt"><span class="neb-chip">CLI aix</span><span class="neb-chip">VS Code Extension</span><span class="neb-chip">JetBrains Plugin</span><span class="neb-chip">CI/CD Hooks</span><span class="neb-chip">Internal REST API</span><span class="neb-chip">Slack Bot</span></div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(16,185,129,.15);color:var(--neb)">ORCHESTRATOR</div>
+      <div class="neb-cnt"><span class="neb-chip">Multi-agent orchestration</span><span class="neb-chip">Task pipeline</span><span class="neb-chip">Shared state across agents</span><span class="neb-chip">Fallback &amp; retry</span></div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(167,139,250,.15);color:var(--cul)">AGENTS</div>
+      <div class="neb-cnt"><span class="neb-chip">Code Review</span><span class="neb-chip">Testing</span><span class="neb-chip">Docs</span><span class="neb-chip">Security</span><span class="neb-chip">Scaffolding (Spec2Code)</span><span class="neb-chip">Domain Design</span></div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(245,158,11,.15);color:var(--con)">LLM ROUTER</div>
+      <div class="neb-cnt"><span class="neb-chip">GPT-4o / GPT-4o mini</span><span class="neb-chip">Claude Sonnet / Haiku</span><span class="neb-chip">Gemini Pro</span><span class="neb-chip">Open source models</span><span class="neb-chip">Routing by task + cost</span></div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(59,130,246,.15);color:var(--blue)">PROMPT ENGINE</div>
+      <div class="neb-cnt"><span class="neb-chip">Prompt Registry (YAML semver)</span><span class="neb-chip">Role-based templates</span><span class="neb-chip">Few-shot examples</span><span class="neb-chip">Eval harness</span><span class="neb-chip">A/B testing</span></div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(16,185,129,.12);color:var(--neb)">CONTEXT ENGINE</div>
+      <div class="neb-cnt"><span class="neb-chip">Vector Store</span><span class="neb-chip">Codebase Index</span><span class="neb-chip">Docs Index</span><span class="neb-chip">Tickets Index</span><span class="neb-chip">Auto re-index on CI</span></div>
+    </div>
+    <div class="neb-layer">
+      <div class="neb-lbl" style="background:rgba(239,68,68,.15);color:var(--red)">OBSERVABILITY</div>
+      <div class="neb-cnt"><span class="neb-chip">Cost per token/agent/dev</span><span class="neb-chip">Prompt acceptance rate</span><span class="neb-chip">Velocity delta</span><span class="neb-chip">LangSmith/Langfuse</span><span class="neb-chip">Real-time dashboard</span></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">How is Nébula deployed?</div>
+  <div class="grid-3">
+    <div class="detail-card">
+      <div class="dc-title"><span>🏢</span> Inside client infrastructure</div>
+      <ul class="step-list">
+        <li>Deployed within the client's own cloud environment (AWS, Azure, GCP)</li>
+        <li>Client code never leaves their infrastructure</li>
+        <li>Compatible with existing security policies and compliance requirements</li>
+        <li>VPC-isolated for maximum security</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>🔧</span> Tailored configuration</div>
+      <ul class="step-list">
+        <li>Connects to the existing stack: GitHub, GitLab, Azure DevOps, Jira, Linear</li>
+        <li>Agents learn the client's coding standards and codebase patterns</li>
+        <li>Prompt Library is built with the team's actual language and stack</li>
+        <li>LLMs are configured according to the client's data policies</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📊</span> Continuous evolution</div>
+      <ul class="step-list">
+        <li>Every interaction feeds back into the Context Engine — improves over time</li>
+        <li>Prompts are evaluated and adjusted with real acceptance data</li>
+        <li>New agents are added according to team needs</li>
+        <li>Andino Labs provides continuous framework updates</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ASSESSMENT
+══════════════════════════════════════════ -->
+<div class="section" id="tab-diagnostico">
+  <div class="sec-title">🎯 AI Readiness Assessment</div>
+  <div class="sec-sub">Andino Labs is the <strong style="color:var(--neb)">execution layer for AI readiness in LATAM</strong> — combining the rigor of the FINOS AI Readiness SIG framework with Nébula's execution capability to turn assessment into concrete action.</div>
+
+  <div class="info-box" style="background:linear-gradient(135deg,rgba(16,185,129,.07),rgba(59,130,246,.05));border:1px solid rgba(16,185,129,.2);margin-bottom:28px;">
+    <div style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:26px;flex-shrink:0;">🏛️</span>
+      <div>
+        <div style="font-weight:800;font-size:14px;margin-bottom:5px;">Based on the FINOS AI Readiness SIG framework</div>
+        <div style="font-size:13px;color:var(--mid);line-height:1.6;">The <em>AI Readiness Special Interest Group</em> from the Fintech Open Source Foundation identifies the core problem: <strong style="color:var(--text)">organizations already have processes for adopting technology, but those processes are not designed for AI.</strong> The gap is not technological — it's organizational, cultural, and governance-related. Andino Labs closes that gap.</div>
+        <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+          <div style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;"><span style="color:var(--neb)">✓</span> High uncertainty · rapid evolution</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;"><span style="color:var(--neb)">✓</span> High value potential</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;"><span style="color:var(--neb)">✓</span> Low organizational maturity</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(6,182,212,.07));border:1px solid rgba(16,185,129,.3);border-radius:var(--radius);padding:22px;margin-bottom:32px;text-align:center;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--neb);margin-bottom:8px;">Strategic positioning</div>
+    <div style="font-size:20px;font-weight:800;line-height:1.3;margin-bottom:10px;">FINOS defines <em style="color:var(--mid)">what</em> an AI-ready organization needs.<br>Andino Labs builds <em style="color:var(--neb)">how</em> to get there.</div>
+    <div style="font-size:13px;color:var(--mid);">Explicit governance (FINOS) + Technical execution (Nébula) + Cultural change (Culture Track) + Team optimization (Consulting Track)</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:18px;">The 9 assessment dimensions</div>
+  <div class="sec-sub">The Andino Labs assessment evaluates each dimension of the FINOS AI Readiness model and delivers a score per area with the specific gaps and priorities for the team.</div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;">
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--blue);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">🧭</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);">D1 · Strategy</div>
+          <div style="font-size:13px;font-weight:700;">Strategy &amp; Alignment</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">Clarity of AI vision, prioritized use cases, alignment with business objectives.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--red)">Typical gap:</strong> "We know we want AI, but we don't know where to create real value"</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--con);">→ Consulting Track</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">🏛️</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--red);">D2 · Governance ★ CORE</div>
+          <div style="font-size:13px;font-weight:700;">Governance &amp; Risk</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">AI usage policies, risk management (hallucinations, prompt injection), regulatory compliance, audit trails.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--red)">FINOS insight:</strong> The most critical dimension in regulated industries. Without this, there is no scale.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--cul);">→ Culture Track + Consulting</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--tec);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">🧱</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--tec);">D3 · Technology</div>
+          <div style="font-size:13px;font-weight:700;">Technology &amp; Architecture</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">AI infrastructure (cloud, APIs, models), LLM integration capability, modular architecture, LLMOps.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--red)">Typical gap:</strong> Disconnected pilots with no ability to scale or measure.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tec);">→ Technical Track + Nébula</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--neb);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">🗄️</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neb);">D4 · Data</div>
+          <div style="font-size:13px;font-weight:700;">Data Readiness</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">Data quality and availability, data governance, access and security, AI data pipelines.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--neb)">Reality:</strong> Without reliable codebase data, there is no effective Context Engine.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tec);">→ Technical Track (Context Engine)</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--cul);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">👥</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--cul);">D5 · Organization</div>
+          <div style="font-size:13px;font-weight:700;">Organization &amp; Talent</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">AI skills by role, business-technology collaboration, emerging new roles, culture of experimentation.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--red)">Typical gap:</strong> Teams treating AI like classic IT — without new ways of working.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--cul);">→ Culture Track</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--con);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">⚙️</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--con);">D6 · Delivery</div>
+          <div style="font-size:13px;font-weight:700;">Use Case Lifecycle &amp; Delivery</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">Process for ideating, building, validating, and scaling AI solutions. Time-to-market with integrated AI.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--red)">FINOS insight:</strong> Current delivery processes don't work for AI — a new cycle is needed.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tec);">→ AI-DLC (all three tracks)</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--red);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">🔐</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--red);">D7 · Security</div>
+          <div style="font-size:13px;font-weight:700;">Security &amp; Responsible AI</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">Protection against prompt injection, data leakage, ethics (bias, fairness), control of model outputs.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--red)">Real risk:</strong> Without a Security Agent, every PR is a potential vulnerability.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tec);">→ Technical Track (Security Agent)</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--neb);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">📊</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neb);">D8 · Monitoring</div>
+          <div style="font-size:13px;font-weight:700;">Observability &amp; Control</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">Model performance tracking, drift, response quality, feedback loops, and impact metrics.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--neb)">Nébula:</strong> Real-time observability dashboard — cost, acceptance rate, velocity delta.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--neb);">→ Nébula Platform</div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;border-top:3px solid var(--blue);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">🌐</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);">D9 · Ecosystem</div>
+          <div style="font-size:13px;font-weight:700;">Ecosystem &amp; Regulation</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.55;">Relationship with regulators, vendors, and open source. Ability to adapt to — and anticipate — future regulation.</div>
+      <div style="font-size:11px;color:var(--muted);background:rgba(239,68,68,.08);border-radius:6px;padding:6px 10px;"><strong style="color:var(--blue)">FINOS insight:</strong> Not just comply with regulation — influence it before it arrives.</div>
+      <div style="margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--con);">→ Consulting Track</div>
+    </div>
+
+  </div>
+
+  <div class="arch-box" style="border-color:rgba(16,185,129,.2);">
+    <div class="arch-title">🗺 How the Andino Labs program covers all 9 dimensions</div>
+    <div class="arch-layers">
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(6,182,212,.15);color:var(--tec)">TECHNICAL TRACK</div>
+        <div class="arch-cnt"><span class="chip">D3 · Technology</span><span class="chip">D4 · Data</span><span class="chip">D7 · Security</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(167,139,250,.15);color:var(--cul)">CULTURE TRACK</div>
+        <div class="arch-cnt"><span class="chip">D2 · Governance</span><span class="chip">D5 · Organization</span><span class="chip">D6 · Delivery (AI-DLC)</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(245,158,11,.15);color:var(--con)">CONSULTING TRACK</div>
+        <div class="arch-cnt"><span class="chip">D1 · Strategy</span><span class="chip">D2 · Governance</span><span class="chip">D9 · Ecosystem</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-lbl" style="background:rgba(16,185,129,.15);color:var(--neb)">NÉBULA PLATFORM</div>
+        <div class="arch-cnt"><span class="chip">D3 · Architecture</span><span class="chip">D6 · Delivery (AI SDLC)</span><span class="chip">D7 · Security</span><span class="chip">D8 · Observability</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">AI maturity levels</div>
+  <div class="sec-sub">The combined score across the 9 dimensions determines the current maturity level and the program entry point.</div>
+
+  <div class="mat-bar">
+    <div class="mat-level" style="border-color:rgba(239,68,68,.3);">
+      <div class="mat-num" style="color:var(--red)">L0</div>
+      <div class="mat-name" style="color:var(--red)">No AI</div>
+      <div class="mat-desc">100% traditional development. No tools, no processes, no AI governance.</div>
+    </div>
+    <div class="mat-level" style="border-color:rgba(245,158,11,.3);">
+      <div class="mat-num" style="color:var(--con)">L1</div>
+      <div class="mat-name" style="color:var(--con)">Personal AI</div>
+      <div class="mat-desc">Individual use (Copilot, ChatGPT) with no standard, no shared data, no governance.</div>
+    </div>
+    <div class="mat-level" style="border-color:rgba(59,130,246,.3);">
+      <div class="mat-num" style="color:var(--blue)">L2</div>
+      <div class="mat-name" style="color:var(--blue)">Team AI</div>
+      <div class="mat-desc">Agreed tools, but no deep integration, no metrics, no delivery framework.</div>
+    </div>
+    <div class="mat-level" style="border-color:rgba(6,182,212,.3);">
+      <div class="mat-num" style="color:var(--tec)">L3</div>
+      <div class="mat-name" style="color:var(--tec)">Integrated AI</div>
+      <div class="mat-desc">AI in CI/CD, partially standardized prompts, basic metrics. Emerging governance.</div>
+    </div>
+    <div class="mat-level" style="border-color:rgba(16,185,129,.3);">
+      <div class="mat-num" style="color:var(--neb)">L4</div>
+      <div class="mat-name" style="color:var(--neb)">AI-Ready</div>
+      <div class="mat-badge">Goal</div>
+      <div class="mat-desc">All 9 dimensions covered. Full framework, agents in production, active governance.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">Entry point by level</div>
+  <div class="grid-3" style="margin-bottom:28px;">
+    <div class="detail-card" style="border-color:rgba(239,68,68,.25);">
+      <div class="dc-title" style="color:var(--red)"><span>🔴</span> Level 0–1 · Technical Start</div>
+      <ul class="step-list">
+        <li>Build infrastructure from scratch with Nébula (D3, D4, D7)</li>
+        <li>Intensive Culture Track — mindset shift and basic governance (D2, D5)</li>
+        <li>Consulting defines strategy and target team structure (D1, D9)</li>
+        <li>Timeline to L4: 3–4 months</li>
+      </ul>
+    </div>
+    <div class="detail-card" style="border-color:rgba(59,130,246,.25);">
+      <div class="dc-title" style="color:var(--blue)"><span>🔵</span> Level 2–3 · Consulting Start</div>
+      <ul class="step-list">
+        <li>Deep diagnostic across all 9 dimensions — identify real gaps</li>
+        <li>Nébula amplifies what exists and closes technical gaps (D3, D8)</li>
+        <li>Culture accelerates adoption and formalizes governance (D2, D5, D6)</li>
+        <li>Timeline to L4: 6–8 weeks</li>
+      </ul>
+    </div>
+    <div class="detail-card" style="border-color:rgba(16,185,129,.25);">
+      <div class="dc-title" style="color:var(--neb)"><span>🟢</span> Level 3–4 · Nébula Start</div>
+      <ul class="step-list">
+        <li>Nébula replaces fragmented stack — multi-agent, multi-LLM, observability (D8)</li>
+        <li>Focus on advanced governance and ecosystem alignment (D2, D9)</li>
+        <li>Fine-tune team optimization with real data (D5, D6)</li>
+        <li>Timeline: full adoption in 3–4 weeks</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">The assessment process</div>
+  <div class="sec-sub">The assessment evaluates all 9 AI Readiness dimensions in a 90-minute initial session. The output is the AI Strategy Brief with a score per dimension and the tailored program proposal.</div>
+
+  <div class="grid-2">
+    <div class="detail-card">
+      <div class="dc-title"><span>📅</span> Assessment session (90 min)</div>
+      <ul class="step-list">
+        <li><strong>Block 1 (30 min):</strong> Strategy, governance, and organization — interview with CTO/VP Eng on vision, risks, and team structure (D1, D2, D5)</li>
+        <li><strong>Block 2 (30 min):</strong> Technology, data, and delivery — review of stack, CI/CD, metrics, and current process (D3, D4, D6)</li>
+        <li><strong>Block 3 (30 min):</strong> Security, observability, and ecosystem — current policies and tools, relevant regulation (D7, D8, D9)</li>
+        <li>Immediate output: score per dimension and entry point recommendation</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📄</span> Output: AI Strategy Brief</div>
+      <ul class="step-list">
+        <li>AI Readiness score across all 9 dimensions with gap visualization</li>
+        <li>Current maturity level (L0–L4) and critical gaps identified</li>
+        <li>Recommended entry point and track emphasis</li>
+        <li>Success objectives and metrics at 30/60/90 days</li>
+        <li>Projected ROI estimate for the specific team</li>
+        <li>Personalized program proposal ready to approve</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     RESULTS
+══════════════════════════════════════════ -->
+<div class="section" id="tab-resultados">
+  <div class="sec-title">📈 Expected results</div>
+  <div class="sec-sub">The impacts a software team can expect upon completing the Andino Labs integrated program. Numbers are based on conservative projections for teams of 30+ people.</div>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div class="roi-card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="color:var(--tec)">🔧</span> Technical Track</div>
+      <div class="roi-metric"><span class="roi-lbl">Ticket → deploy cycle reduction</span><span class="roi-val" style="color:var(--tec)">−40–50%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Code review time</span><span class="roi-val" style="color:var(--tec)">−70%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Automated test coverage</span><span class="roi-val" style="color:var(--tec)">+60–80%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Technical documentation current</span><span class="roi-val" style="color:var(--tec)">100% auto</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Defects caught before production</span><span class="roi-val" style="color:var(--tec)">+60%</span></div>
+    </div>
+    <div class="roi-card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="color:var(--cul)">🧠</span> Culture Track</div>
+      <div class="roi-metric"><span class="roi-lbl">Team adoption rate</span><span class="roi-val" style="color:var(--cul)">&gt;80% by month 2</span></div>
+      <div class="roi-metric"><span class="roi-lbl">New developer onboarding time</span><span class="roi-val" style="color:var(--cul)">&lt;1 day</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Change resistance reduction</span><span class="roi-val" style="color:var(--cul)">measurable</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Internal champions trained</span><span class="roi-val" style="color:var(--cul)">1 per squad</span></div>
+      <div class="roi-metric"><span class="roi-lbl">External independence post-program</span><span class="roi-val" style="color:var(--cul)">full</span></div>
+    </div>
+    <div class="roi-card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="color:var(--con)">📊</span> Consulting Track</div>
+      <div class="roi-metric"><span class="roi-lbl">FTE freed (same output)</span><span class="roi-val" style="color:var(--con)">30–40%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Throughput increase</span><span class="roi-val" style="color:var(--con)">2–3×</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Program ROI</span><span class="roi-val" style="color:var(--con)">5–8× in 6 months</span></div>
+      <div class="roi-metric"><span class="roi-lbl">New possible SLAs with clients</span><span class="roi-val" style="color:var(--con)">concrete</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Team optimization plan</span><span class="roi-val" style="color:var(--con)">actionable</span></div>
+    </div>
+    <div class="roi-card" style="border-color:rgba(16,185,129,.2);">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="color:var(--neb)">🌌</span> Nébula Platform</div>
+      <div class="roi-metric"><span class="roi-lbl">AI SDLC coverage</span><span class="roi-val" style="color:var(--neb)">100%</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Active agents in CI/CD</span><span class="roi-val" style="color:var(--neb)">5+</span></div>
+      <div class="roi-metric"><span class="roi-lbl">LLMs available in the router</span><span class="roi-val" style="color:var(--neb)">multi-provider</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Token cost vs. productivity</span><span class="roi-val" style="color:var(--neb)">optimized</span></div>
+      <div class="roi-metric"><span class="roi-lbl">Impact visibility</span><span class="roi-val" style="color:var(--neb)">real-time</span></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">Results timeline</div>
+  <div class="grid-4" style="margin-bottom:28px;">
+    <div class="detail-card" style="border-top:3px solid var(--red);">
+      <div class="dc-title"><span>📅</span> Weeks 1–2</div>
+      <ul class="step-list">
+        <li>Complete assessment and AI Strategy Brief delivered</li>
+        <li>Nébula infrastructure deployed in client environment</li>
+        <li>First culture workshops underway</li>
+      </ul>
+    </div>
+    <div class="detail-card" style="border-top:3px solid var(--con);">
+      <div class="dc-title"><span>📅</span> Month 1</div>
+      <ul class="step-list">
+        <li>AI Dev Kit installed across the whole team</li>
+        <li>First agents active in CI/CD</li>
+        <li>Baseline metrics captured</li>
+        <li>Mob Elaboration and Construction in practice</li>
+      </ul>
+    </div>
+    <div class="detail-card" style="border-top:3px solid var(--tec);">
+      <div class="dc-title"><span>📅</span> Month 3</div>
+      <ul class="step-list">
+        <li>Full framework with all agents in production</li>
+        <li>80%+ team adoption</li>
+        <li>Impact metrics visible and presentable</li>
+        <li>Internal champions trained and operating</li>
+      </ul>
+    </div>
+    <div class="detail-card" style="border-top:3px solid var(--neb);">
+      <div class="dc-title"><span>📅</span> Month 6</div>
+      <ul class="step-list">
+        <li>Fully consolidated AI-native organization</li>
+        <li>ROI measured and board-ready</li>
+        <li>New client SLAs based on real gains</li>
+        <li>Team fully independent — no dependency on Andino Labs</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-title" style="font-size:17px;">Why Andino Labs?</div>
+  <div class="grid-2">
+    <div class="detail-card">
+      <div class="dc-title"><span>🌌</span> Nébula — the difference no one else has</div>
+      <ul class="step-list">
+        <li>Proprietary platform with multi-agent and multi-LLM orchestration — not an assembly of third-party products</li>
+        <li>Covers the full AI SDLC in a single integrated framework</li>
+        <li>Continuously improves with every client that joins the program</li>
+        <li>Exclusive — not available through any other consulting provider</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>🧩</span> Integrated program — not isolated services</div>
+      <ul class="step-list">
+        <li>All three tracks are designed and executed together — they reinforce each other</li>
+        <li>Not just technology, not just consulting, not just training — all three at once</li>
+        <li>The company exits with internal capability — no permanent vendor dependency</li>
+        <li>Measurable results from month one with board-ready ROI</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>🌎</span> LATAM-first</div>
+      <ul class="step-list">
+        <li>We understand the contexts, teams, and realities of LATAM markets</li>
+        <li>Communication in Spanish and Portuguese — no language or cultural barriers</li>
+        <li>Pricing and engagement models adapted to regional reality</li>
+        <li>Reference network in the region — we know the local stacks and challenges</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="dc-title"><span>📐</span> AI-DLC Methodology (AWS)</div>
+      <ul class="step-list">
+        <li>Built on AWS AI-Driven Development Lifecycle — a proven methodology</li>
+        <li>Concrete artifacts: Intent, Unit, Bolt, Domain Design, Deployment Unit</li>
+        <li>Specific rituals that replace traditional agile ceremonies</li>
+        <li>A framework that scales — from 30 developers to hundreds of people</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta-box" style="margin-top:32px;">
+    <h3>Ready to get started?</h3>
+    <p>The initial assessment is free and without commitment. In 90 minutes we define the exact program for your team and deliver the AI Strategy Brief.</p>
+    <span class="cta-btn">→ Talk to Andino Labs</span>
+  </div>
+
+  <div style="text-align:center;margin-top:28px;font-size:11px;color:var(--muted);">
+    Andino Labs · AI Transformation Program for Development Teams · LATAM
+  </div>
+</div>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const sec = document.getElementById('tab-' + id);
+    if (sec) { sec.classList.add('active'); sec.classList.add('fade-in'); }
+    if (btn) btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
