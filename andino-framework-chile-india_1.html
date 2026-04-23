@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andino Labs · Framework Chile–India v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --bg:#06080f;--bg2:#0b0f1c;--bg3:#111828;--bg4:#161e2e;
+    --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+    --text:#eef2ff;--mid:#8892b0;--muted:#4a5568;
+    --cl:#38bdf8;--in:#f472b6;--sh:#a78bfa;--neb:#10b981;--amb:#fbbf24;--com:#fb923c;
+    --radius:12px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:13.5px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+
+  .nav{position:sticky;top:0;z-index:200;background:rgba(6,8,15,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:0;overflow-x:auto;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav-brand{font-family:var(--font-display);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--neb);padding:16px 0;margin-right:20px;white-space:nowrap;flex-shrink:0;}
+  .nav-brand span{color:var(--cl);}
+  .nav-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 8px;}
+  .nav-group{display:flex;align-items:center;gap:0;flex-shrink:0;}
+  .nav-glabel{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 8px;white-space:nowrap;}
+  .tab-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-family:var(--font-body);font-size:10.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:16px 10px;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0;}
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--text);border-bottom-color:var(--cl);}
+
+  .section{display:none;max-width:1160px;margin:0 auto;padding:36px 28px 80px;}
+  .section.active{display:block;animation:fadeUp .3s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .hero{background:var(--bg);border-bottom:1px solid var(--border);padding:60px 28px 48px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-100px;left:30%;width:500px;height:500px;background:radial-gradient(circle,rgba(56,189,248,.07) 0%,transparent 65%);pointer-events:none;}
+  .hero::after{content:'';position:absolute;top:-60px;right:25%;width:380px;height:380px;background:radial-gradient(circle,rgba(244,114,182,.06) 0%,transparent 65%);pointer-events:none;}
+  .hero-eye{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:22px;}
+  .hero-eye::before,.hero-eye::after{content:'';display:block;width:28px;height:1px;background:var(--border2);}
+  .hero-title{font-family:var(--font-display);font-size:clamp(28px,4vw,50px);font-weight:800;letter-spacing:-.025em;line-height:1.1;margin-bottom:18px;}
+  .hero-sub{font-size:15px;color:var(--mid);max-width:580px;margin:0 auto 34px;line-height:1.75;}
+  .hero-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:11.5px;font-weight:500;letter-spacing:.03em;}
+  .pill-cl{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);color:var(--cl);}
+  .pill-in{background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.2);color:var(--in);}
+  .pill-sh{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:var(--sh);}
+  .pill-neb{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--neb);}
+  .pill-com{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.2);color:var(--com);}
+
+  .sec-title{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.015em;margin-bottom:6px;}
+  .sec-sub{font-size:13.5px;color:var(--mid);margin-bottom:28px;line-height:1.75;max-width:720px;}
+  .divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  @media(max-width:720px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;}
+  .card-title{font-family:var(--font-display);font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .card-list{list-style:none;}
+  .card-list li{padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid);display:flex;gap:8px;align-items:flex-start;}
+  .card-list li:last-child{border-bottom:none;}
+  .card-list li::before{content:'—';color:var(--border2);flex-shrink:0;margin-top:1px;}
+
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+  .badge-cl{background:rgba(56,189,248,.12);color:var(--cl);}
+  .badge-in{background:rgba(244,114,182,.12);color:var(--in);}
+  .badge-sh{background:rgba(167,139,250,.12);color:var(--sh);}
+  .badge-neb{background:rgba(16,185,129,.12);color:var(--neb);}
+  .badge-amb{background:rgba(251,191,36,.12);color:var(--amb);}
+  .badge-com{background:rgba(251,146,60,.12);color:var(--com);}
+
+  .role-split{display:grid;grid-template-columns:1fr 40px 1fr;margin-bottom:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .role-side{padding:22px;}
+  .role-div{background:var(--bg3);border-left:1px solid var(--border);border-right:1px solid var(--border);position:relative;}
+  .role-div::after{content:'⇄';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;color:var(--muted);background:var(--bg3);padding:4px;}
+  .role-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .role-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--mid);line-height:1.5;}
+  .role-item:last-child{border-bottom:none;padding-bottom:0;}
+  .rdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+
+  .ritual{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;}
+  .ritual-hdr{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:background .2s;}
+  .ritual-hdr:hover{background:var(--bg3);}
+  .rleft{display:flex;align-items:center;gap:12px;}
+  .ricon{font-size:18px;flex-shrink:0;}
+  .rname{font-family:var(--font-display);font-size:13.5px;font-weight:700;}
+  .rmeta{font-size:11px;color:var(--muted);margin-top:1px;}
+  .rtags{display:flex;gap:6px;flex-wrap:wrap;}
+  .rtag{font-size:10px;font-weight:600;letter-spacing:.05em;padding:3px 9px;border-radius:100px;text-transform:uppercase;}
+  .rtag-cl{background:rgba(56,189,248,.1);color:var(--cl);}
+  .rtag-in{background:rgba(244,114,182,.1);color:var(--in);}
+  .rtag-sh{background:rgba(167,139,250,.1);color:var(--sh);}
+  .rtag-neb{background:rgba(16,185,129,.1);color:var(--neb);}
+  .rarrow{color:var(--muted);font-size:16px;transition:transform .2s;}
+  .rbody{display:none;padding:0 18px 16px;border-top:1px solid var(--border);}
+  .rbody.open{display:block;}
+  .rbody-inner{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:14px;}
+  @media(max-width:700px){.rbody-inner{grid-template-columns:1fr}}
+  .rblock{font-size:12.5px;color:var(--mid);}
+  .rblbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .rblock li{padding:3px 0;list-style:none;display:flex;gap:7px;}
+  .rblock li::before{content:'›';color:var(--border2);}
+
+  .level-tag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:100px;}
+  .lv-emp{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:var(--sh);}
+  .lv-mix{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--neb);}
+
+  .clcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:10px;}
+  .clavatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .clname{font-family:var(--font-display);font-size:13.5px;font-weight:700;margin-bottom:2px;}
+  .clrole{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+
+  .pipe{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;}
+  .pipe-hdr{padding:14px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .2s;}
+  .pipe-hdr:hover{background:var(--bg3);}
+  .pipe-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:12px;font-weight:800;flex-shrink:0;}
+  .pipe-name{font-family:var(--font-display);font-size:13.5px;font-weight:700;flex:1;}
+  .pipe-meta{font-size:11px;color:var(--muted);}
+  .pbody{display:none;padding:0 18px 16px;border-top:1px solid var(--border);}
+  .pbody.open{display:block;}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding-top:14px;}
+  @media(max-width:700px){.pgrid{grid-template-columns:1fr}}
+  .pclbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .pcol li{font-size:12.5px;color:var(--mid);padding:3px 0;list-style:none;display:flex;gap:7px;}
+  .pcol li::before{content:'›';color:var(--border2);}
+
+  .jira-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .jira-table th{text-align:left;padding:10px 14px;background:var(--bg3);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border2);}
+  .jira-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--mid);vertical-align:top;}
+  .jira-table tr:last-child td{border-bottom:none;}
+  .jira-table tr:hover td{background:rgba(255,255,255,.02);}
+
+  .esc-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr;border-bottom:1px solid var(--border);}
+  .esc-row:last-child{border-bottom:none;}
+  .esc-row.hdr{background:var(--bg3);}
+  .esc-cell{padding:10px 14px;font-size:12px;color:var(--mid);border-right:1px solid var(--border);}
+  .esc-cell:last-child{border-right:none;}
+  .esc-row.hdr .esc-cell{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
+  .esc-lv{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:.05em;}
+
+  .bolt-track{position:relative;padding-left:28px;margin-bottom:8px;}
+  .bolt-track::before{content:'';position:absolute;left:10px;top:28px;bottom:0;width:1px;background:var(--border2);}
+  .bolt-step{position:relative;margin-bottom:4px;}
+  .bdot{position:absolute;left:-24px;top:14px;width:10px;height:10px;border-radius:50%;border:2px solid;}
+  .bcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+  .bday{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+  .bname{font-family:var(--font-display);font-size:13px;font-weight:700;margin-bottom:6px;}
+  .bitems{display:flex;flex-wrap:wrap;gap:5px;}
+  .bitem{font-size:11px;color:var(--mid);}
+  .bitem::after{content:'·';margin-left:5px;color:var(--border2);}
+  .bitem:last-child::after{display:none;}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  @media(max-width:800px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+  .kpi-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;text-align:center;}
+  .kv{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1;margin-bottom:6px;}
+  .kl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;line-height:1.4;}
+
+  .tchan{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:13px 18px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;}
+  .tc-name{font-family:'DM Mono','Courier New',monospace;font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:2px;}
+  .tc-desc{font-size:12px;color:var(--muted);}
+
+  .onb-step{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start;}
+  .onum{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:13px;flex-shrink:0;}
+  .obody{flex:1;padding-top:4px;}
+  .otitle{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:5px;}
+  .odesc{font-size:12.5px;color:var(--mid);line-height:1.6;}
+
+  .info-box{border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;font-size:13px;line-height:1.7;}
+  .foot{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">Andino <span>Labs</span></div>
+  <div class="nav-group">
+    <div class="nav-glabel">Empresa</div>
+    <button class="tab-btn" onclick="go('clevel',this)">C-Level</button>
+    <button class="tab-btn" onclick="go('ceremonias',this)">Ceremonias</button>
+    <button class="tab-btn" onclick="go('comercial',this)">Comercial</button>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-group">
+    <div class="nav-glabel">Proyecto</div>
+    <button class="tab-btn active" onclick="go('overview',this)">Overview</button>
+    <button class="tab-btn" onclick="go('roles',this)">Roles & RACI</button>
+    <button class="tab-btn" onclick="go('rituales',this)">Rituales</button>
+    <button class="tab-btn" onclick="go('bolt',this)">Ciclo Bolt</button>
+    <button class="tab-btn" onclick="go('teams',this)">Teams & Jira</button>
+    <button class="tab-btn" onclick="go('escalacion',this)">Escalación</button>
+    <button class="tab-btn" onclick="go('onboarding',this)">Onboarding</button>
+    <button class="tab-btn" onclick="go('metricas',this)">Métricas</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eye">Andino Labs · Operating Framework · v2.0</div>
+  <h1 class="hero-title"><span style="color:var(--cl)">Chile</span> × <span style="color:var(--in)">India</span><br>Operating Framework</h1>
+  <p class="hero-sub">Desde la prospección comercial y las ceremonias de empresa, hasta los rituales de proyecto y el ciclo de delivery Bolt — un framework repetible y escalable.</p>
+  <div class="hero-pills">
+    <span class="pill pill-sh">🏛️ Empresa — C-Level & ceremonias</span>
+    <span class="pill pill-com">💼 Comercial — prospección y cierre</span>
+    <span class="pill pill-cl">🇨🇱 Chile — liderazgo de proyecto</span>
+    <span class="pill pill-in">🇮🇳 India — ejecución técnica</span>
+    <span class="pill pill-neb">🤖 AI-DLC — Nébula integrado</span>
+  </div>
+</header>
+
+
+<!-- C-LEVEL -->
+<section class="section" id="sec-clevel">
+  <p class="sec-title">Equipo C-Level — Andino Labs</p>
+  <p class="sec-sub">El liderazgo de Andino está distribuido entre Chile, USA e India. Cada rol tiene un dominio de ownership claro y participa en ceremonias según su función.</p>
+  <div id="clevel-container"></div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Mapa de ownership estratégico</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg3);border-bottom:1px solid var(--border2);">
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--com)">💼 Revenue & Clientes</div>
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neb)">🤖 Producto & Delivery</div>
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sh)">🏛️ Empresa</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;">
+      <div style="padding:16px;border-right:1px solid var(--border);font-size:12.5px;color:var(--mid);">
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--com)">›</span>CEO — pipeline LATAM y cuentas estratégicas</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--com)">›</span>Country Manager USA — US pipeline, demos, cierre</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--com)">›</span>CPO — narrativa de producto en el pitch</div>
+        <div style="display:flex;gap:7px;"><span style="color:var(--com)">›</span>CTO — credibilidad técnica en el cierre</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);font-size:12.5px;color:var(--mid);">
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--neb)">›</span>CPO — roadmap de producto Nébula</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--neb)">›</span>Chief AI & Delivery — calidad de delivery</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--neb)">›</span>CTO — arquitectura y stack tecnológico</div>
+        <div style="display:flex;gap:7px;"><span style="color:var(--neb)">›</span>Chief AI & Delivery — adopción IA en proyectos</div>
+      </div>
+      <div style="padding:16px;font-size:12.5px;color:var(--mid);">
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--sh)">›</span>CEO — visión, estrategia y cultura</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--sh)">›</span>CTO — hiring técnico y estándares</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--sh)">›</span>Chief AI & Delivery — framework operacional</div>
+        <div style="display:flex;gap:7px;"><span style="color:var(--sh)">›</span>Country Manager USA — expansión mercado US</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CEREMONIAS -->
+<section class="section" id="sec-ceremonias">
+  <p class="sec-title">Ceremonias de empresa</p>
+  <p class="sec-sub">Más allá de los rituales de proyecto, Andino tiene ceremonias a nivel empresa que aseguran la alineación estratégica, el health del portafolio y la cohesión Chile–India.</p>
+  <div class="info-box" style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);">
+    <strong style="color:var(--sh)">Dos tipos de ceremonia:</strong>&nbsp;&nbsp;
+    <span class="level-tag lv-emp">Solo liderazgo</span> — C-Level de Andino sin equipos de proyecto&nbsp;&nbsp;
+    <span class="level-tag lv-mix">Mixta</span> — C-Level + Tech Leads India
+  </div>
+  <div id="ceremonias-container"></div>
+</section>
+
+
+<!-- COMERCIAL -->
+<section class="section" id="sec-comercial">
+  <p class="sec-title">Proceso comercial</p>
+  <p class="sec-sub">Andino opera con dos motores de prospección: CEO para LATAM y Country Manager USA para el mercado norteamericano. El proceso va desde el primer contacto hasta el kick-off del proyecto.</p>
+  <div class="kpi-grid">
+    <div class="kpi-box"><div class="kv" style="color:var(--com)">~21d</div><div class="kl">ciclo promedio<br>prospecto → cierre</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--cl)">CEO</div><div class="kl">owner LATAM<br>pipeline</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--com)">CM</div><div class="kl">owner USA<br>pipeline</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--neb)">+CPO</div><div class="kl">pitch técnico<br>& producto</div></div>
+  </div>
+  <div id="pipeline-container"></div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Handoff comercial → operaciones</p>
+  <p class="sec-sub">El momento más crítico: cuando el cliente dice "sí". Este handoff define la calidad del kick-off.</p>
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(251,146,60,.2);">
+      <div class="card-title" style="color:var(--com)">📋 Sale Package — entrega comercial</div>
+      <ul class="card-list">
+        <li>Propuesta firmada con scope, precio y condiciones</li>
+        <li>Notas del discovery comercial — dolores y motivaciones</li>
+        <li>Stakeholders del cliente: quién decide, usa, paga</li>
+        <li>Compromisos de timeline dados durante la venta</li>
+        <li>Riesgos identificados en el proceso comercial</li>
+        <li>Contexto cultural del cliente (tamaño, industria, sensibilidades)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:rgba(56,189,248,.2);">
+      <div class="card-title" style="color:var(--cl)">🚀 Project Package — recibe el Project Lead</div>
+      <ul class="card-list">
+        <li>Briefing de 30 min con CEO o Country Manager USA</li>
+        <li>Acceso al CRM con todas las notas del deal</li>
+        <li>Intro al cliente hecha por el vendedor (email + llamada)</li>
+        <li>Asignación del equipo India con Chief AI & Delivery</li>
+        <li>Fecha de kick-off acordada con el cliente</li>
+        <li>Repo creado, canales Teams configurados, accesos listos</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);">
+    <strong style="color:#ef4444">⚠️ Regla del handoff:</strong> El Project Lead no contacta al cliente hasta que el briefing con el vendedor esté completo y la intro haya sido hecha. Un Project Lead sin contexto genera una primera impresión débil que el equipo paga durante semanas.
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Materiales comerciales estándar</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-title" style="color:var(--com)">📄 Deck de propuesta</div><ul class="card-list"><li>Problema que resuelve Andino (específico al cliente)</li><li>Metodología AI-DLC + Nébula</li><li>Cómo funciona el equipo Chile–India</li><li>Casos de referencia relevantes</li><li>Propuesta económica y modelo de engagement</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--neb)">🤖 Demo de Nébula</div><ul class="card-list"><li>Demo en vivo de Claude Code + Nébula en acción</li><li>Comparativo antes/después de velocity</li><li>Context Engine — cómo se construye para el cliente</li><li>CPO o CTO presenta en el pitch técnico</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--sh)">📊 ROI Calculator</div><ul class="card-list"><li>Input: tamaño del equipo, stack, cycle time actual</li><li>Output: proyección de reducción de cycle time</li><li>FTE equivalente liberado por automatización</li><li>Payback estimado del programa</li></ul></div>
+  </div>
+</section>
+
+
+<!-- OVERVIEW -->
+<section class="section active" id="sec-overview">
+  <p class="sec-title">¿Cómo funciona Andino a nivel de proyecto?</p>
+  <p class="sec-sub">Squads pequeños y enfocados. Chile lidera — cliente, scope y decisiones. India ejecuta el delivery técnico. El framework estandariza cómo se conectan ambos lados.</p>
+  <div class="kpi-grid">
+    <div class="kpi-box"><div class="kv" style="color:var(--cl)">1–2</div><div class="kl">personas Chile<br>por proyecto</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--in)">2–3</div><div class="kl">personas India<br>por proyecto</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--sh)">5–10</div><div class="kl">proyectos<br>en paralelo</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--neb)">2w</div><div class="kl">ciclo Bolt<br>estándar</div></div>
+  </div>
+  <div class="info-box" style="background:linear-gradient(135deg,rgba(56,189,248,.07),rgba(244,114,182,.05));border:1px solid rgba(56,189,248,.15);">
+    <strong style="color:var(--cl)">Modelo de colaboración:</strong> Chile es el punto de contacto con el cliente — entiende el negocio, prioriza el scope, valida el output. India traduce ese scope en software con autonomía técnica. La coordinación es complementaria, no jerárquica: cada lado tiene un dominio de ownership claro.
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Principios del framework</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-title" style="color:var(--cl)">🎯 Claridad ante todo</div><ul class="card-list"><li>Cada ticket tiene un owner único</li><li>Intent documentado antes de codificar</li><li>Sin trabajo sin contexto escrito</li><li>Decisiones registradas en Jira/Confluence</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--in)">⚡ Velocidad asimétrica</div><ul class="card-list"><li>India opera ~10h de adelanto a Chile</li><li>Rituales anclados en overlap horario</li><li>Trabajo asíncrono como default</li><li>Bloqueos escalados en &lt;2h</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--neb)">🤖 AI-native por defecto</div><ul class="card-list"><li>Nébula + Claude Code en cada proyecto</li><li>Context Engine actualizado por sprint</li><li>Prompts y workflows documentados</li><li>Métricas de adopción de IA por proyecto</li></ul></div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Estructura de un proyecto tipo</p>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">🔍</div><div style="font-family:var(--font-display);font-size:12px;font-weight:700;margin-bottom:6px;">Discovery</div><div style="font-size:11px;color:var(--muted);">Chile · 1–2 días</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">📐</div><div style="font-family:var(--font-display);font-size:12px;font-weight:700;margin-bottom:6px;">Inception</div><div style="font-size:11px;color:var(--muted);">Chile+India · 2–3d</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;border-color:rgba(167,139,250,.25);"><div style="font-size:22px;margin-bottom:8px;">⚡</div><div style="font-family:var(--font-display);font-size:12px;font-weight:700;margin-bottom:6px;">Bolt × N</div><div style="font-size:11px;color:var(--muted);">India lidera · 2w c/u</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">✅</div><div style="font-family:var(--font-display);font-size:12px;font-weight:700;margin-bottom:6px;">QA & Review</div><div style="font-size:11px;color:var(--muted);">Chile valida · 2–3d</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">🚀</div><div style="font-family:var(--font-display);font-size:12px;font-weight:700;margin-bottom:6px;">Deploy</div><div style="font-size:11px;color:var(--muted);">Compartido · 1d</div></div>
+  </div>
+</section>
+
+
+<!-- ROLES -->
+<section class="section" id="sec-roles">
+  <p class="sec-title">Roles & Responsabilidades</p>
+  <p class="sec-sub">Nadie debe preguntarse "¿quién hace esto?" — la respuesta está aquí y en el README de cada proyecto.</p>
+  <div class="role-split">
+    <div class="role-side">
+      <div class="role-hdr"><span style="font-size:20px;">🇨🇱</span><div><div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--cl);">Chile · Project Lead</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Liderazgo & cliente</div></div></div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Punto de contacto único con el cliente</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Define y prioriza el backlog con el cliente</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Escribe Intent Documents antes de cada Bolt</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Valida entregables contra acceptance criteria</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Gestiona relación y expectativas del proyecto</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Toma decisiones de scope y prioridad</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Escala riesgos hacia cliente o hacia C-Level</div>
+    </div>
+    <div class="role-div"></div>
+    <div class="role-side">
+      <div class="role-hdr"><span style="font-size:20px;">🇮🇳</span><div><div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--in);">India · Tech Lead + Devs</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Ejecución técnica</div></div></div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Tech Lead: arquitectura, decisiones, code review</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Estima esfuerzo y divide Bolts en Units</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Implementa con Claude Code + Nébula como default</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Actualiza el Context Engine en cada PR</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Reporta bloqueos inmediatamente</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Escribe documentación técnica en cada ticket</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Propone mejoras técnicas proactivamente</div>
+    </div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Matriz RACI</p>
+  <p class="sec-sub">R = Responsible · A = Accountable · C = Consulted · I = Informed</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--bg3);border-bottom:1px solid var(--border2);">
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Actividad</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cl);text-align:center">🇨🇱 Lead</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--in);text-align:center">🇮🇳 TL</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--in);text-align:center">🇮🇳 Dev</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center">Cliente</div>
+    </div>
+    <div id="raci-body"></div>
+  </div>
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(56,189,248,.2);"><div class="card-title" style="color:var(--cl)">🇨🇱 Chile NO debe hacer</div><ul class="card-list"><li>Comprometer fechas sin validar con India</li><li>Abrir tickets sin acceptance criteria claros</li><li>Saltarse al Tech Lead para hablar con devs</li><li>Codificar antes de definir el Intent</li></ul></div>
+    <div class="card" style="border-color:rgba(244,114,182,.2);"><div class="card-title" style="color:var(--in)">🇮🇳 India NO debe hacer</div><ul class="card-list"><li>Tomar decisiones de scope sin alinear con Chile</li><li>Ignorar bloqueos más de 2 horas</li><li>Codificar sin Intent validado</li><li>Contactar al cliente sin acuerdo previo</li></ul></div>
+  </div>
+</section>
+
+
+<!-- RITUALES PROYECTO -->
+<section class="section" id="sec-rituales">
+  <p class="sec-title">Rituales de proyecto</p>
+  <p class="sec-sub">Diseñados para el overlap horario Chile–India: 14:00–17:00 CLT / 10:30–13:30 IST. Haz clic para ver el detalle de cada ritual.</p>
+  <div class="info-box" style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);">
+    <strong style="color:var(--amb)">⏰ Ventana de overlap:</strong> ~10h de diferencia entre CLT e IST. Todos los rituales síncronos deben caer entre <strong>14:00–17:00 CLT / 10:30–13:30 IST</strong>.
+  </div>
+  <div id="rituals-container"></div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Protocolo asíncrono</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-title" style="color:var(--cl)">📝 Antes de tu turno</div><ul class="card-list"><li>Actualiza el estado de tus tickets en Jira</li><li>Deja contexto en PRs abiertos</li><li>Prepara preguntas en el canal de Teams del proyecto</li><li>Bloqueos con @mention</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--in)">🌅 Al empezar tu turno</div><ul class="card-list"><li>Lee el stand-up escrito del otro equipo</li><li>Revisa Jira: tickets y comentarios nuevos</li><li>Responde preguntas antes de codificar</li><li>Urgente → @mention en el canal</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--sh)">🚫 Nunca asíncrono</div><ul class="card-list"><li>Decisiones de arquitectura</li><li>Cambios de scope → llamada primero</li><li>Bloqueos críticos → escalar inmediato</li><li>Kick-off de Bolt → siempre en vivo</li></ul></div>
+  </div>
+</section>
+
+
+<!-- BOLT -->
+<section class="section" id="sec-bolt">
+  <p class="sec-title">Ciclo Bolt — 2 semanas</p>
+  <p class="sec-sub">El Bolt es la unidad de delivery de Andino Labs. Cada Bolt tiene un objetivo claro, un conjunto de Units y un demo al cliente al finalizar.</p>
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Semana 1</div>
+      <div class="bolt-track">
+        <div class="bolt-step"><div class="bdot" style="background:rgba(56,189,248,.15);border-color:var(--cl)"></div><div class="bcard"><div class="bday">Día 1 · Síncrono</div><div class="bname">Bolt Kick-off</div><div class="bitems"><span class="bitem">Chile presenta Intent Document</span><span class="bitem">India revisa y pregunta</span><span class="bitem">Estimación de Units</span><span class="bitem">Asignación de tickets</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(244,114,182,.15);border-color:var(--in)"></div><div class="bcard"><div class="bday">Días 2–4 · Asíncrono</div><div class="bname">Construcción principal</div><div class="bitems"><span class="bitem">India ejecuta con Nébula + Claude Code</span><span class="bitem">PRs con descripción detallada</span><span class="bitem">Stand-up diario en Teams</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(167,139,250,.15);border-color:var(--sh)"></div><div class="bcard"><div class="bday">Día 5 · Síncrono</div><div class="bname">Mid-Bolt Check</div><div class="bitems"><span class="bitem">Demo interno Chile–India</span><span class="bitem">Revisión progreso vs. Intent</span><span class="bitem">Ajuste de scope si aplica</span></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Semana 2</div>
+      <div class="bolt-track">
+        <div class="bolt-step"><div class="bdot" style="background:rgba(244,114,182,.15);border-color:var(--in)"></div><div class="bcard"><div class="bday">Días 6–8 · Asíncrono</div><div class="bname">Cierre + QA</div><div class="bitems"><span class="bitem">India completa Units pendientes</span><span class="bitem">Tests + revisión manual</span><span class="bitem">Documentación finalizada</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(56,189,248,.15);border-color:var(--cl)"></div><div class="bcard"><div class="bday">Día 9 · Síncrono</div><div class="bname">Review interna</div><div class="bitems"><span class="bitem">Chile valida vs. acceptance criteria</span><span class="bitem">Feedback a India con issues</span><span class="bitem">Go / No-go para demo cliente</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(16,185,129,.15);border-color:var(--neb)"></div><div class="bcard"><div class="bday">Día 10 · Con cliente</div><div class="bname">Demo & Retro</div><div class="bitems"><span class="bitem">Chile presenta al cliente</span><span class="bitem">Feedback capturado en Jira</span><span class="bitem">Retro interna Chile–India</span></div></div></div>
+      </div>
+    </div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Intent Document — Template</p>
+  <div class="card" style="border-color:rgba(56,189,248,.2);font-family:'DM Mono','Courier New',monospace;font-size:12px;line-height:1.8;">
+    <div style="font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--cl);margin-bottom:12px;letter-spacing:.05em;">📄 INTENT DOCUMENT · Bolt #N — [Proyecto]</div>
+    <div style="color:var(--muted)"># Objetivo del Bolt</div><div style="color:var(--mid);margin-bottom:10px;">[1–2 oraciones: qué queremos lograr y por qué importa]</div>
+    <div style="color:var(--muted)"># Units (entregables)</div><div style="color:var(--mid);margin-bottom:10px;">1. [Unit] — descripción + acceptance criteria<br>2. [Unit] — descripción + acceptance criteria</div>
+    <div style="color:var(--muted)"># Out of scope</div><div style="color:var(--mid);margin-bottom:10px;">[Qué NO entra en este Bolt — explícito]</div>
+    <div style="color:var(--muted)"># Decisiones técnicas</div><div style="color:var(--mid);margin-bottom:10px;">[Restricciones, stack obligatorio, integraciones conocidas]</div>
+    <div style="color:var(--muted)"># Preguntas abiertas</div><div style="color:var(--mid);">[Lo que Chile no sabe y necesita que India aclare en el kick-off]</div>
+  </div>
+</section>
+
+
+<!-- TEAMS & JIRA -->
+<section class="section" id="sec-teams">
+  <p class="sec-title">Microsoft Teams & Jira</p>
+  <p class="sec-sub">Las herramientas funcionan cuando todos las usan igual. Estos protocolos aplican en todos los proyectos — tanto a nivel de empresa como de proyecto.</p>
+  <div class="info-box" style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.15);">
+    <strong style="color:var(--cl)">Estructura de Teams:</strong> Un Team "Andino Labs" con canales internos + un Team separado por proyecto o cliente activo. Los canales de empresa y proyecto viven en distintos Teams para evitar ruido cruzado.
+  </div>
+  <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Team: Andino Labs (interno)</p>
+  <div class="tchan"><div style="font-size:16px;">📢</div><div><div class="tc-name">General</div><div class="tc-desc">Anuncios de empresa, updates de liderazgo, nuevos proyectos. Solo postea C-Level.</div></div><span class="badge badge-sh">Empresa</span></div>
+  <div class="tchan"><div style="font-size:16px;">🏛️</div><div><div class="tc-name">clevel-sync</div><div class="tc-desc">Coordinación de C-Level. Pipeline comercial, portfolio health, decisiones estratégicas.</div></div><span class="badge badge-sh">C-Level</span></div>
+  <div class="tchan"><div style="font-size:16px;">💼</div><div><div class="tc-name">comercial</div><div class="tc-desc">Pipeline, deals activos, propuestas en curso. CEO + Country Manager USA + CPO.</div></div><span class="badge badge-com">Comercial</span></div>
+  <div class="tchan"><div style="font-size:16px;">🤝</div><div><div class="tc-name">chile-india-ops</div><div class="tc-desc">Coordinación cross-team. Updates del framework, cambios de proceso, mejoras al playbook.</div></div><span class="badge badge-sh">Shared</span></div>
+  <div class="tchan"><div style="font-size:16px;">🤖</div><div><div class="tc-name">ai-prompts</div><div class="tc-desc">Repositorio vivo de prompts útiles, workflows de Nébula, tips de Claude Code. Cualquiera postea.</div></div><span class="badge badge-neb">AI</span></div>
+  <div class="tchan"><div style="font-size:16px;">🚨</div><div><div class="tc-name">escalaciones</div><div class="tc-desc">Exclusivo para bloqueos críticos, issues de producción y escalaciones que impactan delivery.</div></div><span class="badge badge-amb">Urgente</span></div>
+  <div class="tchan"><div style="font-size:16px;">☕</div><div><div class="tc-name">random</div><div class="tc-desc">Conversación informal, cultura de equipo. Importante para el vínculo Chile–India.</div></div><span class="badge badge-sh">Social</span></div>
+  <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;">Team: [Cliente-Proyecto] (por proyecto)</p>
+  <div class="tchan"><div style="font-size:16px;">🔧</div><div><div class="tc-name">general</div><div class="tc-desc">Todo lo del proyecto: updates, decisiones, bloqueos, contexto técnico. Sin DMs para temas del proyecto.</div></div><span class="badge badge-cl">CL</span><span class="badge badge-in" style="margin-left:4px">IN</span></div>
+  <div class="tchan"><div style="font-size:16px;">📝</div><div><div class="tc-name">standups</div><div class="tc-desc">Canal exclusivo para el stand-up asíncrono diario. Solo el formato estándar — sin conversación.</div></div><span class="badge badge-sh">Diario</span></div>
+  <div class="tchan"><div style="font-size:16px;">🔗</div><div><div class="tc-name">cliente-[nombre]</div><div class="tc-desc">Canal con el cliente incluido. Solo updates formales y comunicaciones validadas por Chile Lead.</div></div><span class="badge badge-com">Cliente</span></div>
+  <hr class="divider">
+  <p style="font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:14px;">Jira — Estructura de tickets</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+    <table class="jira-table"><thead><tr><th>Tipo</th><th>Quién crea</th><th>Estructura requerida</th><th>SLA</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-sh">Epic</span></td><td><span class="badge badge-cl">Chile</span></td><td>Objetivo del Bolt, Definition of Done</td><td>Antes del kick-off</td></tr>
+      <tr><td><span class="badge badge-sh">Story</span></td><td><span class="badge badge-cl">Chile</span></td><td>Como [usuario] quiero [feature] para [valor]. AC claros.</td><td>24h antes del kick-off</td></tr>
+      <tr><td><span class="badge badge-in">Task</span></td><td><span class="badge badge-in">India</span></td><td>Descripción técnica + subtareas + estimación</td><td>En el kick-off</td></tr>
+      <tr><td><span class="badge badge-amb">Bug</span></td><td>Cualquiera</td><td>Pasos para reproducir + entorno + severidad</td><td>P1: 2h · P2: 4h · P3: día siguiente</td></tr>
+      <tr><td><span class="badge badge-neb">Spike</span></td><td><span class="badge badge-in">India</span></td><td>Pregunta + tiempo máximo + output esperado</td><td>Max 4h, output documentado</td></tr>
+    </tbody></table>
+  </div>
+  <p style="font-family:var(--font-display);font-size:13px;font-weight:700;margin-bottom:10px;">Workflow de estados</p>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--muted)">📋 Backlog</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--cl)">📝 Intent Ready</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--in)">⚙️ In Progress</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--in)">👁️ In Review</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--cl)">✅ QA Chile</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--neb)">🚀 Done</div>
+  </div>
+</section>
+
+
+<!-- ESCALACION -->
+<section class="section" id="sec-escalacion">
+  <p class="sec-title">Protocolo de Escalación</p>
+  <p class="sec-sub">El mayor riesgo en equipos distribuidos es el silencio. Este protocolo define qué hacer, cuándo y con quién — sin ambigüedad.</p>
+  <div class="info-box" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);">
+    <strong style="color:#ef4444">⚠️ Regla de oro:</strong> Si estás bloqueado más de <strong>2 horas</strong>, escalas. No esperes el stand-up del día siguiente.
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;">
+    <div class="esc-row hdr"><div class="esc-cell">Nivel</div><div class="esc-cell">¿Qué situación?</div><div class="esc-cell">¿Quién resuelve?</div><div class="esc-cell">¿Dónde y cómo?</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:var(--neb)">L1 · Dev</span></div><div class="esc-cell">Duda técnica, ambigüedad en ticket, decisión menor</div><div class="esc-cell"><span class="badge badge-in">India Tech Lead</span></div><div class="esc-cell">Comentario en Jira. Max 2h de espera.</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:var(--cl)">L2 · Técnico</span></div><div class="esc-cell">Bloqueo técnico que impacta timeline, decisión de arquitectura</div><div class="esc-cell"><span class="badge badge-cl">Chile Lead</span> + <span class="badge badge-in">India TL</span></div><div class="esc-cell">Canal proyecto en Teams. Llamada en &lt;4h.</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:var(--amb)">L3 · Proyecto</span></div><div class="esc-cell">Riesgo de Bolt, cambio de scope del cliente, conflicto de prioridad</div><div class="esc-cell"><span class="badge badge-cl">Chile Lead</span> → <span class="badge badge-sh">C-Level</span></div><div class="esc-cell">Canal #escalaciones en Teams. Misma ventana de overlap.</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:#ef4444">L4 · Crítico</span></div><div class="esc-cell">Issue producción, breach de seguridad, riesgo de perder cliente</div><div class="esc-cell"><span class="badge badge-sh">C-Level</span></div><div class="esc-cell">#escalaciones + llamada inmediata. Fuera de horario si aplica.</div></div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Template de escalación en Teams</p>
+  <div class="card" style="font-family:'DM Mono','Courier New',monospace;font-size:12px;line-height:1.9;border-color:rgba(251,191,36,.2);">
+    <div style="font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--amb);margin-bottom:10px;">🚨 ESCALACIÓN · [L2/L3] — @[mention]</div>
+    <div style="color:var(--muted)">Proyecto:</div><div style="color:var(--mid);margin-bottom:6px;">[nombre del proyecto]</div>
+    <div style="color:var(--muted)">Ticket Jira:</div><div style="color:var(--mid);margin-bottom:6px;">[PROJ-123]</div>
+    <div style="color:var(--muted)">Bloqueo:</div><div style="color:var(--mid);margin-bottom:6px;">[Qué está bloqueado y desde cuándo]</div>
+    <div style="color:var(--muted)">Ya intenté:</div><div style="color:var(--mid);margin-bottom:6px;">[Opciones ya exploradas]</div>
+    <div style="color:var(--muted)">Impacto:</div><div style="color:var(--mid);margin-bottom:6px;">[Qué se retrasa si no se resuelve hoy]</div>
+    <div style="color:var(--muted)">Necesito:</div><div style="color:var(--mid)">[Decisión / información / debloqueo específico]</div>
+  </div>
+</section>
+
+
+<!-- ONBOARDING -->
+<section class="section" id="sec-onboarding">
+  <p class="sec-title">Onboarding al proyecto</p>
+  <p class="sec-sub">Cuando llega un nuevo integrante, este proceso asegura que esté operativo en menos de 1 día hábil.</p>
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div>
+      <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--cl);margin-bottom:14px;letter-spacing:.04em;text-transform:uppercase;">🇨🇱 Chile — Project Lead</div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">1</div><div class="obody"><div class="otitle">Briefing con comercial (30 min)</div><div class="odesc">CEO o Country Manager USA hace el traspaso: negocio del cliente, historia del deal, stakeholders y compromisos dados durante la venta.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">2</div><div class="obody"><div class="otitle">Leer el Project Brief en Confluence</div><div class="odesc">Stack, decisiones de arquitectura, Bolts anteriores, feedback del cliente y métricas actuales.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">3</div><div class="obody"><div class="otitle">Meet con India Tech Lead (30 min)</div><div class="odesc">Presentación, expectativas de trabajo, timezone, preferencias de comunicación y acuerdos de disponibilidad.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">4</div><div class="obody"><div class="otitle">Accesos y canales</div><div class="odesc">Jira, Team en Teams, Confluence. Intro al cliente hecha por el vendedor antes del primer contacto directo.</div></div></div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--in);margin-bottom:14px;letter-spacing:.04em;text-transform:uppercase;">🇮🇳 India — Dev / Tech Lead</div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">1</div><div class="obody"><div class="otitle">Setup técnico (2h máx)</div><div class="odesc">Repo clonado, dependencias instaladas, env local funcionando, Nébula + Claude Code configurado. Sin esto, no hay día 1 productivo.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">2</div><div class="obody"><div class="otitle">Leer el Context Engine del proyecto</div><div class="odesc">Arquitectura, ADRs, convenciones de código y guías de contribución en Confluence.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">3</div><div class="obody"><div class="otitle">Primer good-first-issue</div><div class="odesc">Chile prepara un ticket etiquetado para el día 1. Objetivo: un PR chico para conocer el proceso completo.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">4</div><div class="obody"><div class="otitle">Meet con Chile Lead (30 min)</div><div class="odesc">Expectativas, acuerdos de comunicación, repaso del Bolt actual. Preguntas sin filtro bienvenidas.</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- MÉTRICAS -->
+<section class="section" id="sec-metricas">
+  <p class="sec-title">Métricas del framework</p>
+  <p class="sec-sub">Métricas en dos niveles: empresa (portfolio, revenue) y proyecto (delivery, colaboración, IA). Revisadas en sus respectivas ceremonias.</p>
+  <p style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--sh);margin-bottom:12px;">🏛️ Métricas de empresa — Portfolio Review mensual</p>
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card" style="border-color:rgba(251,146,60,.2);"><div class="card-title" style="color:var(--com)">💼 Revenue & pipeline</div><ul class="card-list"><li><strong style="color:var(--text)">Pipeline value</strong> — total deals activos LATAM + USA</li><li><strong style="color:var(--text)">Win rate</strong> — % propuestas que cierran (target ≥40%)</li><li><strong style="color:var(--text)">Sales cycle</strong> — días primer contacto → firma (target ≤21d)</li><li><strong style="color:var(--text)">Revenue por proyecto</strong> — vs. costo operacional Chile+India</li></ul></div>
+    <div class="card" style="border-color:rgba(167,139,250,.2);"><div class="card-title" style="color:var(--sh)">📊 Portfolio health</div><ul class="card-list"><li><strong style="color:var(--text)">Proyectos on-track</strong> — % sin riesgo de delivery (target ≥85%)</li><li><strong style="color:var(--text)">NPS del cliente</strong> — encuesta post-Bolt, score agregado</li><li><strong style="color:var(--text)">Utilización India</strong> — % capacidad asignada a proyectos activos</li><li><strong style="color:var(--text)">Churn</strong> — contratos no renovados o cancelados</li></ul></div>
+  </div>
+  <p style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--cl);margin-bottom:12px;">🔧 Métricas de proyecto — Retro quincenal</p>
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(56,189,248,.2);"><div class="card-title" style="color:var(--cl)">📊 Delivery</div><ul class="card-list"><li><strong style="color:var(--text)">Bolt completion rate</strong> — % Units entregadas (target ≥85%)</li><li><strong style="color:var(--text)">Cycle time</strong> — ticket creado → Done (target &lt;5 días)</li><li><strong style="color:var(--text)">PR review time</strong> — PR abierto → aprobado (target &lt;4h)</li><li><strong style="color:var(--text)">Defect escape rate</strong> — bugs post-demo (target 0)</li></ul></div>
+    <div class="card" style="border-color:rgba(16,185,129,.2);"><div class="card-title" style="color:var(--neb)">🤖 Adopción IA</div><ul class="card-list"><li><strong style="color:var(--text)">AI usage rate</strong> — % tickets con Nébula/Claude Code (target ≥80%)</li><li><strong style="color:var(--text)">Context Engine freshness</strong> — % docs actualizados en el último Bolt</li><li><strong style="color:var(--text)">Prompt reuse rate</strong> — % prompts del canal #ai-prompts reutilizados</li></ul></div>
+  </div>
+</section>
+
+<footer class="foot">Andino Labs · Chile × India Operating Framework · v2.0 — Framework vivo: actualizar en cada retro quincenal</footer>
+
+<script>
+const clevelData=[
+  {icon:"🌎",role:"CEO",bg:"rgba(251,146,60,.15)",color:"var(--com)",
+   owns:["Visión y estrategia de Andino","Pipeline LATAM — prospección y cierre","Relaciones con cuentas estratégicas","Cultura y liderazgo del equipo global"],
+   cere:["Weekly C-Level","Portfolio Review mensual","Reunión comercial semanal"]},
+  {icon:"🏗️",role:"CTO",bg:"rgba(56,189,248,.15)",color:"var(--cl)",
+   owns:["Arquitectura técnica y estándares del equipo","Decisiones de stack y tooling global","Hiring técnico Chile e India","Seguridad, compliance y deuda técnica"],
+   cere:["Weekly C-Level","Tech Review mensual (mixta)","Architecture Decision Reviews"]},
+  {icon:"📦",role:"Chief Product Officer",bg:"rgba(244,114,182,.15)",color:"var(--in)",
+   owns:["Roadmap de producto Nébula","Narrativa de producto en el pitch","Experiencia del cliente con el framework","Pricing y packaging de la oferta"],
+   cere:["Weekly C-Level","Product Review quincenal","Demo interno de Nébula mensual"]},
+  {icon:"🤖",role:"Chief AI & Delivery",bg:"rgba(16,185,129,.15)",color:"var(--neb)",
+   owns:["Calidad de delivery en todos los proyectos","Adopción y madurez de IA en el equipo","Evolución del framework operacional","Métricas de portfolio — Bolt completion, NPS"],
+   cere:["Weekly C-Level","Portfolio Review mensual","Tech Review mensual (mixta)","Retro de líderes trimestral"]},
+  {icon:"🇺🇸",role:"Country Manager USA",bg:"rgba(167,139,250,.15)",color:"var(--sh)",
+   owns:["Pipeline USA — prospección y cierre","Expansión del mercado norteamericano","Relaciones con cuentas USA activas","Adaptación de la oferta al mercado US"],
+   cere:["Weekly C-Level","Reunión comercial semanal","QBR clientes USA"]},
+];
+const cc=document.getElementById('clevel-container');
+clevelData.forEach(r=>{
+  const d=document.createElement('div');d.className='clcard';
+  d.innerHTML=`<div class="clavatar" style="background:${r.bg}">${r.icon}</div>
+    <div style="flex:1"><div class="clname">${r.role}</div><div class="clrole">Ownership & accountability</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+      <div><div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Dominio de ownership</div>
+        ${r.owns.map(o=>`<div style="font-size:12px;color:var(--mid);padding:2px 0;display:flex;gap:6px;"><span style="color:${r.color}">›</span>${o}</div>`).join('')}</div>
+      <div><div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Participa en</div>
+        ${r.cere.map(c=>`<div style="font-size:12px;color:var(--mid);padding:2px 0;display:flex;gap:6px;"><span style="color:var(--sh)">›</span>${c}</div>`).join('')}</div>
+    </div></div>`;
+  cc.appendChild(d);
+});
+
+const ceremonias=[
+  {icon:"🔁",name:"Weekly C-Level Sync",meta:"Semanal · Lunes 09:00 CLT · Síncrono 45 min",level:"lv-emp",lbl:"Solo liderazgo",
+   quienes:"CEO, CTO, CPO, Chief AI & Delivery, Country Manager USA",
+   left:{label:"Agenda",items:["00–10: Pipeline update — CEO (LATAM) + Country Manager (USA)","10–20: Portfolio health — Chief AI & Delivery: proyectos, bloqueos, riesgos","20–30: Producto & tech — CPO + CTO: Nébula, stack, hiring","30–40: Prioridades de la semana — cada rol comparte su foco","40–45: Decisiones y acuerdos — registradas en Confluence"]},
+   right:{label:"Reglas",items:["Notas en Confluence con acuerdos y owners antes de las 11:00 CLT","Si alguien no asiste, envía update escrito antes de la reunión","Temas que necesiten >10 min van a reuniones separadas","Decisiones tomadas son vinculantes para toda la semana"]}},
+  {icon:"📊",name:"Portfolio Review mensual",meta:"Mensual · Primer jueves del mes · Síncrono 90 min",level:"lv-emp",lbl:"Solo liderazgo",
+   quienes:"CEO, CTO, CPO, Chief AI & Delivery, Country Manager USA",
+   left:{label:"Agenda",items:["00–20: Portfolio health — revisión proyecto a proyecto con métricas","20–40: Financiero — revenue vs. proyectado, costos, márgenes","40–60: Pipeline comercial — deals en curso LATAM y USA, forecast","60–80: Producto & framework — mejoras a Nébula, feedback de clientes","80–90: Decisiones estratégicas — prioridades del próximo mes"]},
+   right:{label:"Outputs",items:["Portfolio Dashboard actualizado en Confluence","Decisiones de asignación de equipo comunicadas a Chief AI & Delivery","Proyectos en riesgo con plan de acción y owner","Revenue forecast del trimestre actualizado","Cambios al framework documentados en el playbook"]}},
+  {icon:"🤝",name:"Tech Review mensual — India",meta:"Mensual · Tercer miércoles · Síncrono 60 min · 14:00 CLT / 10:30 IST",level:"lv-mix",lbl:"Mixta",
+   quienes:"CTO, Chief AI & Delivery + Tech Leads India (todos los proyectos activos)",
+   left:{label:"Agenda",items:["00–15: Problemas técnicos recurrentes — Tech Leads comparten top 3 del mes","15–30: Evolución del stack — nuevas herramientas, cambios en Nébula","30–45: Adopción de IA — métricas, mejores prompts del mes, casos nuevos","45–55: Feedback sobre el framework — qué no está funcionando","55–60: Próximos cambios al playbook técnico"]},
+   right:{label:"Reglas",items:["CTO documenta decisiones técnicas globales como ADRs","Chief AI & Delivery actualiza el framework según el feedback","Sesión grabada para quien no puede asistir","Los Tech Leads preparan sus 3 puntos con anticipación","Cambios al Context Engine estándar se comunican a todos"]}},
+  {icon:"🌱",name:"Retro de líderes trimestral",meta:"Trimestral · Fin de trimestre · Síncrono 2h · Formato facilitado",level:"lv-mix",lbl:"Mixta",
+   quienes:"C-Level completo + Project Leads Chile + Tech Leads India",
+   left:{label:"Agenda",items:["00–20: Mirada al trimestre — qué funcionó, qué no, qué aprendimos","20–50: Fricción Chile–India — ejercicio facilitado de mejora colaborativa","50–80: Evolución del framework — propuestas con owner y fecha","80–100: Cultura y equipo — health check, reconocimientos, preocupaciones","100–120: Compromisos del próximo trimestre"]},
+   right:{label:"Principios",items:["Facilitador neutral (rota entre C-Level cada trimestre)","Ningún punto se descarta sin discutirse","Los acuerdos tienen owner y fecha — sin owner no es un acuerdo","Resumen publicado en #chile-india-ops en Teams","El playbook se actualiza antes de la semana siguiente"]}},
+  {icon:"💼",name:"Reunión comercial semanal",meta:"Semanal · Miércoles · Síncrono 30 min",level:"lv-emp",lbl:"Solo liderazgo",
+   quienes:"CEO, Country Manager USA · + CPO cuando hay pitch técnico activo",
+   left:{label:"Agenda",items:["00–10: CEO update — pipeline LATAM: deals nuevos y avance de propuestas","10–20: Country Manager update — pipeline USA: leads, demos, propuestas enviadas","20–28: Próximas semanas — reuniones confirmadas, materiales a preparar","28–30: Handoffs a operaciones — clientes que están cerrando"]},
+   right:{label:"Reglas",items:["CRM actualizado antes de entrar — no se actualiza en vivo","Deal nuevo → notificar en #comercial en Teams el mismo día","Handoff operacional con 5 días de anticipación al cierre","CPO recibe aviso 2 semanas antes cuando hay pitch técnico"]}},
+];
+const ccon=document.getElementById('ceremonias-container');
+ceremonias.forEach((c,i)=>{
+  const d=document.createElement('div');d.className='ritual';
+  d.innerHTML=`<div class="ritual-hdr" onclick="tog(this)">
+    <div class="rleft"><span class="ricon">${c.icon}</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span class="rname">${c.name}</span><span class="level-tag ${c.level}">${c.lbl}</span></div>
+        <div class="rmeta">${c.meta}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">👥 ${c.quienes}</div>
+      </div></div>
+    <span class="rarrow">›</span></div>
+  <div class="rbody${i===0?' open':''}">
+    <div class="rbody-inner">
+      <div class="rblock"><div class="rblbl">${c.left.label}</div><ul>${c.left.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+      <div class="rblock"><div class="rblbl">${c.right.label}</div><ul>${c.right.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+    </div></div>`;
+  ccon.appendChild(d);
+});
+
+const pipeline=[
+  {num:"01",name:"Identificación y calificación",meta:"Días 1–3 · Owner: CEO (LATAM) / Country Manager USA",color:"var(--com)",
+   cols:[{label:"¿Qué se hace?",items:["Identificar empresa target: industria, tamaño, stack, cultura de ingeniería","Calificar fit: ¿tiene equipo de dev? ¿dolor con el delivery? ¿puede pagar?","Primer contacto — LinkedIn, referidos o outreach directo","Objetivo: conseguir una Discovery Call de 30 min"]},
+         {label:"Criterios BANT",items:["Budget: ¿tiene presupuesto para servicios de desarrollo / consultoría?","Authority: ¿estamos hablando con quien decide?","Need: ¿el dolor de delivery o productividad es real y urgente?","Timeline: ¿quieren resolver esto en los próximos 60–90 días?"]},
+         {label:"Output",items:["CRM actualizado con empresa, contacto, fuente del lead y score","Si no pasa BANT → nurture con contenido, no avanzar","Si pasa → agendar Discovery Call","Notificar en #comercial en Teams"]}]},
+  {num:"02",name:"Discovery Call",meta:"Días 4–7 · 45–60 min · Owner: CEO o Country Manager",color:"var(--amb)",
+   cols:[{label:"Agenda",items:["00–10: Andino en 5 min — quiénes somos, qué nos diferencia","10–30: Escucha activa — dolores del cliente: ¿qué frena el delivery hoy?","30–45: Demo rápido de Nébula si el perfil es técnico","45–60: Preguntas de calificación profunda + acuerdo de próximo paso"]},
+         {label:"Preguntas clave",items:["¿Cuántas personas en el equipo de dev? ¿Qué seniority?","¿Cuál es su ciclo de delivery actual? ¿Qué los frena?","¿Han intentado usar IA antes? ¿Qué pasó?","¿Quién más está involucrado en esta decisión?","¿Qué necesitaría pasar para que esto fuera un sí?"]},
+         {label:"Output",items:["Notas de discovery en el CRM en &lt;24h","Si hay fit → propuesta en 3–5 días hábiles","Si hay dudas → segunda llamada con CTO o CPO","Si no hay fit → cerrar con dignidad, mantener relación"]}]},
+  {num:"03",name:"Propuesta y pitch técnico",meta:"Días 8–14 · Owner: CEO/Country Manager + CPO + CTO",color:"var(--neb)",
+   cols:[{label:"Componentes de la propuesta",items:["Problema específico del cliente (basado en notas del discovery)","Cómo resuelve Andino ese problema con su metodología","Modelo de engagement — scope, equipo, duración, Bolts","Inversión — precio y modelo de pago","Métricas de éxito propuestas para el proyecto"]},
+         {label:"Pitch técnico (cuando aplica)",items:["CPO o CTO se une a la llamada de presentación","Demo en vivo de Nébula con un caso de uso similar al cliente","Explicación del modelo Chile–India con garantías","Q&A técnico — stack, seguridad, integraciones","ROI Calculator con los datos del cliente"]},
+         {label:"Reglas",items:["No enviar propuesta sin haber hecho el discovery — nunca","La propuesta se presenta en vivo, no se manda sin llamada","Ajuste de precio → escalar a CEO antes de responder","Máximo 2 iteraciones de propuesta"]}]},
+  {num:"04",name:"Negociación y cierre",meta:"Días 15–21 · Owner: CEO o Country Manager",color:"var(--cl)",
+   cols:[{label:"Gestión de objeciones comunes",items:["\"Es muy caro\" → mostrar ROI concreto, comparar con costo de un dev FTE","\"No conocemos el modelo\" → mostrar caso de referencia similar","\"Necesitamos pensarlo\" → acordar fecha concreta de respuesta","\"¿Solo una parte?\" → evaluar si tiene sentido, ajustar precio si se ajusta scope"]},
+         {label:"Proceso de cierre",items:["Acuerdo verbal → enviar contrato en 24h","Contrato firmado → notificar a Chief AI & Delivery para asignación","Depósito o primera factura → confirmar fecha de kick-off","Intro del Project Lead al cliente hecha por el vendedor"]},
+         {label:"Handoff a operaciones",items:["Briefing de 30 min del vendedor al Project Lead","Sale Package completo en Confluence","Accesos del cliente configurados antes del kick-off","Chief AI & Delivery confirma disponibilidad del equipo India"]}]},
+  {num:"05",name:"Post-venta y expansión",meta:"Ongoing · Owner: CEO / Country Manager + Project Lead",color:"var(--sh)",
+   cols:[{label:"Durante el proyecto",items:["CEO o Country Manager hace check-in con el cliente cada 2 Bolts","NPS capturado post cada demo al cliente","Identificar señales de expansión: más equipos, nuevos proyectos, referidos","Alertar al Project Lead si la relación está en riesgo"]},
+         {label:"Expansión del contrato",items:["Más scope → CEO/Country Manager lidera, Project Lead provee contexto técnico","Referidos: pedir intro al finalizar el primer Bolt exitoso","Upsell de tracks adicionales si el cliente está listo"]},
+         {label:"Cierre y renovación",items:["Retrospectiva final con el cliente — CEO/Country Manager + Project Lead","Propuesta de continuidad presentada 2 semanas antes del último Bolt","Si no renueva: exit interview documentada en CRM","Caso de éxito documentado (con permiso del cliente)"]}]},
+];
+const pc=document.getElementById('pipeline-container');
+pipeline.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='pipe';
+  d.innerHTML=`<div class="pipe-hdr" onclick="togP(this)">
+    <div class="pipe-num" style="background:rgba(251,146,60,.1);color:${s.color};border:1.5px solid ${s.color}">${s.num}</div>
+    <div><div class="pipe-name">${s.name}</div><div class="pipe-meta">${s.meta}</div></div>
+    <span class="rarrow">›</span></div>
+  <div class="pbody${i===0?' open':''}">
+    <div class="pgrid">${s.cols.map(col=>`<div><div class="pclbl">${col.label}</div><ul class="pcol">${col.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>`).join('')}
+    </div></div>`;
+  pc.appendChild(d);
+});
+
+const rituals=[
+  {icon:"📝",name:"Stand-up asíncrono diario",meta:"Diario · Asíncrono · Canal standups en Teams",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"]],
+   left:{label:"Formato fijo",items:["✅ Qué hice ayer","🔧 Qué haré hoy","⛔ Bloqueos con @mention","📊 Tickets: [PROJ-XX] → [estado]"]},
+   right:{label:"Reglas",items:["Chile postea 09:00 CLT · India 09:30 IST","Bloqueo → escalar en <2h","No es reunión — es artefacto escrito"]}},
+  {icon:"🚀",name:"Bolt Kick-off",meta:"Cada 2 semanas · Síncrono 60 min · 14:00 CLT / 10:30 IST",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄ Síncrono"]],
+   left:{label:"Agenda",items:["00–10: Chile presenta Intent Document","10–20: India clarifica scope","20–40: Estimación de Units en vivo","40–55: Asignación de tickets","55–60: Acuerdos de disponibilidad"]},
+   right:{label:"Pre-requisitos",items:["Intent Document en Jira antes de la llamada","Stories con AC escritos por Chile","Todos leen el Intent antes de entrar"]}},
+  {icon:"🔍",name:"Mid-Bolt Check",meta:"Semana 1 · Viernes · Síncrono 30 min",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄"]],
+   left:{label:"Agenda",items:["00–10: India demo de lo construido","10–20: Chile valida vs. Intent","20–25: Ajuste de scope si hay riesgo","25–30: Acuerdos para semana 2"]},
+   right:{label:"Output",items:["On-track o ajuste documentado","Tickets repriorizados si aplica","Bloqueos registrados en Jira"]}},
+  {icon:"✅",name:"Bolt Review interna",meta:"Semana 2 · Día 9 · Síncrono 45 min",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄"]],
+   left:{label:"Agenda",items:["00–20: India demo completo de Units","20–35: Chile valida acceptance criteria","35–42: Issues → tickets creados","42–45: Go / No-go para demo cliente"]},
+   right:{label:"Criterio de Go",items:["≥85% Units entregadas según AC","0 bugs P1 abiertos","Documentación actualizada","Context Engine actualizado"]}},
+  {icon:"🔄",name:"Retro quincenal",meta:"Post-demo cliente · Síncrono 30 min",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄"]],
+   left:{label:"Agenda",items:["00–05: Métricas del Bolt","05–15: What went well / didn't","15–25: Action items con owner","25–30: Team health check en Teams"]},
+   right:{label:"Reglas",items:["Sin owner no es un acuerdo","Documentar en Confluence","Action items revisados en la retro siguiente"]}},
+  {icon:"🤖",name:"Mob AI Session",meta:"Mensual · Síncrono 60 min · Todo el equipo",tags:[["rtag-sh","⇄ Todos"],["rtag-neb","🤖 Nébula"]],
+   left:{label:"Propósito",items:["Compartir prompts y workflows funcionando","Resolver problema técnico con IA en vivo","Actualizar el Context Engine juntos","Mejorar el tooling de Nébula"]},
+   right:{label:"Output",items:["≥3 prompts en #ai-prompts en Teams","1 workflow de Nébula mejorado","Context Engine actualizado","Feedback al framework global"]}},
+];
+const rc=document.getElementById('rituals-container');
+rituals.forEach((r,i)=>{
+  const d=document.createElement('div');d.className='ritual';
+  d.innerHTML=`<div class="ritual-hdr" onclick="tog(this)">
+    <div class="rleft"><span class="ricon">${r.icon}</span>
+      <div><div class="rname">${r.name}</div><div class="rmeta">${r.meta}</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="rtags">${r.tags.map(([cls,lbl])=>`<span class="rtag ${cls}">${lbl}</span>`).join('')}</div>
+      <span class="rarrow">›</span></div></div>
+  <div class="rbody${i===0?' open':''}">
+    <div class="rbody-inner">
+      <div class="rblock"><div class="rblbl">${r.left.label}</div><ul>${r.left.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+      <div class="rblock"><div class="rblbl">${r.right.label}</div><ul>${r.right.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+    </div></div>`;
+  rc.appendChild(d);
+});
+
+const raciData=[
+  ["Discovery / kick-off con cliente","R/A","C","—","C"],
+  ["Escribir Intent Document","R/A","C","—","I"],
+  ["Estimar y descomponer Bolt en Units","C","R/A","C","—"],
+  ["Priorizar backlog","R/A","C","—","C"],
+  ["Arquitectura técnica","I","R/A","C","—"],
+  ["Implementación de features","—","C","R/A","—"],
+  ["Code review","—","R/A","R","—"],
+  ["QA & validación acceptance criteria","R/A","C","C","—"],
+  ["Demo al cliente","R/A","I","—","I"],
+  ["Actualizar Context Engine / docs","I","R/A","R","—"],
+  ["Escalar bloqueos L3+","R/A","I","—","—"],
+  ["Facilitar retro","R/A","C","C","—"],
+];
+const cols={"R/A":"badge-sh","R":"badge-in","A":"badge-cl","C":"badge-amb","I":"badge-neb","—":""};
+const tbody=document.getElementById('raci-body');
+raciData.forEach((row,i)=>{
+  const tr=document.createElement('div');
+  tr.style.cssText=`display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);${i%2?'background:rgba(255,255,255,.015)':''}`;
+  tr.innerHTML=`<div style="padding:10px 16px;font-size:12.5px;color:var(--mid)">${row[0]}</div>`+
+    [1,2,3,4].map(j=>`<div style="padding:10px 14px;text-align:center">${row[j]!=='—'?`<span class="badge ${cols[row[j]]}">${row[j]}</span>`:'<span style="color:var(--muted);font-size:12px">—</span>'}</div>`).join('');
+  tbody.appendChild(tr);
+});
+
+function tog(hdr){const b=hdr.nextElementSibling,a=hdr.querySelector('.rarrow');b.classList.toggle('open');a.style.transform=b.classList.contains('open')?'rotate(90deg)':'';}
+function togP(hdr){const b=hdr.nextElementSibling,a=hdr.querySelector('.rarrow');b.classList.toggle('open');a.style.transform=b.classList.contains('open')?'rotate(90deg)':'';}
+function go(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
