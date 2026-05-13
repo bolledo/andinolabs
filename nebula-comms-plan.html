@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nébula · 3-Month Communication Plan</title>
+<style>
+  :root {
+    --bg:    #0a0a0f;
+    --card:  #13131a;
+    --border:#1e1e2e;
+    --text:  #e2e8f0;
+    --muted: #64748b;
+    --neb:   #10b981;
+    --neb2:  #059669;
+    --tec:   #06b6d4;
+    --cul:   #a78bfa;
+    --con:   #f59e0b;
+    --blue:  #3b82f6;
+    --red:   #ef4444;
+    --pink:  #ec4899;
+    --int:   #06b6d4;
+    --ext:   #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0a0a0f 0%, #0d1f18 50%, #0a0a0f 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(16,185,129,.12), transparent);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(16,185,129,.12);
+    border: 1px solid rgba(16,185,129,.3);
+    color: var(--neb);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--neb); }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 580px;
+    margin: 0 auto 28px;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .hero-meta-item .val {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--neb);
+  }
+  .hero-meta-item .lbl {
+    font-size: .75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  /* TABS */
+  .tabs-bar {
+    display: flex;
+    gap: 4px;
+    padding: 16px 40px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: .85rem;
+    font-weight: 500;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--neb); border-bottom-color: var(--neb); }
+
+  /* CONTENT */
+  .tab-content { display: none; padding: 40px; max-width: 1100px; margin: 0 auto; }
+  .tab-content.active { display: block; animation: fadein .3s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-title span { color: var(--neb); }
+  .section-desc { color: var(--muted); font-size: .95rem; margin-bottom: 32px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card.neb { border-color: rgba(16,185,129,.3); }
+  .card.tec { border-color: rgba(6,182,212,.3); }
+  .card.cul { border-color: rgba(167,139,250,.3); }
+  .card.con { border-color: rgba(245,158,11,.3); }
+  .card.blue { border-color: rgba(59,130,246,.3); }
+  .card.pink { border-color: rgba(236,72,153,.3); }
+
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+  .card-icon.neb { background: rgba(16,185,129,.15); }
+  .card-icon.tec { background: rgba(6,182,212,.15); }
+  .card-icon.cul { background: rgba(167,139,250,.15); }
+  .card-icon.con { background: rgba(245,158,11,.15); }
+  .card-icon.blue { background: rgba(59,130,246,.15); }
+  .card-icon.pink { background: rgba(236,72,153,.15); }
+
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: .88rem; color: var(--muted); line-height: 1.6; }
+
+  /* PILL TAGS */
+  .pill {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .pill.neb { background: rgba(16,185,129,.15); color: var(--neb); border: 1px solid rgba(16,185,129,.3); }
+  .pill.tec { background: rgba(6,182,212,.15); color: var(--tec); border: 1px solid rgba(6,182,212,.3); }
+  .pill.cul { background: rgba(167,139,250,.15); color: var(--cul); border: 1px solid rgba(167,139,250,.3); }
+  .pill.con { background: rgba(245,158,11,.15); color: var(--con); border: 1px solid rgba(245,158,11,.3); }
+  .pill.blue { background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3); }
+  .pill.pink { background: rgba(236,72,153,.15); color: var(--pink); border: 1px solid rgba(236,72,153,.3); }
+  .pill.int { background: rgba(6,182,212,.15); color: var(--tec); border: 1px solid rgba(6,182,212,.3); }
+  .pill.ext { background: rgba(167,139,250,.15); color: var(--cul); border: 1px solid rgba(167,139,250,.3); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    color: var(--muted);
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+
+  /* PHASE BAND */
+  .phase-band {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .phase-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    border-top: 3px solid var(--neb);
+  }
+  .phase-box.p2 { border-top-color: var(--tec); }
+  .phase-box.p3 { border-top-color: var(--cul); }
+  .phase-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--neb);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .phase-box.p2 .phase-label { color: var(--tec); }
+  .phase-box.p3 .phase-label { color: var(--cul); }
+  .phase-box h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .phase-box p { font-size: .84rem; color: var(--muted); }
+
+  /* MEETING CARD */
+  .meeting-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 160px 120px;
+    gap: 16px;
+    align-items: start;
+    padding: 18px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  .meeting-name { font-weight: 700; font-size: .95rem; }
+  .meeting-desc { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  .meeting-freq { font-size: .82rem; color: var(--neb); font-weight: 600; }
+  .meeting-owner { font-size: .82rem; color: var(--muted); }
+
+  /* CONTENT CALENDAR */
+  .cal-week {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .cal-week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .cal-week-header h4 { font-size: .9rem; font-weight: 700; }
+  .cal-week-body { padding: 16px 20px; }
+  .cal-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: .85rem;
+  }
+  .cal-item:last-child { border-bottom: none; }
+  .cal-channel {
+    min-width: 100px;
+    font-weight: 600;
+  }
+
+  /* MESSAGE BOX */
+  .msg-box {
+    background: rgba(16,185,129,.06);
+    border: 1px solid rgba(16,185,129,.2);
+    border-left: 3px solid var(--neb);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: .9rem;
+  }
+  .msg-box .msg-label {
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--neb);
+    margin-bottom: 6px;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot {
+    position: absolute;
+    left: -24px; top: 4px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--neb);
+    border: 2px solid var(--bg);
+  }
+  .tl-dot.tec { background: var(--tec); }
+  .tl-dot.cul { background: var(--cul); }
+  .tl-week { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 4px; }
+  .tl-title { font-weight: 700; margin-bottom: 4px; font-size: .95rem; }
+  .tl-body { font-size: .85rem; color: var(--muted); }
+
+  /* KPI ROW */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .kpi-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .kpi-val { font-size: 2rem; font-weight: 800; color: var(--neb); }
+  .kpi-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+  .kpi-target { font-size: .82rem; color: var(--muted); margin-top: 6px; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 40px 20px 32px; }
+    .tabs-bar { padding: 12px 16px 0; }
+    .tab-content { padding: 24px 16px; }
+    .meeting-row { grid-template-columns: 1fr; }
+    .phase-band { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Andino Labs · Internal & Market</div>
+  <h1><span>Nébula</span> Communication Plan</h1>
+  <p>3-month roadmap to align the organization and establish market presence for Andino Labs' proprietary AI SDLC platform.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span class="val">3</span><span class="lbl">Months</span></div>
+    <div class="hero-meta-item"><span class="val">2</span><span class="lbl">Audiences</span></div>
+    <div class="hero-meta-item"><span class="val">5</span><span class="lbl">Channels</span></div>
+    <div class="hero-meta-item"><span class="val">LATAM + IN</span><span class="lbl">Coverage</span></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('overview', this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('internal', this)">Internal Comms</button>
+  <button class="tab-btn" onclick="switchTab('technical', this)">Technical Leaders</button>
+  <button class="tab-btn" onclick="switchTab('clevel', this)">C-Level</button>
+  <button class="tab-btn" onclick="switchTab('market', this)">Market</button>
+  <button class="tab-btn" onclick="switchTab('calendar', this)">3-Month Calendar</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB: OVERVIEW -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-overview">
+  <div class="section-title">What we're <span>communicating</span></div>
+  <p class="section-desc">Nébula's launch requires two parallel communication tracks — internal alignment across Andino Labs globally, and external positioning in the LATAM (and future US) market.</p>
+
+  <div class="phase-band">
+    <div class="phase-box">
+      <div class="phase-label">Month 1 · Weeks 1–4</div>
+      <h3>Ignite</h3>
+      <p>Announce internally. Share the vision with all of Andino Labs. Brief C-Level and technical leaders. Begin external teaser presence.</p>
+    </div>
+    <div class="phase-box p2">
+      <div class="phase-label">Month 2 · Weeks 5–8</div>
+      <h3>Engage</h3>
+      <p>Deepen internal understanding through working sessions. Launch external thought leadership. Activate LinkedIn and specialized media outreach.</p>
+    </div>
+    <div class="phase-box p3">
+      <div class="phase-label">Month 3 · Weeks 9–12</div>
+      <h3>Amplify</h3>
+      <p>First external results and case stories. Periodic C-Level review. Expand media reach. Consolidate internal flywheel practices.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:32px;">
+    <div class="card neb">
+      <div class="card-icon neb">🏛️</div>
+      <h3>Internal Objective</h3>
+      <p>Every person at Andino Labs — LATAM and India — understands what Nébula is, why it matters strategically, and how it relates to their role. C-Level and technical leaders are active champions, not just informed stakeholders.</p>
+    </div>
+    <div class="card cul">
+      <div class="card-icon cul">📡</div>
+      <h3>External Objective</h3>
+      <p>Andino Labs is recognized in LATAM as the AI engineering transformation partner with a proprietary platform. Target buyers (CTOs, VPs Engineering) see Nébula as a credible differentiator, not just a marketing claim.</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-bottom:16px;">Core <span>Messages</span></div>
+
+  <div class="msg-box">
+    <div class="msg-label">Message 1 — What Nébula is</div>
+    Nébula is Andino Labs' proprietary multi-agent, multi-LLM platform that covers the full AI Software Development Lifecycle — from intent capture through deployment — deployed inside client infrastructure, exclusive to Andino Labs engagements.
+  </div>
+  <div class="msg-box" style="border-left-color: var(--tec); background: rgba(6,182,212,.06);">
+    <div class="msg-label" style="color:var(--tec);">Message 2 — Why it matters</div>
+    Most teams adopt AI tools individually and plateau. Nébula makes AI adoption a team capability, not a personal skill — with a feedback flywheel that compounds over time. It's the execution layer that turns AI intent into AI-ready engineering teams.
+  </div>
+  <div class="msg-box" style="border-left-color: var(--cul); background: rgba(167,139,250,.06);">
+    <div class="msg-label" style="color:var(--cul);">Message 3 — Why Andino Labs</div>
+    Andino Labs brings 15+ years of digital engineering depth from one of the world's largest retail tech ecosystems (Bangalore) combined with LATAM-native delivery. No other partner in the region combines proprietary AI tooling with this level of engineering maturity.
+  </div>
+  <div class="msg-box" style="border-left-color: var(--con); background: rgba(245,158,11,.06);">
+    <div class="msg-label" style="color:var(--con);">Message 4 — The FINOS anchor</div>
+    FINOS defines what an AI-ready organization needs. Andino Labs builds how to get there. Nébula is the infrastructure that operationalizes all 9 dimensions of AI readiness — from Technology and Data to Governance and Monitoring.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB: INTERNAL COMMS -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-internal">
+  <div class="section-title">Internal <span>Communications</span></div>
+  <p class="section-desc">Aligning LATAM operations and India HQ around Nébula as the company's primary strategic differentiator. Coverage spans all roles — engineering, sales, consulting, and leadership.</p>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:12px;">Audience <span>Matrix</span></div>
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Audience</th>
+          <th>Location</th>
+          <th>Primary Channel</th>
+          <th>Key Message</th>
+          <th>Cadence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>C-Level / Founders</strong></td>
+          <td>LATAM + India</td>
+          <td>Executive Briefing</td>
+          <td>Strategic priority & business impact</td>
+          <td><span class="pill neb">Monthly</span></td>
+        </tr>
+        <tr>
+          <td><strong>Technical Leaders</strong></td>
+          <td>LATAM + India</td>
+          <td>Deep-dive sessions</td>
+          <td>Platform architecture & delivery methodology</td>
+          <td><span class="pill tec">Bi-weekly</span></td>
+        </tr>
+        <tr>
+          <td><strong>Engineering Team</strong></td>
+          <td>LATAM + India</td>
+          <td>All-hands + Slack</td>
+          <td>How Nébula changes daily work</td>
+          <td><span class="pill blue">Monthly</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sales / BD</strong></td>
+          <td>LATAM</td>
+          <td>Enablement sessions</td>
+          <td>Pitch, objection handling, differentiation</td>
+          <td><span class="pill con">Bi-weekly</span></td>
+        </tr>
+        <tr>
+          <td><strong>Consulting Team</strong></td>
+          <td>LATAM</td>
+          <td>Practitioner sessions</td>
+          <td>FINOS framework + assessment tooling</td>
+          <td><span class="pill cul">Bi-weekly</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:12px;">Recurring Meeting <span>Cadences</span></div>
+
+  <div class="meeting-row">
+    <div>
+      <div class="meeting-name">🚀 Nébula All-Hands</div>
+      <div class="meeting-desc">Full company visibility</div>
+    </div>
+    <div>
+      <div>Global meeting (LATAM + India). Vision presentation, progress update, Q&amp;A. First session is the formal launch announcement. Subsequent sessions cover updates, wins, and strategic direction.</div>
+    </div>
+    <div><span class="pill neb">Monthly</span></div>
+    <div class="meeting-owner">Diego / CEO</div>
+  </div>
+
+  <div class="meeting-row">
+    <div>
+      <div class="meeting-name">🔧 Tech Sync</div>
+      <div class="meeting-desc">Engineering alignment</div>
+    </div>
+    <div>
+      <div>Cross-team technical sync between LATAM and India engineering leads. Platform updates, architecture decisions, feedback from client deployments. 45-minute working meeting.</div>
+    </div>
+    <div><span class="pill tec">Bi-weekly</span></div>
+    <div class="meeting-owner">CTO / Tech Lead</div>
+  </div>
+
+  <div class="meeting-row">
+    <div>
+      <div class="meeting-name">📣 Sales Enablement</div>
+      <div class="meeting-desc">Pitch &amp; objection prep</div>
+    </div>
+    <div>
+      <div>LATAM-focused session. Live pitch practice, competitive Q&amp;A, deal review where Nébula is part of the conversation. Builds sales team confidence and consistency.</div>
+    </div>
+    <div><span class="pill con">Bi-weekly</span></div>
+    <div class="meeting-owner">VP Sales / Diego</div>
+  </div>
+
+  <div class="meeting-row">
+    <div>
+      <div class="meeting-name">📐 Consulting Practitioner</div>
+      <div class="meeting-desc">Assessment methodology</div>
+    </div>
+    <div>
+      <div>For consulting team members conducting FINOS-based assessments. Share new client insights, refine diagnostic approach, calibrate scoring. Keeps the assessment consistent across engagements.</div>
+    </div>
+    <div><span class="pill cul">Bi-weekly</span></div>
+    <div class="meeting-owner">Practice Lead</div>
+  </div>
+
+  <div class="meeting-row">
+    <div>
+      <div class="meeting-name">🎓 Learning Sessions</div>
+      <div class="meeting-desc">Internal upskilling</div>
+    </div>
+    <div>
+      <div>30-minute sessions in common team meeting slots. Rotating topics: how Nébula's Context Engine works, multi-LLM routing decisions, client AI-DLC retrospectives. Knowledge stays in the team.</div>
+    </div>
+    <div><span class="pill blue">Weekly · Month 1</span><br><span class="pill blue" style="margin-top:6px; display:inline-block;">Bi-weekly · Month 2–3</span></div>
+    <div class="meeting-owner">Team rotation</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:12px;">Internal <span>Channels</span></div>
+  <div class="grid-3">
+    <div class="card tec">
+      <div class="card-icon tec">💬</div>
+      <h3>Slack / Teams</h3>
+      <p>Dedicated <code>#nebula</code> channel. Weekly async update post (every Monday). Wins, deployments, media mentions shared in real time. Keeps awareness alive between formal meetings.</p>
+    </div>
+    <div class="card neb">
+      <div class="card-icon neb">📄</div>
+      <h3>Internal Wiki</h3>
+      <p>Single source of truth for Nébula. Architecture docs, pitch deck, FAQ, FINOS mapping, competitive positioning. All teams can self-serve without waiting for a meeting.</p>
+    </div>
+    <div class="card con">
+      <div class="card-icon con">📧</div>
+      <h3>Monthly Digest</h3>
+      <p>Email to full company (LATAM + India). What shipped, what's next, a market signal worth knowing, one client story. Short, readable, valuable. Sent by the CEO.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB: TECHNICAL LEADERS -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-technical">
+  <div class="section-title">Technical <span>Leader Engagement</span></div>
+  <p class="section-desc">Technical leaders are the internal champions and the external credibility signal. This track ensures they go beyond "informed" to "convinced and able to evangelize."</p>
+
+  <div class="grid-2" style="margin-bottom:32px;">
+    <div class="card tec">
+      <div class="card-icon tec">🎯</div>
+      <h3>Objective</h3>
+      <p>Technical leaders (architects, engineering managers, tech leads) should be able to explain Nébula's architecture, validate its differentiation, and use it in their own work. Their credibility is the platform's credibility.</p>
+    </div>
+    <div class="card neb">
+      <div class="card-icon neb">👥</div>
+      <h3>Target Profiles</h3>
+      <p>Principal Engineers · Staff Engineers · Engineering Managers · Solution Architects · DevOps / Platform Leads · QA Leads. Both LATAM and India HQ.</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">3-Month <span>Session Plan</span></div>
+
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Session</th>
+          <th>Month</th>
+          <th>Format</th>
+          <th>Content</th>
+          <th>Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Kick-off Briefing</strong></td>
+          <td><span class="pill neb">Month 1</span></td>
+          <td>60 min · Live</td>
+          <td>What Nébula is, why it's our top strategic priority, what it means for engineering practice. Full architecture overview. Q&amp;A.</td>
+          <td>Internal FAQ document</td>
+        </tr>
+        <tr>
+          <td><strong>Architecture Deep-Dive</strong></td>
+          <td><span class="pill neb">Month 1</span></td>
+          <td>90 min · Workshop</td>
+          <td>Multi-agent orchestration design, LLM routing logic, Context Engine internals (RAG pipeline), deployment model within client infra. Hands-on walkthrough.</td>
+          <td>Architecture decision record</td>
+        </tr>
+        <tr>
+          <td><strong>AI-DLC Practitioner Lab</strong></td>
+          <td><span class="pill tec">Month 2</span></td>
+          <td>2h · Workshop</td>
+          <td>Live session running a full AI-DLC cycle: Intent → Unit → Bolt → Domain Design → Deployment Unit. Mob Elaboration and Mob Construction rituals practiced in real time.</td>
+          <td>Shared playbook entry</td>
+        </tr>
+        <tr>
+          <td><strong>Feedback Flywheel Lab</strong></td>
+          <td><span class="pill tec">Month 2</span></td>
+          <td>60 min · Working session</td>
+          <td>Teams learn to identify the 4 signal types (Context, Instruction, Workflow, Failure) and feed them back into living artifacts. Retrospective format practiced live.</td>
+          <td>Team signal capture template</td>
+        </tr>
+        <tr>
+          <td><strong>Client Scenario Simulation</strong></td>
+          <td><span class="pill cul">Month 3</span></td>
+          <td>90 min · Role-play</td>
+          <td>Technical leaders act as the client engineering team. FINOS assessment conducted, Nébula deployment scoped, AI-DLC onboarding simulated. Stress-tests the methodology.</td>
+          <td>Refined delivery playbook</td>
+        </tr>
+        <tr>
+          <td><strong>Champions Review</strong></td>
+          <td><span class="pill cul">Month 3</span></td>
+          <td>45 min · Quarterly</td>
+          <td>Technical leaders share what's working and what isn't. Platform improvements flagged, methodology gaps identified. Input feeds Nébula roadmap.</td>
+          <td>Roadmap input doc</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:12px;">What Makes a <span>Technical Champion</span></div>
+  <div class="grid-3">
+    <div class="card neb">
+      <div class="card-icon neb">🧠</div>
+      <h3>Can Explain</h3>
+      <p>Able to describe Nébula's architecture, LLM routing logic, and Context Engine to a peer-level audience without reading from a slide.</p>
+    </div>
+    <div class="card tec">
+      <div class="card-icon tec">⚙️</div>
+      <h3>Has Used It</h3>
+      <p>Has completed at least one AI-DLC cycle using Nébula tooling. Personal experience makes technical credibility authentic, not theoretical.</p>
+    </div>
+    <div class="card cul">
+      <div class="card-icon cul">📣</div>
+      <h3>Will Advocate</h3>
+      <p>Comfortable speaking about Nébula in client conversations, conference talks, LinkedIn posts, or peer technical discussions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB: C-LEVEL -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-clevel">
+  <div class="section-title">C-Level <span>Engagement</span></div>
+  <p class="section-desc">Executive alignment is not a one-time briefing — it's a recurring practice that keeps Nébula as the company's stated strategic priority and surfaces blockers early.</p>
+
+  <div class="grid-2" style="margin-bottom:32px;">
+    <div class="card neb">
+      <div class="card-icon neb">🎯</div>
+      <h3>Objective</h3>
+      <p>C-Level (CEO, CTO, COO, VP Sales) across LATAM and India HQ are not just aware of Nébula — they are active sponsors who communicate its priority publicly, allocate resources, and remove blockers.</p>
+    </div>
+    <div class="card con">
+      <div class="card-icon con">📅</div>
+      <h3>Cadence</h3>
+      <p>Monthly 60-minute executive session + async briefing document delivered 48 hours before each meeting. No surprises, no cold reads. Meeting time is for decisions, not updates.</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">Monthly Executive <span>Session Structure</span></div>
+
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>Time</th>
+          <th>Content</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Status &amp; KPIs</strong></td>
+          <td>10 min</td>
+          <td>Progress against 3-month plan. Internal adoption metrics (# teams using Nébula, sessions per week). Market metrics (LinkedIn reach, pipeline influenced).</td>
+          <td>Program Lead</td>
+        </tr>
+        <tr>
+          <td><strong>Market Signal</strong></td>
+          <td>10 min</td>
+          <td>One meaningful external signal: competitor move, analyst report, relevant client conversation, FINOS/industry update. Keeps the C-Level calibrated to market reality.</td>
+          <td>VP Sales / BD</td>
+        </tr>
+        <tr>
+          <td><strong>Decision Items</strong></td>
+          <td>25 min</td>
+          <td>2–3 decisions requiring executive input: resource allocation, go/no-go on partnerships, pricing adjustments, platform investment prioritization. Pre-read sent 48h before.</td>
+          <td>CTO / Diego</td>
+        </tr>
+        <tr>
+          <td><strong>Communications Review</strong></td>
+          <td>10 min</td>
+          <td>What is the C-Level saying publicly about Nébula? Review of LinkedIn posts, media mentions. Align on next month's external narrative. Who posts what.</td>
+          <td>Comms Lead</td>
+        </tr>
+        <tr>
+          <td><strong>Next Month Preview</strong></td>
+          <td>5 min</td>
+          <td>What's coming: key milestones, external events, planned publications, client announcements. Sets shared expectation before the next meeting.</td>
+          <td>Program Lead</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">3-Month Executive <span>Arc</span></div>
+
+  <div class="phase-band">
+    <div class="phase-box">
+      <div class="phase-label">Month 1 — Align</div>
+      <h3>Strategic Commitment</h3>
+      <p>C-Level formally endorses Nébula as strategic priority #1 for the next 12 months. Budget, headcount, and marketing resources confirmed. Each executive commits to 2 public LinkedIn posts about Nébula in Month 1.</p>
+    </div>
+    <div class="phase-box p2">
+      <div class="phase-label">Month 2 — Activate</div>
+      <h3>First Results Review</h3>
+      <p>Review first internal deployment data, first pipeline deals where Nébula was positioned, and first market content performance. Identify gaps and adjust resourcing. C-Level approved quotes for media use.</p>
+    </div>
+    <div class="phase-box p3">
+      <div class="phase-label">Month 3 — Validate</div>
+      <h3>Market Proof Points</h3>
+      <p>Review first external validation signals: inbound interest, media coverage, conference speaking invitations. Decide on 6-month roadmap for Nébula positioning in LATAM and US expansion narrative.</p>
+    </div>
+  </div>
+
+  <div class="msg-box">
+    <div class="msg-label">Key Principle</div>
+    The C-Level session is protected time — it is never canceled, never shortened, and always has a pre-read. Its regularity signals internally that Nébula is a real priority, not a project that will fade when the next thing gets attention.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB: MARKET -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-market">
+  <div class="section-title">Market <span>Communications</span></div>
+  <p class="section-desc">Building Nébula's external presence in LATAM — starting with owned channels (LinkedIn), expanding to earned media (specialized publications, podcasts, events).</p>
+
+  <div class="grid-2" style="margin-bottom:32px;">
+    <div class="card neb">
+      <div class="card-icon neb">🎯</div>
+      <h3>Target Buyer</h3>
+      <p><strong>Primary:</strong> CTOs and VPs of Engineering at LATAM software companies (30+ tech headcount). They experience the plateau problem daily. They're on LinkedIn and read Thoughtworks, InfoQ, and regional tech media.</p>
+      <p style="margin-top:8px;"><strong>Secondary:</strong> Engineering managers and senior developers who influence the buying decision and share technical content within their networks.</p>
+    </div>
+    <div class="card cul">
+      <div class="card-icon cul">📣</div>
+      <h3>Positioning in Market</h3>
+      <p>Andino Labs is the <strong>execution layer of AI readiness in LATAM</strong>. Not a vendor selling licenses. Not a consulting firm giving advice. A transformation partner with proprietary tooling that makes the change stick.</p>
+      <p style="margin-top:8px;">Nébula is the proof point that separates Andino Labs from everyone else in the space.</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">Channel <span>Strategy</span></div>
+
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th>Role</th>
+          <th>Cadence</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>LinkedIn (Diego's profile)</strong></td>
+          <td>Primary thought leadership voice. Personal credibility drives reach. Builds the CTO-to-CTO relationship before a sales conversation.</td>
+          <td><span class="pill neb">3×/week</span></td>
+          <td>Diego</td>
+        </tr>
+        <tr>
+          <td><strong>LinkedIn (Company page)</strong></td>
+          <td>Platform for case studies, announcements, product content, job posts. Amplifies individual posts. Professional credibility signal.</td>
+          <td><span class="pill neb">2×/week</span></td>
+          <td>Marketing / Comms</td>
+        </tr>
+        <tr>
+          <td><strong>CTO / Tech Lead profiles</strong></td>
+          <td>Technical credibility amplification. Engineers trust other engineers. Their posts about Nébula from the inside carry weight that company content doesn't.</td>
+          <td><span class="pill tec">1×/week each</span></td>
+          <td>Technical leaders</td>
+        </tr>
+        <tr>
+          <td><strong>Specialized media</strong></td>
+          <td>Earned coverage in LATAM tech outlets (Platzi Blog, InfoQ LATAM, Dev.to, Medium Engineering). One guest article per month builds SEO and credibility beyond the Andino network.</td>
+          <td><span class="pill con">1 article/month</span></td>
+          <td>Diego + Comms</td>
+        </tr>
+        <tr>
+          <td><strong>Podcasts &amp; Events</strong></td>
+          <td>LATAM tech podcasts (e.g., EngineeringLatam, Código Facilito, DevRockstar) and industry events. Speaking slots position Diego and tech leaders as the AI engineering voice in the region.</td>
+          <td><span class="pill cul">1–2/month</span></td>
+          <td>Diego / CTO</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">LinkedIn <span>Content Framework</span></div>
+  <div class="grid-3" style="margin-bottom:32px;">
+    <div class="card neb">
+      <div class="card-icon neb">💡</div>
+      <h3>Insight Posts <span style="font-size:.8rem; color:var(--muted); font-weight:400;">(40%)</span></h3>
+      <p>Sharp observations about the AI adoption plateau, engineering team dynamics, what great AI-ready teams do differently. Pulls from the Fowler flywheel framework and FINOS. Builds credibility with CTOs.</p>
+      <p style="margin-top:10px; font-size:.8rem; color:var(--neb);">→ "Why your team adopted Copilot and is still 6 months behind"</p>
+    </div>
+    <div class="card tec">
+      <div class="card-icon tec">🔧</div>
+      <h3>Behind-the-Build <span style="font-size:.8rem; color:var(--muted); font-weight:400;">(35%)</span></h3>
+      <p>Technical content about Nébula architecture decisions, AI-DLC methodology in practice, multi-LLM routing choices. Builds trust with engineers who influence decisions.</p>
+      <p style="margin-top:10px; font-size:.8rem; color:var(--tec);">→ "How we route tasks across GPT-4o, Claude, and open-source models in Nébula"</p>
+    </div>
+    <div class="card con">
+      <div class="card-icon con">📊</div>
+      <h3>Results &amp; Stories <span style="font-size:.8rem; color:var(--muted); font-weight:400;">(25%)</span></h3>
+      <p>Client impact (anonymized or with permission), before/after metrics, team transformation stories. First-pass acceptance rate, DORA metric movement, iteration cycle reduction.</p>
+      <p style="margin-top:10px; font-size:.8rem; color:var(--con);">→ "How a LATAM fintech cut post-merge rework by 40% in 8 weeks"</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">Specialized Media <span>Targets</span></div>
+  <div class="grid-2">
+    <div class="card blue">
+      <div class="card-icon blue">📰</div>
+      <h3>LATAM Tech Media</h3>
+      <p style="margin-bottom:10px;">Publications and platforms where LATAM engineering leaders read and share:</p>
+      <div>
+        <span class="pill blue">InfoQ</span>
+        <span class="pill blue">Dev.to</span>
+        <span class="pill blue">Medium Engineering</span>
+        <span class="pill blue">Platzi Blog</span>
+        <span class="pill blue">Revista Digital</span>
+        <span class="pill blue">TechCrunch Latam</span>
+      </div>
+    </div>
+    <div class="card pink">
+      <div class="card-icon pink">🎙️</div>
+      <h3>Podcasts &amp; Communities</h3>
+      <p style="margin-bottom:10px;">Audio and community channels with LATAM engineering audiences:</p>
+      <div>
+        <span class="pill pink">Código Facilito</span>
+        <span class="pill pink">DevRockstar</span>
+        <span class="pill pink">EngineeringLatam</span>
+        <span class="pill pink">Comunidad AWS LATAM</span>
+        <span class="pill pink">FINOS Community</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB: CALENDAR -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-calendar">
+  <div class="section-title">3-Month <span>Calendar</span></div>
+  <p class="section-desc">Week-by-week execution plan across internal and external tracks. <span class="pill int">INT</span> = internal. <span class="pill ext">EXT</span> = external/market.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-box">
+      <div class="kpi-val">12</div>
+      <div class="kpi-label">Weeks</div>
+      <div class="kpi-target">Full plan horizon</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val">3</div>
+      <div class="kpi-label">C-Level Sessions</div>
+      <div class="kpi-target">1 per month</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val">6</div>
+      <div class="kpi-label">Tech Leader Sessions</div>
+      <div class="kpi-target">Across 3 months</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val">3+</div>
+      <div class="kpi-label">Media Articles</div>
+      <div class="kpi-target">1 per month earned</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val">60+</div>
+      <div class="kpi-label">LinkedIn Posts</div>
+      <div class="kpi-target">Diego + team combined</div>
+    </div>
+  </div>
+
+  <!-- MONTH 1 -->
+  <div style="font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--neb); margin-bottom:12px;">MONTH 1 — IGNITE</div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 1 — Launch</h4>
+      <span class="pill neb">Foundation</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> All-Hands</div><div><strong>Nébula Launch All-Hands</strong> — Full company (LATAM + India). Vision, strategic priority, what changes for each team. Diego presents. Live Q&amp;A.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Slack</div><div><strong>#nebula channel goes live</strong> — Pinned post with vision doc, FAQ, and first resource links. Sets the async communication home base.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Teaser post — Diego's profile:</strong> "Something we've been building for 2 years goes public next week. The problem it solves is one every engineering team in LATAM has but doesn't talk about." Builds anticipation.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> C-Level</div><div><strong>Month 1 Executive Session</strong> — Strategic commitment, resource confirmation, LinkedIn commitment from each executive.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 2 — Technical Depth</h4>
+      <span class="pill tec">Architecture</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Tech Leaders</div><div><strong>Technical Kick-off Briefing</strong> — What Nébula is, full architecture overview, Q&amp;A. 60 minutes. Output: internal FAQ.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Tech Leaders</div><div><strong>Architecture Deep-Dive Workshop</strong> — Multi-agent design, LLM routing, Context Engine. 90 minutes hands-on.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Insight post — Diego:</strong> "The AI adoption plateau. Why 80% of engineering teams using AI are exactly where they were 6 months ago." Core problem framing. No mention of Nébula yet.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Technical post — CTO:</strong> "What multi-LLM orchestration actually looks like in a production SDLC environment." Establishes technical credibility.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 3 — Sales &amp; Consulting Enablement</h4>
+      <span class="pill con">Enablement</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Sales</div><div><strong>Sales Enablement Session #1</strong> — Pitch walkthrough, objection handling, competitive differentiation from Nébula's perspective. Live role-play.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Consulting</div><div><strong>Consulting Practitioner Session #1</strong> — FINOS 9-dimension framework review, assessment methodology, how Nébula maps to each dimension.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Nébula announcement post — Company page:</strong> Official introduction. What it is, what problem it solves, why it's exclusive to Andino Labs. Link to landing page.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> Media</div><div><strong>Article pitch to 2 LATAM tech publications</strong> — Topic: "From SDLC to AI-DLC: What the next generation of software delivery looks like." Targets: InfoQ LATAM, Dev.to.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 4 — Consolidate &amp; Measure</h4>
+      <span class="pill blue">Review</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Learning</div><div><strong>Learning Session:</strong> "How the Context Engine works — RAG pipeline, codebase ingestion, auto re-index." 30 minutes for all engineering.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Digest</div><div><strong>Month 1 Internal Digest</strong> — CEO email. What launched, what's next, one market signal, first team reaction highlights.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>FINOS framework post — Diego:</strong> "FINOS defines what an AI-ready org needs. We build how to get there." Positions Andino Labs as the execution layer. Tags FINOS community.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Results post — Company page:</strong> First engagement data from internal launch. Community response. Builds social proof early.</div></div>
+    </div>
+  </div>
+
+  <!-- MONTH 2 -->
+  <div style="font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--tec); margin: 24px 0 12px;">MONTH 2 — ENGAGE</div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 5 — AI-DLC in Practice</h4>
+      <span class="pill tec">Deep Work</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Tech Leaders</div><div><strong>AI-DLC Practitioner Lab</strong> — Live full cycle run. Mob Elaboration + Mob Construction with Nébula tooling. 2 hours.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Sales</div><div><strong>Sales Enablement Session #2</strong> — Deal review where Nébula was pitched. What worked, what didn't. Live objection Q&amp;A from the field.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Mob Construction explainer — CTO:</strong> "What Mob Construction looks like in an AI-DLC team. Not a code review. Not a planning meeting. Something different." Behind-the-build content.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 6 — Feedback Flywheel</h4>
+      <span class="pill neb">Methodology</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Tech Leaders</div><div><strong>Feedback Flywheel Lab</strong> — 4 signal types practiced live. Teams build their first signal capture template. Output feeds the wiki.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Consulting</div><div><strong>Consulting Practitioner Session #2</strong> — First assessment debrief. What dimension scores revealed, how to calibrate across different client types.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> Media</div><div><strong>Article published:</strong> "From SDLC to AI-DLC: What the next generation of software delivery looks like." InfoQ LATAM or Dev.to.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Flywheel insight — Diego:</strong> "Every AI session generates signal. Most teams throw it away. Here's how to build a feedback loop that compounds." Thoughtworks article reference.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 7 — Amplify Reach</h4>
+      <span class="pill cul">Awareness</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> C-Level</div><div><strong>Month 2 Executive Session</strong> — First pipeline and market data. C-Level approved quotes for media. Adjust resourcing if needed.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> Podcast</div><div><strong>First podcast appearance confirmed</strong> — Diego or CTO on a LATAM tech podcast. Topic: AI engineering transformation, Nébula mention natural in context.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Client transformation story — Diego:</strong> Anonymized. What L1→L3 maturity progression looks like in practice over 8 weeks. Metrics-led.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 8 — Consolidate</h4>
+      <span class="pill blue">Review</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Learning</div><div><strong>Learning Session:</strong> "The 4 signal types — how to run a Nébula-informed AI retrospective." Applied to real sessions from the past month.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Digest</div><div><strong>Month 2 Internal Digest</strong> — CEO email. Market traction update, media published, pipeline influenced, team wins.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>DORA metrics post — Company page:</strong> "How AI-DLC adoption moves DORA metrics. First-pass acceptance rate as a leading indicator." Data-driven credibility post.</div></div>
+    </div>
+  </div>
+
+  <!-- MONTH 3 -->
+  <div style="font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--cul); margin: 24px 0 12px;">MONTH 3 — AMPLIFY</div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 9 — Client Simulation</h4>
+      <span class="pill tec">Validation</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Tech Leaders</div><div><strong>Client Scenario Simulation</strong> — Full FINOS assessment + Nébula deployment scoped in real time. Stress-tests methodology. 90 minutes.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> Media</div><div><strong>Article published:</strong> "The 9 dimensions of AI readiness — and what it takes to reach L4 in LATAM." FINOS framework explainer. Positions Andino Labs as the FINOS execution partner in the region.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>Nébula differentiation post — Diego:</strong> "What separates Nébula from every other AI coding tool in the market. It's not the model. It's the infrastructure around it." Direct competitive framing.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 10 — Scale Presence</h4>
+      <span class="pill cul">Expansion</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Consulting</div><div><strong>Consulting Practitioner Session #3</strong> — Refine assessment scoring based on 3 months of data. Update FINOS dimension playbooks.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> C-Level</div><div><strong>Month 3 Executive Session</strong> — Market proof points review. Decide on 6-month roadmap. US expansion narrative alignment.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> Podcast</div><div><strong>Second podcast / event appearance</strong> — Industry conference or LATAM AWS community event. First conference speaking slot confirmed for Q2.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 11 — Champions Review</h4>
+      <span class="pill neb">Retrospective</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Tech Leaders</div><div><strong>Champions Review</strong> — What's working in Nébula, what's missing, what goes on the roadmap. Technical leaders' input shapes next quarter.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>US expansion signal — Diego:</strong> "Andino Labs is taking AI engineering transformation to the US. What we learned in LATAM that others missed." Starts the US narrative.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> Media</div><div><strong>Third article pitched:</strong> "Why LATAM will lead AI engineering adoption in the Americas." Broader market perspective. Positions Andino Labs as the authority voice.</div></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-header">
+      <h4>Week 12 — 90-Day Review</h4>
+      <span class="pill blue">Measure</span>
+    </div>
+    <div class="cal-week-body">
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> All-Hands</div><div><strong>90-Day Nébula Review All-Hands</strong> — Full company. What we built, what we learned, where we're going. Celebrates wins, acknowledges gaps, confirms next quarter's direction.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill int">INT</span> Digest</div><div><strong>Quarter 1 Retrospective Digest</strong> — CEO email. Full 3-month metrics: internal adoption, pipeline, media reach, LinkedIn growth, FINOS community engagement.</div></div>
+      <div class="cal-item"><div class="cal-channel"><span class="pill ext">EXT</span> LinkedIn</div><div><strong>90-day recap — Diego:</strong> "3 months ago we launched Nébula. Here's what we learned, what worked, and what's next." Authentic, metrics-backed, builds momentum for Q2.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-bottom:16px;">Success <span>Metrics at 90 Days</span></div>
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Track</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>% of Andino Labs team</strong> who can explain Nébula in 2 minutes</td>
+          <td><span class="pill int">Internal</span></td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td><strong>Technical leaders</strong> who completed at least 1 AI-DLC lab</td>
+          <td><span class="pill int">Internal</span></td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td><strong>C-Level sessions</strong> held (never canceled)</td>
+          <td><span class="pill int">Internal</span></td>
+          <td>3 of 3</td>
+        </tr>
+        <tr>
+          <td><strong>LinkedIn posts</strong> published (Diego + team combined)</td>
+          <td><span class="pill ext">External</span></td>
+          <td>60+</td>
+        </tr>
+        <tr>
+          <td><strong>Earned media articles</strong> published in LATAM tech outlets</td>
+          <td><span class="pill ext">External</span></td>
+          <td>3+</td>
+        </tr>
+        <tr>
+          <td><strong>Podcast/event appearances</strong></td>
+          <td><span class="pill ext">External</span></td>
+          <td>2+</td>
+        </tr>
+        <tr>
+          <td><strong>Pipeline deals</strong> where Nébula was part of the pitch</td>
+          <td><span class="pill ext">External</span></td>
+          <td>5+</td>
+        </tr>
+        <tr>
+          <td><strong>LinkedIn follower growth</strong> on company page</td>
+          <td><span class="pill ext">External</span></td>
+          <td>+30%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
