@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andino Labs · Chile–India Operating Framework v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    /* ── Andino Labs Brand System ── */
+    --bg:    #070c18;
+    --bg2:   #0d1425;
+    --bg3:   #111c35;
+    --bg4:   #162040;
+    --border: rgba(255,255,255,0.07);
+    --border2:rgba(255,255,255,0.13);
+    --text:  #f1f5f9;
+    --mid:   #94a3b8;
+    --muted: #475569;
+    --dim:   #2d3a52;
+
+    /* Brand accents */
+    --neb:   #10b981;   /* emerald — primary */
+    --blue:  #3b82f6;   /* blue — secondary */
+    --cl:    #06b6d4;   /* cyan — Chile */
+    --in:    #a78bfa;   /* violet — India */
+    --sh:    #8b5cf6;   /* purple — company */
+    --amb:   #f59e0b;   /* amber — attention */
+    --com:   #f97316;   /* orange — comercial */
+    --red:   #ef4444;
+
+    --radius: 14px;
+    --radius-sm: 8px;
+    --font: 'Inter', system-ui, sans-serif;
+  }
+
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    font-size:13.5px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    font-feature-settings:'cv02','cv03','cv04','cv11';
+  }
+
+  /* ── NAV ── */
+  .nav{
+    position:sticky;top:0;z-index:200;
+    background:rgba(7,12,24,.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:0 24px;
+    display:flex;align-items:center;gap:0;
+    overflow-x:auto;
+  }
+  .nav::-webkit-scrollbar{display:none;}
+  .nav-brand{
+    font-size:11px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--neb);
+    padding:17px 0;margin-right:24px;
+    white-space:nowrap;flex-shrink:0;
+  }
+  .nav-brand span{color:var(--cl);}
+  .nav-sep{width:1px;height:20px;background:var(--border);flex-shrink:0;margin:0 10px;}
+  .nav-group{display:flex;align-items:center;gap:0;flex-shrink:0;}
+  .nav-glabel{
+    font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--dim);padding:0 10px;white-space:nowrap;
+  }
+  .tab-btn{
+    background:none;border:none;cursor:pointer;
+    color:var(--muted);font-family:var(--font);
+    font-size:11px;font-weight:500;letter-spacing:.02em;
+    padding:17px 11px;white-space:nowrap;
+    border-bottom:2px solid transparent;
+    transition:color .15s,border-color .15s;
+    flex-shrink:0;
+  }
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--text);border-bottom-color:var(--neb);font-weight:600;}
+
+  /* ── SECTIONS ── */
+  .section{display:none;max-width:1160px;margin:0 auto;padding:40px 28px 88px;}
+  .section.active{display:block;animation:fadeUp .25s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ── HERO ── */
+  .hero{
+    background:linear-gradient(160deg,#070c18 0%,#0a1628 55%,#091a30 100%);
+    border-bottom:1px solid var(--border);
+    padding:72px 28px 60px;
+    text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);
+    width:700px;height:700px;
+    background:radial-gradient(circle,rgba(16,185,129,.07) 0%,transparent 65%);
+    pointer-events:none;
+  }
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);
+    border-radius:100px;padding:5px 15px;
+    font-size:10.5px;font-weight:700;color:var(--neb);
+    letter-spacing:.09em;text-transform:uppercase;margin-bottom:26px;
+  }
+  .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--neb);}
+  .hero-title{
+    font-size:clamp(30px,4.5vw,54px);font-weight:800;
+    letter-spacing:-.03em;line-height:1.08;
+    margin-bottom:20px;
+  }
+  .hero-title .hl-neb{color:var(--neb);}
+  .hero-title .hl-cl{color:var(--cl);}
+  .hero-title .hl-in{color:var(--in);}
+  .hero-sub{
+    font-size:15px;font-weight:400;color:var(--mid);
+    max-width:560px;margin:0 auto 40px;line-height:1.8;
+  }
+  .hero-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 14px;border-radius:100px;
+    font-size:11.5px;font-weight:500;
+  }
+  .pill-cl{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);color:var(--cl);}
+  .pill-in{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:var(--in);}
+  .pill-sh{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);color:var(--sh);}
+  .pill-neb{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--neb);}
+  .pill-com{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);color:var(--com);}
+
+  /* ── TYPOGRAPHY ── */
+  .sec-title{
+    font-size:22px;font-weight:700;letter-spacing:-.02em;
+    margin-bottom:8px;color:var(--text);
+  }
+  .sec-sub{
+    font-size:14px;color:var(--mid);
+    margin-bottom:32px;line-height:1.75;
+    max-width:720px;font-weight:400;
+  }
+  .divider{border:none;border-top:1px solid var(--border);margin:36px 0;}
+
+  /* ── GRID ── */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  @media(max-width:720px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  /* ── CARDS ── */
+  .card{
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px 22px;
+    transition:border-color .2s;
+  }
+  .card:hover{border-color:var(--border2);}
+  .card-title{
+    font-size:11.5px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;margin-bottom:14px;
+    display:flex;align-items:center;gap:8px;
+    color:var(--mid);
+  }
+  .card-list{list-style:none;}
+  .card-list li{
+    padding:7px 0;border-bottom:1px solid var(--border);
+    font-size:13px;color:var(--mid);
+    display:flex;gap:10px;align-items:flex-start;
+    line-height:1.55;
+  }
+  .card-list li:last-child{border-bottom:none;}
+  .card-list li::before{
+    content:'';display:block;width:4px;height:4px;border-radius:50%;
+    background:var(--border2);flex-shrink:0;margin-top:6px;
+  }
+
+  /* ── BADGES ── */
+  .badge{
+    display:inline-block;padding:2px 9px;
+    border-radius:5px;font-size:10px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;
+  }
+  .badge-cl{background:rgba(6,182,212,.12);color:var(--cl);}
+  .badge-in{background:rgba(167,139,250,.12);color:var(--in);}
+  .badge-sh{background:rgba(139,92,246,.12);color:var(--sh);}
+  .badge-neb{background:rgba(16,185,129,.12);color:var(--neb);}
+  .badge-amb{background:rgba(245,158,11,.12);color:var(--amb);}
+  .badge-com{background:rgba(249,115,22,.12);color:var(--com);}
+
+  /* ── ROLE SPLIT ── */
+  .role-split{
+    display:grid;grid-template-columns:1fr 48px 1fr;
+    margin-bottom:20px;
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;
+  }
+  .role-side{padding:24px;}
+  .role-div{
+    background:var(--bg3);
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    position:relative;
+  }
+  .role-div::after{
+    content:'⇄';position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    font-size:13px;color:var(--muted);
+    background:var(--bg3);padding:4px;
+  }
+  .role-hdr{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:16px;padding-bottom:14px;
+    border-bottom:1px solid var(--border);
+  }
+  .role-item{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:8px 0;border-bottom:1px solid var(--border);
+    font-size:13px;color:var(--mid);line-height:1.55;
+  }
+  .role-item:last-child{border-bottom:none;padding-bottom:0;}
+  .rdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+
+  /* ── ACCORDION (rituals / ceremonies) ── */
+  .ritual{
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;margin-bottom:8px;
+    transition:border-color .2s;
+  }
+  .ritual:hover{border-color:var(--border2);}
+  .ritual-hdr{
+    padding:16px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    cursor:pointer;transition:background .15s;
+  }
+  .ritual-hdr:hover{background:rgba(255,255,255,.02);}
+  .rleft{display:flex;align-items:center;gap:14px;}
+  .ricon{font-size:17px;flex-shrink:0;}
+  .rname{font-size:13.5px;font-weight:600;color:var(--text);}
+  .rmeta{font-size:11px;color:var(--muted);margin-top:2px;}
+  .rtags{display:flex;gap:5px;flex-wrap:wrap;}
+  .rtag{
+    font-size:9.5px;font-weight:700;letter-spacing:.06em;
+    padding:3px 9px;border-radius:100px;text-transform:uppercase;
+  }
+  .rtag-cl{background:rgba(6,182,212,.1);color:var(--cl);}
+  .rtag-in{background:rgba(167,139,250,.1);color:var(--in);}
+  .rtag-sh{background:rgba(139,92,246,.1);color:var(--sh);}
+  .rtag-neb{background:rgba(16,185,129,.1);color:var(--neb);}
+  .rarrow{color:var(--muted);font-size:15px;transition:transform .2s;}
+  .rbody{display:none;padding:0 20px 18px;border-top:1px solid var(--border);}
+  .rbody.open{display:block;}
+  .rbody-inner{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding-top:16px;}
+  @media(max-width:700px){.rbody-inner{grid-template-columns:1fr}}
+  .rblock{font-size:13px;color:var(--mid);}
+  .rblbl{
+    font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+  }
+  .rblock li{padding:4px 0;list-style:none;display:flex;gap:8px;line-height:1.55;}
+  .rblock li::before{content:'→';color:var(--border2);font-size:11px;flex-shrink:0;margin-top:1px;}
+
+  /* ── LEVEL TAGS ── */
+  .level-tag{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:9.5px;font-weight:700;letter-spacing:.07em;
+    text-transform:uppercase;padding:3px 9px;border-radius:100px;
+  }
+  .lv-emp{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);color:var(--sh);}
+  .lv-mix{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--neb);}
+
+  /* ── C-LEVEL CARDS ── */
+  .clcard{
+    background:var(--bg2);border:1px solid var(--border);
+    border-radius:var(--radius);padding:20px 22px;
+    display:flex;gap:16px;align-items:flex-start;
+    margin-bottom:10px;transition:border-color .2s;
+  }
+  .clcard:hover{border-color:var(--border2);}
+  .clavatar{
+    width:42px;height:42px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;flex-shrink:0;
+  }
+  .clname{font-size:14px;font-weight:700;margin-bottom:2px;letter-spacing:-.01em;}
+  .clrole{
+    font-size:10.5px;font-weight:600;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+  }
+
+  /* ── PIPELINE ── */
+  .pipe{
+    background:var(--bg2);border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;margin-bottom:8px;
+    transition:border-color .2s;
+  }
+  .pipe:hover{border-color:var(--border2);}
+  .pipe-hdr{
+    padding:16px 20px;display:flex;align-items:center;gap:14px;
+    cursor:pointer;transition:background .15s;
+  }
+  .pipe-hdr:hover{background:rgba(255,255,255,.02);}
+  .pipe-num{
+    width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:800;flex-shrink:0;
+  }
+  .pipe-name{font-size:13.5px;font-weight:600;flex:1;letter-spacing:-.01em;}
+  .pipe-meta{font-size:11px;color:var(--muted);}
+  .pbody{display:none;padding:0 20px 18px;border-top:1px solid var(--border);}
+  .pbody.open{display:block;}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding-top:16px;}
+  @media(max-width:700px){.pgrid{grid-template-columns:1fr}}
+  .pclbl{
+    font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+  }
+  .pcol li{
+    font-size:13px;color:var(--mid);padding:4px 0;
+    list-style:none;display:flex;gap:8px;line-height:1.5;
+  }
+  .pcol li::before{content:'→';color:var(--border2);font-size:11px;flex-shrink:0;margin-top:2px;}
+
+  /* ── TABLE ── */
+  .jira-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .jira-table th{
+    text-align:left;padding:10px 16px;
+    background:var(--bg3);
+    font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);
+    border-bottom:1px solid var(--border2);
+  }
+  .jira-table td{
+    padding:11px 16px;border-bottom:1px solid var(--border);
+    color:var(--mid);vertical-align:top;
+  }
+  .jira-table tr:last-child td{border-bottom:none;}
+  .jira-table tr:hover td{background:rgba(255,255,255,.015);}
+
+  /* ── ESCALATION TABLE ── */
+  .esc-row{
+    display:grid;grid-template-columns:96px 1fr 1fr 1fr;
+    border-bottom:1px solid var(--border);
+  }
+  .esc-row:last-child{border-bottom:none;}
+  .esc-row.hdr{background:var(--bg3);}
+  .esc-cell{
+    padding:11px 16px;font-size:12.5px;color:var(--mid);
+    border-right:1px solid var(--border);line-height:1.5;
+  }
+  .esc-cell:last-child{border-right:none;}
+  .esc-row.hdr .esc-cell{
+    font-size:9.5px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .esc-lv{font-weight:700;font-size:11.5px;letter-spacing:.02em;}
+
+  /* ── BOLT TIMELINE ── */
+  .bolt-track{position:relative;padding-left:30px;margin-bottom:8px;}
+  .bolt-track::before{
+    content:'';position:absolute;left:11px;top:30px;bottom:0;
+    width:1px;background:linear-gradient(to bottom,var(--border2),transparent);
+  }
+  .bolt-step{position:relative;margin-bottom:6px;}
+  .bdot{
+    position:absolute;left:-25px;top:15px;
+    width:10px;height:10px;border-radius:50%;border:2px solid;
+  }
+  .bcard{
+    background:var(--bg2);border:1px solid var(--border);
+    border-radius:var(--radius);padding:14px 18px;
+    transition:border-color .2s;
+  }
+  .bcard:hover{border-color:var(--border2);}
+  .bday{
+    font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:4px;
+  }
+  .bname{font-size:13px;font-weight:600;margin-bottom:7px;letter-spacing:-.01em;}
+  .bitems{display:flex;flex-wrap:wrap;gap:5px;}
+  .bitem{font-size:11.5px;color:var(--mid);}
+  .bitem::after{content:'·';margin-left:5px;color:var(--border2);}
+  .bitem:last-child::after{display:none;}
+
+  /* ── KPI GRID ── */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+  @media(max-width:800px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+  .kpi-box{
+    background:var(--bg2);border:1px solid var(--border);
+    border-radius:var(--radius);padding:20px 16px;text-align:center;
+    transition:border-color .2s,transform .2s;
+  }
+  .kpi-box:hover{border-color:var(--border2);transform:translateY(-1px);}
+  .kv{
+    font-size:30px;font-weight:800;letter-spacing:-.03em;
+    line-height:1;margin-bottom:8px;
+  }
+  .kl{
+    font-size:10.5px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.05em;line-height:1.45;
+  }
+
+  /* ── TEAMS CHANNELS ── */
+  .tchan{
+    background:var(--bg2);border:1px solid var(--border);
+    border-radius:var(--radius);padding:14px 18px;margin-bottom:8px;
+    display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+    transition:border-color .2s;
+  }
+  .tchan:hover{border-color:var(--border2);}
+  .tc-name{
+    font-family:'Roboto Mono','Courier New',monospace;
+    font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:3px;
+  }
+  .tc-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+  /* ── ONBOARDING ── */
+  .onb-step{display:flex;gap:18px;margin-bottom:22px;align-items:flex-start;}
+  .onum{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:800;flex-shrink:0;
+  }
+  .obody{flex:1;padding-top:4px;}
+  .otitle{font-size:14px;font-weight:600;margin-bottom:5px;letter-spacing:-.01em;}
+  .odesc{font-size:13px;color:var(--mid);line-height:1.65;}
+
+  /* ── INFO BOX ── */
+  .info-box{
+    border-radius:var(--radius);padding:16px 20px;
+    margin-bottom:20px;font-size:13px;line-height:1.7;
+  }
+
+  /* ── FOOTER ── */
+  .foot{
+    text-align:center;padding:18px;font-size:11px;
+    color:var(--muted);border-top:1px solid var(--border);
+    letter-spacing:.03em;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">Andino <span>Labs</span></div>
+  <div class="nav-group">
+    <div class="nav-glabel">Company</div>
+    <button class="tab-btn" onclick="go('clevel',this)">C-Level</button>
+    <button class="tab-btn" onclick="go('ceremonias',this)">Ceremonies</button>
+    <button class="tab-btn" onclick="go('comercial',this)">Commercial</button>
+    <button class="tab-btn" onclick="go('descriptores',this)">Job Descriptions</button>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-group">
+    <div class="nav-glabel">Project</div>
+    <button class="tab-btn active" onclick="go('overview',this)">Overview</button>
+    <button class="tab-btn" onclick="go('roles',this)">Roles & RACI</button>
+    <button class="tab-btn" onclick="go('rituales',this)">Rituals</button>
+    <button class="tab-btn" onclick="go('bolt',this)">Bolt Cycle</button>
+    <button class="tab-btn" onclick="go('teams',this)">Teams & Jira</button>
+    <button class="tab-btn" onclick="go('escalacion',this)">Escalation</button>
+    <button class="tab-btn" onclick="go('onboarding',this)">Onboarding</button>
+    <button class="tab-btn" onclick="go('metricas',this)">Metrics</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-badge">Andino Labs · Operating Framework · v2.0</div>
+  <h1 class="hero-title">
+    <span class="hl-cl">Chile</span> × <span class="hl-in">India</span><br><span class="hl-neb">Operating</span> Framework
+  </h1>
+  <p class="hero-sub">From commercial prospecting and company-level ceremonies, to project rituals and the Bolt delivery cycle — a repeatable, scalable operating framework.</p>
+  <div class="hero-pills">
+    <span class="pill pill-sh">🏛️ Company — C-Level &amp; ceremonies</span>
+    <span class="pill pill-com">💼 Commercial — prospecting &amp; close</span>
+    <span class="pill pill-cl">🇨🇱 Chile — project leadership</span>
+    <span class="pill pill-in">🇮🇳 India — technical execution</span>
+    <span class="pill pill-neb">🤖 AI-DLC — Nébula integrated</span>
+  </div>
+</header>
+
+
+<!-- C-LEVEL -->
+<section class="section" id="sec-clevel">
+  <p class="sec-title">C-Level Team — Andino Labs</p>
+  <p class="sec-sub">Andino's leadership is distributed across Chile, USA and India. Each role has a clear ownership domain and participates in ceremonies according to their function.</p>
+  <div id="clevel-container"></div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Strategic Ownership Map</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg3);border-bottom:1px solid var(--border2);">
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--com)">💼 Revenue & Clientes</div>
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neb)">🤖 Producto & Delivery</div>
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sh)">🏛️ Company</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;">
+      <div style="padding:16px;border-right:1px solid var(--border);font-size:12.5px;color:var(--mid);">
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--com)">›</span>CEO — LATAM pipeline &amp; strategic accounts</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--com)">›</span>Country Manager USA — US pipeline, demos, close</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--com)">›</span>CPO — product narrative in the pitch</div>
+        <div style="display:flex;gap:7px;"><span style="color:var(--com)">›</span>CTO — technical credibility in the close</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);font-size:12.5px;color:var(--mid);">
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--neb)">›</span>CPO — Nébula product roadmap</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--neb)">›</span>Chief AI & Delivery — calidad de delivery</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--neb)">›</span>CTO — architecture &amp; tech stack</div>
+        <div style="display:flex;gap:7px;"><span style="color:var(--neb)">›</span>Chief AI & Delivery — AI adoption across projects</div>
+      </div>
+      <div style="padding:16px;font-size:12.5px;color:var(--mid);">
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--sh)">›</span>CEO — vision, strategy &amp; culture</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--sh)">›</span>CTO — technical hiring &amp; standards</div>
+        <div style="margin-bottom:7px;display:flex;gap:7px;"><span style="color:var(--sh)">›</span>Chief AI & Delivery — framework operacional</div>
+        <div style="display:flex;gap:7px;"><span style="color:var(--sh)">›</span>Country Manager USA — US market expansion</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CEREMONIAS -->
+<section class="section" id="sec-ceremonias">
+  <p class="sec-title">Company Ceremonies</p>
+  <p class="sec-sub">Beyond project rituals, Andino has company-level ceremonies that ensure strategic alignment, portfolio health, and Chile–India cohesion.</p>
+  <div class="info-box" style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);">
+    <strong style="color:var(--sh)">Two ceremony types:</strong>&nbsp;&nbsp;
+    <span class="level-tag lv-emp">Leadership only</span> — Andino C-Level without project teams&nbsp;&nbsp;
+    <span class="level-tag lv-mix">Mixed</span> — C-Level + India Tech Leads
+  </div>
+  <div id="ceremonias-container"></div>
+</section>
+
+
+<!-- COMERCIAL -->
+<section class="section" id="sec-comercial">
+  <p class="sec-title">Sales Process</p>
+  <p class="sec-sub">Andino operates with two prospecting engines: CEO for LATAM and Country Manager USA for the North American market. The process runs from first contact to project kick-off.</p>
+  <div class="kpi-grid">
+    <div class="kpi-box"><div class="kv" style="color:var(--com)">~21d</div><div class="kl">avg. cycle<br>prospect → close</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--cl)">CEO</div><div class="kl">LATAM<br>pipeline owner</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--com)">CM</div><div class="kl">USA<br>pipeline owner</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--neb)">+CPO</div><div class="kl">technical pitch<br>& producto</div></div>
+  </div>
+  <div id="pipeline-container"></div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Sales → Operations Handoff</p>
+  <p class="sec-sub">The most critical moment: when the client says "yes." This handoff defines kick-off quality.</p>
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(251,146,60,.2);">
+      <div class="card-title" style="color:var(--com)">📋 Sale Package — what sales delivers</div>
+      <ul class="card-list">
+        <li>Signed proposal with scope, price and terms</li>
+        <li>Sales discovery notes — pain points and motivations</li>
+        <li>Client stakeholders: who decides, uses, pays</li>
+        <li>Timeline commitments made during the sale</li>
+        <li>Risks identified during the sales process</li>
+        <li>Client context (size, industry, sensitivities)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:rgba(56,189,248,.2);">
+      <div class="card-title" style="color:var(--cl)">🚀 Project Package — what the Project Lead receives</div>
+      <ul class="card-list">
+        <li>30-min briefing with CEO or Country Manager USA</li>
+        <li>CRM access with all deal notes</li>
+        <li>Client intro made by the seller (email + call)</li>
+        <li>India team assignment con Chief AI & Delivery</li>
+        <li>Kick-off date agreed with the client</li>
+        <li>Repo created, Teams channels set up, accesses ready</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);">
+    <strong style="color:#ef4444">⚠️ Handoff rule:</strong> The Project Lead does not contact the client until the seller briefing is complete and the intro has been made. A Project Lead without context creates a weak first impression that the team pays for over weeks.
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Standard Sales Materials</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-title" style="color:var(--com)">📄 Proposal Deck</div><ul class="card-list"><li>Andino's solution (specific to the client's problem)</li><li>AI-DLC methodology + Nébula</li><li>How the Chile–India team works</li><li>Relevant reference cases</li><li>Investment proposal and engagement model</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--neb)">🤖 Nébula Demo</div><ul class="card-list"><li>Live demo of Claude Code + Nébula in action</li><li>Before/after velocity comparison</li><li>Context Engine — how it is built for the client</li><li>CPO or CTO presents in the technical pitch</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--sh)">📊 ROI Calculator</div><ul class="card-list"><li>Input: team size, stack, current cycle time</li><li>Output: cycle time reduction projection</li><li>FTE equivalent freed by automation</li><li>Estimated program payback</li></ul></div>
+  </div>
+</section>
+
+
+<!-- OVERVIEW -->
+<section class="section active" id="sec-overview">
+  <p class="sec-title">How Andino Works at the Project Level</p>
+  <p class="sec-sub">Small, focused squads. Chile leads — client, scope and decisions. India executes technical delivery. The framework standardizes how both sides connect.</p>
+  <div class="kpi-grid">
+    <div class="kpi-box"><div class="kv" style="color:var(--cl)">1–2</div><div class="kl">Chile people<br>per project</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--in)">2–3</div><div class="kl">India people<br>per project</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--sh)">5–10</div><div class="kl">parallel<br>projects</div></div>
+    <div class="kpi-box"><div class="kv" style="color:var(--neb)">2w</div><div class="kl">standard<br>Bolt cycle</div></div>
+  </div>
+  <div class="info-box" style="background:linear-gradient(135deg,rgba(56,189,248,.07),rgba(244,114,182,.05));border:1px solid rgba(56,189,248,.15);">
+    <strong style="color:var(--cl)">Collaboration model:</strong> Chile is the single point of contact with the client — understands the business, prioritizes scope, validates output. India translates that scope into software with full technical autonomy. Coordination is complementary, not hierarchical: each side owns a clear domain.
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Framework Principles</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-title" style="color:var(--cl)">🎯 Clarity first</div><ul class="card-list"><li>Every ticket has a single owner</li><li>Intent documented before coding</li><li>No work without written context</li><li>Decisions recorded in Jira/Confluence</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--in)">⚡ Asymmetric speed</div><ul class="card-list"><li>India runs ~10h ahead of Chile</li><li>Rituals anchored in overlap window</li><li>Async work as default</li><li>Blockers escalated in &lt;2h</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--neb)">🤖 AI-native by default</div><ul class="card-list"><li>Nébula + Claude Code on every project</li><li>Context Engine updated each sprint</li><li>Prompts and workflows documented</li><li>AI adoption metrics per project</li></ul></div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Structure of a Typical Project</p>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">🔍</div><div style="font-family:var(--font);font-size:12px;font-weight:700;margin-bottom:6px;">Discovery</div><div style="font-size:11px;color:var(--muted);">Chile · 1–2 days</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">📐</div><div style="font-family:var(--font);font-size:12px;font-weight:700;margin-bottom:6px;">Inception</div><div style="font-size:11px;color:var(--muted);">Chile+India · 2–3d</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;border-color:rgba(167,139,250,.25);"><div style="font-size:22px;margin-bottom:8px;">⚡</div><div style="font-family:var(--font);font-size:12px;font-weight:700;margin-bottom:6px;">Bolt × N</div><div style="font-size:11px;color:var(--muted);">India leads · 2w each</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">✅</div><div style="font-family:var(--font);font-size:12px;font-weight:700;margin-bottom:6px;">QA & Review</div><div style="font-size:11px;color:var(--muted);">Chile validates · 2–3d</div></div>
+    <div class="card" style="text-align:center;padding:18px 12px;"><div style="font-size:22px;margin-bottom:8px;">🚀</div><div style="font-family:var(--font);font-size:12px;font-weight:700;margin-bottom:6px;">Deploy</div><div style="font-size:11px;color:var(--muted);">Shared · 1d</div></div>
+  </div>
+</section>
+
+
+<!-- ROLES -->
+<section class="section" id="sec-roles">
+  <p class="sec-title">Roles & Responsabilidades</p>
+  <p class="sec-sub">Nobody should ask "who does this?" — the answer is here and in every project README.</p>
+  <div class="role-split">
+    <div class="role-side">
+      <div class="role-hdr"><span style="font-size:20px;">🇨🇱</span><div><div style="font-family:var(--font);font-size:14px;font-weight:800;color:var(--cl);">Chile · Project Lead</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Liderazgo & cliente</div></div></div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Single point of contact with the client</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Defines and prioritizes the backlog with the client</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Writes Intent Documents before each Bolt</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Validates deliverables against acceptance criteria</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Manages relationship and project expectations</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Makes scope and priority decisions</div>
+      <div class="role-item"><span class="rdot" style="background:var(--cl)"></span>Escalates risks to client or C-Level</div>
+    </div>
+    <div class="role-div"></div>
+    <div class="role-side">
+      <div class="role-hdr"><span style="font-size:20px;">🇮🇳</span><div><div style="font-family:var(--font);font-size:14px;font-weight:800;color:var(--in);">India · Tech Lead + Devs</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Technical execution</div></div></div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Tech Lead: architecture, decisions, code review</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Estimates effort and breaks Bolts into Units</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Implements with Claude Code + Nébula as default</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Updates the Context Engine on every PR</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Reports blockers immediately</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Writes technical documentation on every ticket</div>
+      <div class="role-item"><span class="rdot" style="background:var(--in)"></span>Proposes technical improvements proactively</div>
+    </div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">RACI Matrix</p>
+  <p class="sec-sub">R = Responsible · A = Accountable · C = Consulted · I = Informed</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--bg3);border-bottom:1px solid var(--border2);">
+      <div style="padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Actividad</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cl);text-align:center">🇨🇱 Lead</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--in);text-align:center">🇮🇳 TL</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--in);text-align:center">🇮🇳 Dev</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center">Cliente</div>
+    </div>
+    <div id="raci-body"></div>
+  </div>
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(56,189,248,.2);"><div class="card-title" style="color:var(--cl)">🇨🇱 Chile must NOT do this</div><ul class="card-list"><li>Comprometer fechas sin validar con India</li><li>Open tickets without clear acceptance criteria</li><li>Bypass the Tech Lead to talk directly with devs</li><li>Codificar antes de definir el Intent</li></ul></div>
+    <div class="card" style="border-color:rgba(244,114,182,.2);"><div class="card-title" style="color:var(--in)">🇮🇳 India must NOT do this</div><ul class="card-list"><li>Make scope decisions without aligning with Chile</li><li>Ignore blockers for more than 2 hours</li><li>Code without a validated Intent</li><li>Contact the client without prior agreement</li></ul></div>
+  </div>
+</section>
+
+
+<!-- RITUALES PROYECTO -->
+<section class="section" id="sec-rituales">
+  <p class="sec-title">Project Rituals</p>
+  <p class="sec-sub">Designed for the Chile–India overlap window: 2:00–5:00 PM CLT / 10:30 AM–1:30 PM IST. Click to expand each ritual.</p>
+  <div class="info-box" style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);">
+    <strong style="color:var(--amb)">⏰ Overlap window:</strong> ~10h difference between CLT and IST. All synchronous rituals must fall between <strong>2:00–5:00 PM CLT / 10:30 AM–1:30 PM IST</strong>.
+  </div>
+  <div id="rituals-container"></div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Async Protocol</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-title" style="color:var(--cl)">📝 Before your shift</div><ul class="card-list"><li>Update your ticket statuses in Jira</li><li>Leave context on open PRs</li><li>Prepare questions in the project Teams channel</li><li>Blockers with @mention</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--in)">🌅 Starting your shift</div><ul class="card-list"><li>Read the other team's written stand-up</li><li>Review Jira: new tickets and comments</li><li>Answer questions before coding</li><li>Urgent → @mention in the channel</li></ul></div>
+    <div class="card"><div class="card-title" style="color:var(--sh)">🚫 Never async</div><ul class="card-list"><li>Architecture decisions</li><li>Scope changes → call first</li><li>Critical blockers → escalate immediately</li><li>Bolt kick-off → always live</li></ul></div>
+  </div>
+</section>
+
+
+<!-- BOLT -->
+<section class="section" id="sec-bolt">
+  <p class="sec-title">Bolt Cycle — 2 weeks</p>
+  <p class="sec-sub">The Bolt is Andino Labs' delivery unit. Each Bolt has a clear objective, a set of Units, and a client demo at the end.</p>
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Week 1</div>
+      <div class="bolt-track">
+        <div class="bolt-step"><div class="bdot" style="background:rgba(56,189,248,.15);border-color:var(--cl)"></div><div class="bcard"><div class="bday">Day 1 · Sync</div><div class="bname">Bolt Kick-off</div><div class="bitems"><span class="bitem">Chile presents Intent Document</span><span class="bitem">India reviews and asks questions</span><span class="bitem">Units estimation</span><span class="bitem">Ticket assignment</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(244,114,182,.15);border-color:var(--in)"></div><div class="bcard"><div class="bday">Days 2–4 · Async</div><div class="bname">Main build</div><div class="bitems"><span class="bitem">India executes with Nébula + Claude Code</span><span class="bitem">PRs with detailed descriptions</span><span class="bitem">Daily stand-up in Teams</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(167,139,250,.15);border-color:var(--sh)"></div><div class="bcard"><div class="bday">Day 5 · Sync</div><div class="bname">Mid-Bolt Check</div><div class="bitems"><span class="bitem">Chile–India internal demo</span><span class="bitem">Progress vs. Intent review</span><span class="bitem">Scope adjustment if needed</span></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Week 2</div>
+      <div class="bolt-track">
+        <div class="bolt-step"><div class="bdot" style="background:rgba(244,114,182,.15);border-color:var(--in)"></div><div class="bcard"><div class="bday">Days 6–8 · Async</div><div class="bname">Close + QA</div><div class="bitems"><span class="bitem">India completes pending Units</span><span class="bitem">Tests + manual review</span><span class="bitem">Documentation finalized</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(56,189,248,.15);border-color:var(--cl)"></div><div class="bcard"><div class="bday">Day 9 · Sync</div><div class="bname">Internal review</div><div class="bitems"><span class="bitem">Chile validates against acceptance criteria</span><span class="bitem">Feedback to India with issues</span><span class="bitem">Go / No-go for client demo</span></div></div></div>
+        <div class="bolt-step"><div class="bdot" style="background:rgba(16,185,129,.15);border-color:var(--neb)"></div><div class="bcard"><div class="bday">Day 10 · With client</div><div class="bname">Demo & Retro</div><div class="bitems"><span class="bitem">Chile presents to client</span><span class="bitem">Feedback captured in Jira</span><span class="bitem">Chile–India internal retro</span></div></div></div>
+      </div>
+    </div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Intent Document — Template</p>
+  <div class="card" style="border-color:rgba(56,189,248,.2);font-family:'DM Mono','Courier New',monospace;font-size:12px;line-height:1.8;">
+    <div style="font-family:var(--font);font-size:12px;font-weight:700;color:var(--cl);margin-bottom:12px;letter-spacing:.05em;">📄 INTENT DOCUMENT · Bolt #N — [Project]</div>
+    <div style="color:var(--muted)"># Bolt Objective</div><div style="color:var(--mid);margin-bottom:10px;">[1–2 sentences: what we want to achieve and why it matters]</div>
+    <div style="color:var(--muted)"># Units (deliverables)</div><div style="color:var(--mid);margin-bottom:10px;">1. [Unit] — description + acceptance criteria<br>2. [Unit] — description + acceptance criteria</div>
+    <div style="color:var(--muted)"># Out of scope</div><div style="color:var(--mid);margin-bottom:10px;">[What does NOT belong in this Bolt — explicit]</div>
+    <div style="color:var(--muted)"># Technical decisions</div><div style="color:var(--mid);margin-bottom:10px;">[Constraints, required stack, known integrations]</div>
+    <div style="color:var(--muted)"># Open questions</div><div style="color:var(--mid);">[What Chile doesn't know and needs India to clarify at kick-off]</div>
+  </div>
+</section>
+
+
+<!-- TEAMS & JIRA -->
+<section class="section" id="sec-teams">
+  <p class="sec-title">Microsoft Teams & Jira</p>
+  <p class="sec-sub">Tools work when everyone uses them the same way. These protocols apply to all projects — at both company and project level.</p>
+  <div class="info-box" style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.15);">
+    <strong style="color:var(--cl)">Teams structure:</strong> An "Andino Labs" Team with internal channels + a separate Team per active project or client. Company and project channels live in different Teams to avoid cross-noise.
+  </div>
+  <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Team: Andino Labs (internal)</p>
+  <div class="tchan"><div style="font-size:16px;">📢</div><div><div class="tc-name">General</div><div class="tc-desc">Company announcements, leadership updates, new projects. C-Level only posts here.</div></div><span class="badge badge-sh">Empresa</span></div>
+  <div class="tchan"><div style="font-size:16px;">🏛️</div><div><div class="tc-name">clevel-sync</div><div class="tc-desc">C-Level coordination. Commercial pipeline, portfolio health, strategic decisions.</div></div><span class="badge badge-sh">C-Level</span></div>
+  <div class="tchan"><div style="font-size:16px;">💼</div><div><div class="tc-name">comercial</div><div class="tc-desc">Pipeline, active deals, proposals in progress. CEO + Country Manager USA + CPO.</div></div><span class="badge badge-com">Comercial</span></div>
+  <div class="tchan"><div style="font-size:16px;">🤝</div><div><div class="tc-name">chile-india-ops</div><div class="tc-desc">Cross-team coordination. Framework updates, process changes, playbook improvements.</div></div><span class="badge badge-sh">Shared</span></div>
+  <div class="tchan"><div style="font-size:16px;">🤖</div><div><div class="tc-name">ai-prompts</div><div class="tc-desc">Living repository of useful prompts, Nébula workflows, Claude Code tips. Anyone can post.</div></div><span class="badge badge-neb">AI</span></div>
+  <div class="tchan"><div style="font-size:16px;">🚨</div><div><div class="tc-name">escalaciones</div><div class="tc-desc">Exclusive for critical blockers, production issues, and delivery-impacting escalations.</div></div><span class="badge badge-amb">Urgente</span></div>
+  <div class="tchan"><div style="font-size:16px;">☕</div><div><div class="tc-name">random</div><div class="tc-desc">Informal conversation, team culture. Important for the Chile–India bond.</div></div><span class="badge badge-sh">Social</span></div>
+  <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;">Team: [Client-Project] (per project)</p>
+  <div class="tchan"><div style="font-size:16px;">🔧</div><div><div class="tc-name">general</div><div class="tc-desc">Everything about the project: updates, decisions, blockers, technical context. No DMs for project topics.</div></div><span class="badge badge-cl">CL</span><span class="badge badge-in" style="margin-left:4px">IN</span></div>
+  <div class="tchan"><div style="font-size:16px;">📝</div><div><div class="tc-name">standups</div><div class="tc-desc">Exclusive channel for the daily async stand-up. Standard format only — no side conversation.</div></div><span class="badge badge-sh">Diario</span></div>
+  <div class="tchan"><div style="font-size:16px;">🔗</div><div><div class="tc-name">cliente-[nombre]</div><div class="tc-desc">Channel with the client included. Formal updates and communications validated by Chile Lead only.</div></div><span class="badge badge-com">Cliente</span></div>
+  <hr class="divider">
+  <p style="font-family:var(--font);font-size:15px;font-weight:700;margin-bottom:14px;">Jira — Ticket Structure</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+    <table class="jira-table"><thead><tr><th>Tipo</th><th>Who creates</th><th>Required structure</th><th>SLA</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-sh">Epic</span></td><td><span class="badge badge-cl">Chile</span></td><td>Objetivo del Bolt, Definition of Done</td><td>Before kick-off</td></tr>
+      <tr><td><span class="badge badge-sh">Story</span></td><td><span class="badge badge-cl">Chile</span></td><td>As [user] I want [feature] so that [value]. Clear ACs.</td><td>24h before kick-off</td></tr>
+      <tr><td><span class="badge badge-in">Task</span></td><td><span class="badge badge-in">India</span></td><td>Technical description + subtasks + estimate</td><td>At kick-off</td></tr>
+      <tr><td><span class="badge badge-amb">Bug</span></td><td>Cualquiera</td><td>Steps to reproduce + environment + severity</td><td>P1: 2h · P2: 4h · P3: next day</td></tr>
+      <tr><td><span class="badge badge-neb">Spike</span></td><td><span class="badge badge-in">India</span></td><td>Question + time box + expected output</td><td>Max 4h, output documented</td></tr>
+    </tbody></table>
+  </div>
+  <p style="font-family:var(--font);font-size:13px;font-weight:700;margin-bottom:10px;">Status Workflow</p>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--muted)">📋 Backlog</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--cl)">📝 Intent Ready</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--in)">⚙️ In Progress</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--in)">👁️ In Review</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--cl)">✅ QA Chile</div>
+    <div style="color:var(--border2)">→</div>
+    <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--neb)">🚀 Done</div>
+  </div>
+</section>
+
+
+<!-- ESCALACION -->
+<section class="section" id="sec-escalacion">
+  <p class="sec-title">Escalation Protocol</p>
+  <p class="sec-sub">The biggest risk in distributed teams is silence. This protocol defines what to do, when, and with whom — without ambiguity.</p>
+  <div class="info-box" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);">
+    <strong style="color:#ef4444">⚠️ Golden rule:</strong> If you're blocked for more than <strong>2 hours</strong>, you escalate. Don't wait for the next day's stand-up.
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;">
+    <div class="esc-row hdr"><div class="esc-cell">Nivel</div><div class="esc-cell">What situation?</div><div class="esc-cell">Who resolves?</div><div class="esc-cell">Where and how?</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:var(--neb)">L1 · Dev</span></div><div class="esc-cell">Technical question, ticket ambiguity, minor decision</div><div class="esc-cell"><span class="badge badge-in">India Tech Lead</span></div><div class="esc-cell">Jira comment. Max 2h wait.</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:var(--cl)">L2 · Technical</span></div><div class="esc-cell">Technical blocker impacting timeline, architecture decision</div><div class="esc-cell"><span class="badge badge-cl">Chile Lead</span> + <span class="badge badge-in">India TL</span></div><div class="esc-cell">Project channel in Teams. Call within &lt;4h.</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:var(--amb)">L3 · Proyecto</span></div><div class="esc-cell">Bolt risk, client scope change, priority conflict</div><div class="esc-cell"><span class="badge badge-cl">Chile Lead</span> → <span class="badge badge-sh">C-Level</span></div><div class="esc-cell">#escalations channel in Teams. Same overlap window.</div></div>
+    <div class="esc-row"><div class="esc-cell"><span class="esc-lv" style="color:#ef4444">L4 · Critical</span></div><div class="esc-cell">Production issue, security breach, risk of losing client</div><div class="esc-cell"><span class="badge badge-sh">C-Level</span></div><div class="esc-cell">#escalations + immediate call. After hours if needed.</div></div>
+  </div>
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Teams Escalation Template</p>
+  <div class="card" style="font-family:'DM Mono','Courier New',monospace;font-size:12px;line-height:1.9;border-color:rgba(251,191,36,.2);">
+    <div style="font-family:var(--font);font-size:12px;font-weight:700;color:var(--amb);margin-bottom:10px;">🚨 ESCALATION · [L2/L3] — @[mention]</div>
+    <div style="color:var(--muted)">Project:</div><div style="color:var(--mid);margin-bottom:6px;">[project name]</div>
+    <div style="color:var(--muted)">Jira Ticket:</div><div style="color:var(--mid);margin-bottom:6px;">[PROJ-123]</div>
+    <div style="color:var(--muted)">Blocker:</div><div style="color:var(--mid);margin-bottom:6px;">[What is blocked and since when]</div>
+    <div style="color:var(--muted)">Already tried:</div><div style="color:var(--mid);margin-bottom:6px;">[Options already explored]</div>
+    <div style="color:var(--muted)">Impact:</div><div style="color:var(--mid);margin-bottom:6px;">[What gets delayed if not resolved today]</div>
+    <div style="color:var(--muted)">I need:</div><div style="color:var(--mid)">[Specific decision / information / unblocking needed]</div>
+  </div>
+</section>
+
+
+<!-- ONBOARDING -->
+<section class="section" id="sec-onboarding">
+  <p class="sec-title">Project Onboarding</p>
+  <p class="sec-sub">When a new team member joins, this process ensures they are operational in less than 1 business day.</p>
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div>
+      <div style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--cl);margin-bottom:14px;letter-spacing:.04em;text-transform:uppercase;">🇨🇱 Chile — Project Lead</div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">1</div><div class="obody"><div class="otitle">Sales briefing (30 min)</div><div class="odesc">CEO or Country Manager USA delivers the handoff: client business, deal history, stakeholders and commitments made during the sale.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">2</div><div class="obody"><div class="otitle">Read the Project Brief in Confluence</div><div class="odesc">Stack, architecture decisions, previous Bolts, client feedback and current metrics.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">3</div><div class="obody"><div class="otitle">Meet with India Tech Lead (30 min)</div><div class="odesc">Introduction, working expectations, timezone, communication preferences and availability agreements.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(56,189,248,.1);color:var(--cl)">4</div><div class="obody"><div class="otitle">Accesses and channels</div><div class="odesc">Jira, Teams channel, Confluence. Client intro made by the seller before first direct contact.</div></div></div>
+    </div>
+    <div>
+      <div style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--in);margin-bottom:14px;letter-spacing:.04em;text-transform:uppercase;">🇮🇳 India — Dev / Tech Lead</div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">1</div><div class="obody"><div class="otitle">Technical setup (max 2h)</div><div class="odesc">Repo cloned, dependencies installed, local env working, Nébula + Claude Code configured. Without this, there is no productive Day 1.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">2</div><div class="obody"><div class="otitle">Read the project's Context Engine</div><div class="odesc">Architecture, ADRs, code conventions and contribution guides in Confluence.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">3</div><div class="obody"><div class="otitle">First good-first-issue</div><div class="odesc">Chile prepares a labeled ticket for Day 1. Goal: a small PR to learn the full process end-to-end.</div></div></div>
+      <div class="onb-step"><div class="onum" style="background:rgba(244,114,182,.1);color:var(--in)">4</div><div class="obody"><div class="otitle">Meet with Chile Lead (30 min)</div><div class="odesc">Expectations, communication agreements, current Bolt walkthrough. Unfiltered questions welcome.</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- METRICS -->
+<section class="section" id="sec-metricas">
+  <p class="sec-title">Framework Metrics</p>
+  <p class="sec-sub">Metrics at two levels: company (portfolio, revenue) and project (delivery, collaboration, AI). Reviewed at their respective ceremonies.</p>
+  <p style="font-family:var(--font);font-size:14px;font-weight:700;color:var(--sh);margin-bottom:12px;">🏛️ Company Metrics — Monthly Portfolio Review</p>
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card" style="border-color:rgba(251,146,60,.2);"><div class="card-title" style="color:var(--com)">💼 Revenue & pipeline</div><ul class="card-list"><li><strong style="color:var(--text)">Pipeline value</strong> — total active deals LATAM + USA</li><li><strong style="color:var(--text)">Win rate</strong> — % prproposals that close (target ≥40%)</li><li><strong style="color:var(--text)">Sales cycle</strong> — days first contact → signature (target ≤21d)</li><li><strong style="color:var(--text)">Revenue per project</strong> — vs. costo operacional Chile+India</li></ul></div>
+    <div class="card" style="border-color:rgba(167,139,250,.2);"><div class="card-title" style="color:var(--sh)">📊 Portfolio Health</div><ul class="card-list"><li><strong style="color:var(--text)">Projects on-track</strong> — % without delivery risk (target ≥85%)</li><li><strong style="color:var(--text)">NPS dthe client</strong> — encuesta post-Bolt, score agregado</li><li><strong style="color:var(--text)">India utilization</strong> — % capacity assigned to active projects</li><li><strong style="color:var(--text)">Churn</strong> — contracts not renewed or cancelled</li></ul></div>
+  </div>
+  <p style="font-family:var(--font);font-size:14px;font-weight:700;color:var(--cl);margin-bottom:12px;">🔧 Project Metrics — Bi-weekly Retro</p>
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(56,189,248,.2);"><div class="card-title" style="color:var(--cl)">📊 Delivery</div><ul class="card-list"><li><strong style="color:var(--text)">Bolt completion rate</strong> — % Units delivered (target ≥85%)</li><li><strong style="color:var(--text)">Cycle time</strong> — ticket created → Done (target &lt;5 days)</li><li><strong style="color:var(--text)">PR review time</strong> — PR opened → approved (target &lt;4h)</li><li><strong style="color:var(--text)">Defect escape rate</strong> — bugs post-demo (target 0)</li></ul></div>
+    <div class="card" style="border-color:rgba(16,185,129,.2);"><div class="card-title" style="color:var(--neb)">🤖 AI Adoption</div><ul class="card-list"><li><strong style="color:var(--text)">AI usage rate</strong> — % tickets with Nébula/Claude Code (target ≥80%)</li><li><strong style="color:var(--text)">Context Engine freshness</strong> — % docs updated in the last Bolt</li><li><strong style="color:var(--text)">Prompt reuse rate</strong> — % prompts del canal #ai-prompts reutilizados</li></ul></div>
+  </div>
+</section>
+
+<footer class="foot">Andino Labs · Chile × India Operating Framework · v2.0 — Living document: update at every bi-weekly retro</footer>
+
+<script>
+const clevelData=[
+  {icon:"🌎",role:"CEO",bg:"rgba(251,146,60,.15)",color:"var(--com)",
+   owns:["Vision and strategy of Andino","LATAM pipeline — prospecting and close","Strategic account relationships","Cultura y liderazgo of the team global"],
+   cere:["Weekly C-Level","Monthly Portfolio Review","Weekly Sales Meeting"]},
+  {icon:"🏗️",role:"CTO",bg:"rgba(56,189,248,.15)",color:"var(--cl)",
+   owns:["Technical architecture and team standards","Global stack and tooling decisions","Technical hiring Chile and India","Security, compliance and technical debt"],
+   cere:["Weekly C-Level","Tech Review monthly (mixta)","Architecture Decision Reviews"]},
+  {icon:"📦",role:"Chief Product Officer",bg:"rgba(244,114,182,.15)",color:"var(--in)",
+   owns:["Nébula product roadmap","Product narrative in the pitch","Experiencia dthe client con el framework","Offer pricing and packaging"],
+   cere:["Weekly C-Level","Bi-weekly Product Review","Monthly internal Nébula demo"]},
+  {icon:"🤖",role:"Chief AI & Delivery",bg:"rgba(16,185,129,.15)",color:"var(--neb)",
+   owns:["Delivery quality across all projects","AI adoption and maturity in the team","Operational framework evolution","Portfolio metrics — Bolt completion, NPS"],
+   cere:["Weekly C-Level","Monthly Portfolio Review","Tech Review monthly (mixta)","Quarterly Leaders Retro"]},
+  {icon:"🇺🇸",role:"Country Manager USA",bg:"rgba(167,139,250,.15)",color:"var(--sh)",
+   owns:["USA pipeline — prospecting and close","North American market expansion","Active USA account relationships","Offer adaptation to the US market"],
+   cere:["Weekly C-Level","Weekly Sales Meeting","USA Client QBR"]},
+];
+const cc=document.getElementById('clevel-container');
+clevelData.forEach(r=>{
+  const d=document.createElement('div');d.className='clcard';
+  d.innerHTML=`<div class="clavatar" style="background:${r.bg}">${r.icon}</div>
+    <div style="flex:1"><div class="clname">${r.role}</div><div class="clrole">Ownership & accountability</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+      <div><div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Dominio de ownership</div>
+        ${r.owns.map(o=>`<div style="font-size:12px;color:var(--mid);padding:2px 0;display:flex;gap:6px;"><span style="color:${r.color}">›</span>${o}</div>`).join('')}</div>
+      <div><div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Participa en</div>
+        ${r.cere.map(c=>`<div style="font-size:12px;color:var(--mid);padding:2px 0;display:flex;gap:6px;"><span style="color:var(--sh)">›</span>${c}</div>`).join('')}</div>
+    </div></div>`;
+  cc.appendChild(d);
+});
+
+const ceremonias=[
+  {icon:"🔁",name:"Weekly C-Level Sync",meta:"Weekly · Monday 9:00 AM CLT · Sync 45 min",level:"lv-emp",lbl:"Leadership only",
+   attendees:"CEO, CTO, CPO, Chief AI & Delivery, Country Manager USA",
+   left:{label:"Agenda",items:["00–10: Pipeline update — CEO (LATAM) + Country Manager (USA)","10–20: Portfolio health — Chief AI & Delivery: projects, blockers, risks","20–30: Product & tech — CPO + CTO: Nébula, stack, hiring","30–40: Weekly priorities — each role shares their focus","40–45: Decisions and agreements — recorded in Confluence"]},
+   right:{label:"Rules",items:["Meeting notes in Confluence with agreements and owners before 11:00 AM CLT","If someone can't attend, they send a written update before the meeting","Topics needing >10 min go to separate meetings","Decisions taken are binding for the entire week"]}},
+  {icon:"📊",name:"Monthly Portfolio Review",meta:"Monthly · First Thursday of the month · Sync 90 min",level:"lv-emp",lbl:"Leadership only",
+   attendees:"CEO, CTO, CPO, Chief AI & Delivery, Country Manager USA",
+   left:{label:"Agenda",items:["00–20: Portfolio health — project-by-project review with metrics","20–40: Financial — revenue vs. projected, costs, margins","40–60: Commercial pipeline — active deals LATAM and USA, forecast","60–80: Product & framework — Nébula improvements, client feedback","80–90: Strategic decisions — next month priorities"]},
+   right:{label:"Outputs",items:["Portfolio Dashboard updated in Confluence","Team assignment decisions communicated to Chief AI & Delivery","At-risk projects with action plan and owner","Updated quarterly revenue forecast","Framework changes documented in the playbook"]}},
+  {icon:"🤝",name:"Monthly Tech Review — India",meta:"Monthly · Third Wednesday · Sync 60 min · 2:00 PM CLT / 10:30 AM IST",level:"lv-mix",lbl:"Mixed",
+   attendees:"CTO, Chief AI & Delivery + India Tech Leads (all active projects)",
+   left:{label:"Agenda",items:["00–15: Recurring technical issues — Tech Leads share their top 3 of the month","15–30: Stack evolution — new tools, Nébula changes","30–45: AI adoption — metrics, best prompts of the month, new use cases","45–55: Framework feedback — what isn't working","55–60: Upcoming technical playbook changes"]},
+   right:{label:"Rules",items:["CTO documents global technical decisions as ADRs","Chief AI & Delivery updates the framework based on feedback","Session recorded for those who cannot attend","Tech Leads prepare their 3 points in advance","Standard Context Engine changes are communicated to everyone"]}},
+  {icon:"🌱",name:"Quarterly Leaders Retro",meta:"Quarterly · End of quarter · Sync 2h · Facilitated format",level:"lv-mix",lbl:"Mixed",
+   attendees:"Full C-Level + Chile Project Leads + India Tech Leads",
+   left:{label:"Agenda",items:["00–20: Quarter review — what worked, what didn't, what we learned","20–50: Chile–India friction — facilitated collaborative improvement exercise","50–80: Framework evolution — proposals with owner and date","80–100: Culture and team — health check, recognition, concerns","100–120: Next quarter commitments"]},
+   right:{label:"Principles",items:["Neutral facilitator (rotates among C-Level each quarter)","No point is dismissed without discussion","Agreements have an owner and a date — without an owner it's not an agreement","Summary published in #chile-india-ops on Teams","The playbook is updated before the following week"]}},
+  {icon:"💼",name:"Weekly Sales Meeting",meta:"Weekly · Wednesday · Sync 30 min",level:"lv-emp",lbl:"Leadership only",
+   attendees:"CEO, Country Manager USA · + CPO when there is an active technical pitch",
+   left:{label:"Agenda",items:["00–10: CEO update — LATAM pipeline: new deals and proposal progress","10–20: Country Manager update — USA pipeline: leads, demos, proposals sent","20–28: Coming weeks — confirmed meetings, materials to prepare","28–30: Operations handoffs — clients closing"]},
+   right:{label:"Rules",items:["CRM updated before the meeting — not updated live during it","New deal → notify in #commercial on Teams the same day","Operational handoff 5 days before close","CPO notified 2 weeks in advance when there is a technical pitch"]}},
+];
+const ccon=document.getElementById('ceremonias-container');
+ceremonias.forEach((c,i)=>{
+  const d=document.createElement('div');d.className='ritual';
+  d.innerHTML=`<div class="ritual-hdr" onclick="tog(this)">
+    <div class="rleft"><span class="ricon">${c.icon}</span>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span class="rname">${c.name}</span><span class="level-tag ${c.level}">${c.lbl}</span></div>
+        <div class="rmeta">${c.meta}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">👥 ${c.attendees}</div>
+      </div></div>
+    <span class="rarrow">›</span></div>
+  <div class="rbody${i===0?' open':''}">
+    <div class="rbody-inner">
+      <div class="rblock"><div class="rblbl">${c.left.label}</div><ul>${c.left.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+      <div class="rblock"><div class="rblbl">${c.right.label}</div><ul>${c.right.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+    </div></div>`;
+  ccon.appendChild(d);
+});
+
+const pipeline=[
+  {num:"01",name:"Identification and Qualification",meta:"Days 1–3 · Owner: CEO (LATAM) / Country Manager USA",color:"var(--com)",
+   cols:[{label:"What happens?",items:["Identify target company: industry, size, stack, engineering culture","Qualify fit: do they have a dev team? Pain with delivery? Can they pay?","First contact — LinkedIn, referrals or direct outreach","Goal: secure a 30-min Discovery Call"]},
+         {label:"BANT Criteria",items:["Budget: do they have budget for development / consulting services?","Authority: are we talking to the decision-maker?","Need: is the delivery or productivity pain real and urgent?","Timeline: do they want to solve this in the next 60–90 days?"]},
+         {label:"Output",items:["CRM updated with company, contact, lead source and score","Doesn't pass BANT → nurture with content, don't advance","Passes → schedule Discovery Call","Notify in #commercial on Teams"]}]},
+  {num:"02",name:"Discovery Call",meta:"Days 4–7 · 45–60 min · Owner: CEO or Country Manager",color:"var(--amb)",
+   cols:[{label:"Agenda",items:["00–10: Andino in 5 min — who we are, what differentiates us","10–30: Active listening — client pain points: what's slowing delivery today?","30–45: Quick Nébula demo if the profile is technical","45–60: Deep qualification questions + next step agreement"]},
+         {label:"Key questions",items:["How many people on the dev team? What seniority?","What is their current delivery cycle? What holds them back?","Have they tried using AI before? What happened?","Who else is involved in this decision?","What would need to happen for this to be a yes?"]},
+         {label:"Output",items:["Notas de discovery en el CRM en &lt;24h","If fit → proposal in 3–5 business days","If doubts → second call with CTO or CPO","If no fit → close gracefully, maintain the relationship"]}]},
+  {num:"03",name:"Proposal and Technical Pitch",meta:"Days 8–14 · Owner: CEO/Country Manager + CPO + CTO",color:"var(--neb)",
+   cols:[{label:"Proposal components",items:["Client's specific problem (based on discovery notes)","How Andino solves that problem with its methodology","Engagement model — scope, team, duration, Bolts","Investment — price and payment model","Proposed success metrics for the project"]},
+         {label:"Technical pitch (when applicable)",items:["CPO or CTO joins the presentation call","Live Nébula demo with a use case similar to the client","Chile–India model explanation with quality guarantees","Technical Q&A — stack, security, integrations","ROI Calculator with the client's data"]},
+         {label:"Rules",items:["Never send a proposal without having done the discovery","The proposal is presented live, never sent without a call","Price adjustment → escalate to CEO before responding","Maximum 2 proposal iterations"]}]},
+  {num:"04",name:"Negotiation and Close",meta:"Days 15–21 · Owner: CEO or Country Manager",color:"var(--cl)",
+   cols:[{label:"Handling common objections",items:["\"Too expensive\" → show concrete ROI, compare with cost of a dev FTE","\"We don't know the model\" → show a similar reference case","\"We need to think about it\" → agree on a concrete response date","\"Just part of it?\" → evaluate whether it makes sense, adjust price if scope changes"]},
+         {label:"Closing process",items:["Verbal agreement → send contract within 24h","Contract signed → notify Chief AI & Delivery for team assignment","Deposit or first invoice → confirm kick-off date","Project Lead intro to client made by the seller"]},
+         {label:"Operations handoff",items:["30-min briefing from seller to Project Lead","Complete Sale Package in Confluence","Client accesses configured before kick-off","Chief AI & Delivery confirms India team availability"]}]},
+  {num:"05",name:"Post-Sale and Expansion",meta:"Ongoing · Owner: CEO / Country Manager + Project Lead",color:"var(--sh)",
+   cols:[{label:"During the project",items:["CEO or Country Manager checks in with the client every 2 Bolts","NPS captured after each client demo","Identify expansion signals: more teams, new projects, referrals","Alert the Project Lead if the relationship is at risk"]},
+         {label:"Contract expansion",items:["More scope → CEO/Country Manager leads, Project Lead provides technical context","Referrals: ask for intro after the first successful Bolt","Upsell of additional tracks if the client is ready"]},
+         {label:"Close and renewal",items:["Final retrospective with the client — CEO/Country Manager + Project Lead","Continuity proposal presented 2 weeks before the last Bolt","If no renewal: exit interview documented in CRM","Success case documented (with client permission)"]}]},
+];
+const pc=document.getElementById('pipeline-container');
+pipeline.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='pipe';
+  d.innerHTML=`<div class="pipe-hdr" onclick="togP(this)">
+    <div class="pipe-num" style="background:rgba(251,146,60,.1);color:${s.color};border:1.5px solid ${s.color}">${s.num}</div>
+    <div><div class="pipe-name">${s.name}</div><div class="pipe-meta">${s.meta}</div></div>
+    <span class="rarrow">›</span></div>
+  <div class="pbody${i===0?' open':''}">
+    <div class="pgrid">${s.cols.map(col=>`<div><div class="pclbl">${col.label}</div><ul class="pcol">${col.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>`).join('')}
+    </div></div>`;
+  pc.appendChild(d);
+});
+
+const rituals=[
+  {icon:"📝",name:"Daily Async Stand-up",meta:"Daily · Async · standups channel in Teams",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"]],
+   left:{label:"Fixed format",items:["✅ What I did yesterday","🔧 What I'll do today","⛔ Blockers with @mention","📊 Tickets: [PROJ-XX] → [status]"]},
+   right:{label:"Rules",items:["Chile posts 9:00 AM CLT · India 9:30 AM IST","Blocker → escalate in <2h","Not a meeting — it's a written artifact"]}},
+  {icon:"🚀",name:"Bolt Kick-off",meta:"Every 2 weeks · Sync 60 min · 2:00 PM CLT / 10:30 AM IST",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄ Sync"]],
+   left:{label:"Agenda",items:["00–10: Chile presents Intent Document","10–20: India clarifies scope","20–40: Units estimation en vivo","40–55: Ticket assignment","55–60: Availability agreements"]},
+   right:{label:"Prerequisites",items:["Intent Document in Jira before the call","Stories with ACs written by Chile","Everyone reads the Intent before joining"]}},
+  {icon:"🔍",name:"Mid-Bolt Check",meta:"Week 1 · Friday · Sync 30 min",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄"]],
+   left:{label:"Agenda",items:["00–10: India demos what was built","10–20: Chile validates vs. Intent","20–25: Scope adjustment if there's risk","25–30: Agreements for Week 2"]},
+   right:{label:"Output",items:["On-track or adjustment documented","Tickets re-prioritized if applicable","Blockers recorded in Jira"]}},
+  {icon:"✅",name:"Bolt Internal review",meta:"Week 2 · Day 9 · Sync 45 min",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄"]],
+   left:{label:"Agenda",items:["00–20: India full Units demo","20–35: Chile validates acceptance criteria","35–42: Issues → tickets created","42–45: Go / No-go for client demo"]},
+   right:{label:"Go criteria",items:["≥85% Units delivered against ACs","0 open P1 bugs","Documentation updated","Context Engine updated"]}},
+  {icon:"🔄",name:"Retro quincenal",meta:"Post-client demo · Sync 30 min",tags:[["rtag-cl","🇨🇱"],["rtag-in","🇮🇳"],["rtag-sh","⇄"]],
+   left:{label:"Agenda",items:["00–05: Bolt metrics","05–15: What went well / didn't","15–25: Action items with owner","25–30: Team health check on Teams"]},
+   right:{label:"Rules",items:["No owner means it's not an agreement","Document in Confluence","Action items reviewed at the next retro"]}},
+  {icon:"🤖",name:"Mob AI Session",meta:"Monthly · Sync 60 min · Full team",tags:[["rtag-sh","⇄ Todos"],["rtag-neb","🤖 Nébula"]],
+   left:{label:"Purpose",items:["Share working prompts and workflows","Solve a technical problem with AI live","Update the Context Engine together","Improve the Nébula tooling"]},
+   right:{label:"Output",items:["≥3 prompts in #ai-prompts on Teams","1 improved Nébula workflow","Context Engine updated","Feedback to the global framework"]}},
+];
+const rc=document.getElementById('rituals-container');
+rituals.forEach((r,i)=>{
+  const d=document.createElement('div');d.className='ritual';
+  d.innerHTML=`<div class="ritual-hdr" onclick="tog(this)">
+    <div class="rleft"><span class="ricon">${r.icon}</span>
+      <div><div class="rname">${r.name}</div><div class="rmeta">${r.meta}</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="rtags">${r.tags.map(([cls,lbl])=>`<span class="rtag ${cls}">${lbl}</span>`).join('')}</div>
+      <span class="rarrow">›</span></div></div>
+  <div class="rbody${i===0?' open':''}">
+    <div class="rbody-inner">
+      <div class="rblock"><div class="rblbl">${r.left.label}</div><ul>${r.left.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+      <div class="rblock"><div class="rblbl">${r.right.label}</div><ul>${r.right.items.map(it=>`<li>${it}</li>`).join('')}</ul></div>
+    </div></div>`;
+  rc.appendChild(d);
+});
+
+const raciData=[
+  ["Discovery / kick-off with client","R/A","C","—","C"],
+  ["Write Intent Document","R/A","C","—","I"],
+  ["Estimate and break Bolt into Units","C","R/A","C","—"],
+  ["Prioritize backlog","R/A","C","—","C"],
+  ["Technical architecture","I","R/A","C","—"],
+  ["Feature implementation","—","C","R/A","—"],
+  ["Code review","—","R/A","R","—"],
+  ["QA & acceptance criteria validation","R/A","C","C","—"],
+  ["Client demo","R/A","I","—","I"],
+  ["Update Context Engine / docs","I","R/A","R","—"],
+  ["Escalate L3+ blockers","R/A","I","—","—"],
+  ["Facilitate retro","R/A","C","C","—"],
+];
+const cols={"R/A":"badge-sh","R":"badge-in","A":"badge-cl","C":"badge-amb","I":"badge-neb","—":""};
+const tbody=document.getElementById('raci-body');
+raciData.forEach((row,i)=>{
+  const tr=document.createElement('div');
+  tr.style.cssText=`display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);${i%2?'background:rgba(255,255,255,.015)':''}`;
+  tr.innerHTML=`<div style="padding:10px 16px;font-size:12.5px;color:var(--mid)">${row[0]}</div>`+
+    [1,2,3,4].map(j=>`<div style="padding:10px 14px;text-align:center">${row[j]!=='—'?`<span class="badge ${cols[row[j]]}">${row[j]}</span>`:'<span style="color:var(--muted);font-size:12px">—</span>'}</div>`).join('');
+  tbody.appendChild(tr);
+});
+
+function tog(hdr){const b=hdr.nextElementSibling,a=hdr.querySelector('.rarrow');b.classList.toggle('open');a.style.transform=b.classList.contains('open')?'rotate(90deg)':'';}
+function togP(hdr){const b=hdr.nextElementSibling,a=hdr.querySelector('.rarrow');b.classList.toggle('open');a.style.transform=b.classList.contains('open')?'rotate(90deg)':'';}
+function go(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── DESCRIPTOR TABS ── */
+function showDesc(id, btn){
+  document.querySelectorAll('.desc-panel').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.desc-tab').forEach(b=>{
+    b.style.background='var(--bg2)';b.style.color='var(--muted)';b.style.borderColor='var(--border)';
+  });
+  document.getElementById('desc-'+id).style.display='block';
+  const colors={caid:'rgba(16,185,129,.1)',pl:'rgba(56,189,248,.1)',tl:'rgba(244,114,182,.1)',dev:'rgba(244,114,182,.08)'};
+  const borders={caid:'rgba(16,185,129,.3)',pl:'rgba(56,189,248,.3)',tl:'rgba(244,114,182,.3)',dev:'rgba(244,114,182,.2)'};
+  const txts={caid:'var(--neb)',pl:'var(--cl)',tl:'var(--in)',dev:'var(--in)'};
+  btn.style.background=colors[id];btn.style.borderColor=borders[id];btn.style.color=txts[id];
+}
+
+/* ── PROJECT LEAD RESPONSIBILITIES ── */
+const respPL=[
+  {icon:'👤',color:'var(--cl)',title:'Client relationship',subtitle:'Single interface between Andino and the client during the project',
+   resp:[
+     {r:'Be the single client point of contact: all team communication with the client goes through the Project Lead.',n:'If the client speaks with India directly, there is a process problem.'},
+     {r:'Actively manage client expectations — before they form, not after they are frustrated.',n:'A poorly managed expectation today is a relationship crisis in two weeks.'},
+     {r:'Present the demo to the client at the close of each Bolt and capture feedback in a structured way in Jira.',n:'Poorly captured feedback is as costly as ignored feedback.'},
+     {r:'Validate that the commercial handoff is complete before first client contact.',n:'See the handoff rule — does not enter the project without a seller briefing.'},
+   ]},
+  {icon:'📋',color:'var(--cl)',title:'Scope and backlog management',subtitle:"Ownership of the project's what and when",
+   resp:[
+     {r:'Write the Intent Document before each Bolt kick-off: objective, Units with ACs, out of scope, technical constraints and open questions.',n:'Without an Intent Document, there is no kick-off. This is the most important rule of the role.'},
+     {r:'Keep the backlog prioritized and updated in Jira — Stories have clear ACs before India sees them.',n:'A Story without ACs is a ticket open to free interpretation.'},
+     {r:'Defend the agreed scope against client change requests — evaluate impact, negotiate and record in Jira.',n:'Scope creep is the number one cause of failed Bolts.'},
+     {r:'Make priority decisions based on client business value — not just perceived urgency.',n:'Urgent ≠ important. The Project Lead distinguishes between the two.'},
+   ]},
+  {icon:'🤝',color:'var(--cl)',title:'Coordination with India',subtitle:'Enable India to execute — not micro-manage',
+   resp:[
+     {r:'Facilitate the Bolt kick-off within the overlap window (2:00–5:00 PM CLT / 10:30 AM–1:30 PM IST) with the Intent Document prepared.',n:'Arriving at kick-off without a prepared Intent is arriving to lead without an agenda.'},
+     {r:'Answer India\'s questions within 4 hours during the overlap — an ignored blocker becomes a lost day.',n:'The Project Lead\'s response speed defines India\'s speed.'},
+     {r:'Send the weekly check-in to the Chief AI & Delivery every Friday before 5:00 PM CLT with all four signals complete.',n:'Without a check-in there is no portfolio visibility — and that escalates on its own.'},
+     {r:'Proactively escalate risks to the Chief AI & Delivery — don\'t wait for the risk to become a certainty.',n:'An early risk has options. A late risk only has consequences.'},
+   ]},
+];
+
+const plContainer=document.getElementById('resp-pl-container');
+if(plContainer) renderRespDomains(respPL, plContainer, false);
+
+/* ── TECH LEAD RESPONSIBILITIES ── */
+const respTL=[
+  {icon:'🏗️',color:'var(--in)',title:'Architecture and technical decisions',subtitle:"Ownership of the project's how",
+   resp:[
+     {r:'Design the solution architecture from the Intent Document — and document decisions as ADRs in Confluence.',n:'An undocumented technical decision is the most expensive type of technical debt.'},
+     {r:'Estimate each Bolt\'s effort honestly — giving ranges, not exact numbers under pressure from the Project Lead.',n:'Optimistic estimates generate commitments that the team ends up paying for.'},
+     {r:'Validate that tickets have enough technical context before assigning them to devs.',n:'A poorly specified ticket generates the work twice.'},
+     {r:'Make technical decisions autonomously within scope — without needing Chile\'s approval for each implementation decision.',n:'The TL\'s technical autonomy is what makes the model work at a distance.'},
+   ]},
+  {icon:'👁️',color:'var(--in)',title:'Quality and code review',subtitle:"The guardian of the project's technical quality",
+   resp:[
+     {r:'Do real code review on every PR — not just approvals under time pressure.',n:'A PR approved without review is technical debt disguised as velocity.'},
+     {r:'Keep the Context Engine updated as part of the PR closing process — not as a separate task at the end of the Bolt.',n:'If left for the end, it doesn\'t get done. The Context Engine is updated in the moment.'},
+     {r:'Detect dev technical blockers before they hit 2 hours — reviewing the daily async stand-up is part of the role.',n:'Silent blockers are the most costly.'},
+     {r:'Document the Bolt\'s technical findings for the monthly Tech Review with India and the CTO.',n:'Technical learning from one project must benefit all projects.'},
+   ]},
+  {icon:'🤖',color:'var(--in)',title:'AI Adoption',subtitle:'Responsible for ensuring the team uses Nébula and Claude Code as default',
+   resp:[
+     {r:'Ensure every dev uses Nébula and Claude Code on their tickets and documents it in the PR.',n:'The target is ≥80% of tickets with documented AI usage.'},
+     {r:'Prepare and facilitate the monthly project Mob AI Sessions — with output documented in #ai-prompts.',n:'A Mob AI Session without documented output didn\'t happen.'},
+     {r:'Identify bottlenecks where AI could most accelerate delivery and propose the corresponding prompts or workflows.',n:'AI doesn\'t adopt itself — someone has to show how.'},
+   ]},
+];
+
+const tlContainer=document.getElementById('resp-tl-container');
+if(tlContainer) renderRespDomains(respTL, tlContainer, false);
+
+/* ── DEVELOPER RESPONSIBILITIES ── */
+const respDev=[
+  {icon:'💻',color:'var(--in)',title:'Implementation',subtitle:'Execute autonomously within the Intent Document',
+   resp:[
+     {r:'Implement assigned Tasks using Nébula and Claude Code as default tools — and document their use in the PR.',n:'"I didn\'t use it" is not a valid answer. "I tried it and it didn\'t work for this case" is.'},
+     {r:'Estimate Task effort at kick-off honestly — and update the estimate if unexpected issues arise during implementation.',n:'An estimate that is not updated is worse than no estimate at all.'},
+     {r:'Post the async stand-up every day at 9:30 AM IST with the standard format — no exceptions.',n:'The async stand-up is the minimum visibility contract with the team.'},
+     {r:'Escalate technical blockers to the Tech Lead before they hit 2 hours — using the standard escalation format.',n:'Silence is not autonomy. It is invisible risk.'},
+   ]},
+  {icon:'📝',color:'var(--in)',title:'Quality and documentation',subtitle:'Documentation is part of the ticket — not an extra task',
+   resp:[
+     {r:'Write PRs with enough context: what changed, why, how to test it, and relevant technical decisions.',n:'A PR that only has code is an incomplete PR.'},
+     {r:'Update the Context Engine when closing a ticket that has project-relevant technical decisions.',n:'If something was hard to understand, others will have the same problem. Documenting it prevents it.'},
+     {r:'Write tests for the code they implement — coverage level is defined by the Tech Lead, but the testing culture is defined by the dev.',n:'A ticket without tests is a ticket that will return as a bug.'},
+   ]},
+];
+
+const devContainer=document.getElementById('resp-dev-container');
+if(devContainer) renderRespDomains(respDev, devContainer, false);
+
+/* ── SHARED RESP RENDERER ── */
+function renderRespDomains(domains, container, openFirst=true){
+  domains.forEach((dom,i)=>{
+    const d=document.createElement('div');
+    d.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;';
+    d.innerHTML=`
+      <div style="padding:14px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .2s;" onclick="togRespGen(this)" class="resp-hdr">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(16,185,129,.07);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid rgba(255,255,255,.06);">${dom.icon}</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font);font-size:13px;font-weight:700;color:${dom.color};margin-bottom:1px;">${dom.title}</div>
+          <div style="font-size:11px;color:var(--muted);">${dom.subtitle}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;">${dom.resp.length} items</span>
+          <span class="rarrow" style="color:var(--muted);font-size:16px;transition:transform .2s;"${(!openFirst||i>0)?'':' style="transform:rotate(90deg)"'}>›</span>
+        </div>
+      </div>
+      <div style="display:${(openFirst&&i===0)?'block':'none'};border-top:1px solid var(--border);">
+        <div style="padding:6px 0;">
+          ${dom.resp.map((item,j)=>`
+          <div style="padding:13px 20px;border-bottom:1px solid var(--border);${j===dom.resp.length-1?'border-bottom:none;':''}">
+            <div style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:4px;display:flex;gap:10px;align-items:flex-start;">
+              <span style="color:${dom.color};flex-shrink:0;margin-top:3px;font-size:12px;">›</span><span>${item.r}</span>
+            </div>
+            <div style="font-size:11.5px;color:var(--muted);padding-left:20px;line-height:1.55;font-style:italic;">${item.n}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    container.appendChild(d);
+  });
+}
+function togRespGen(hdr){
+  const body=hdr.nextElementSibling;
+  const arrow=hdr.querySelector('.rarrow');
+  const isOpen=body.style.display==='block';
+  body.style.display=isOpen?'none':'block';
+  arrow.style.transform=isOpen?'':'rotate(90deg)';
+}
+
+/* ── INJECT TRACKING INTO CEREMONIAS ── */
+const tpl=document.getElementById('tpl-portfolio-tracking');
+const cerSection=document.getElementById('sec-ceremonias');
+if(tpl&&cerSection){
+  cerSection.appendChild(tpl.content.cloneNode(true));
+}
+
+/* ── CHIEF AI & DELIVERY RESPONSABILIDADES (existing) ── */
+const respDomains=[
+  {
+    icon:'📦', color:'var(--cl)', title:'Delivery & project quality',
+    subtitle:'Accountability for the output of all active projects',
+    resp:[
+      {r:'Monitor the health of all parallel projects (4–6 active) through the weekly portfolio dashboard.',n:'Does not manage project by project — manages the system.'},
+      {r:'Detect early risk signals: Bolt completion rate dropping, cycle time rising, incomplete or missing check-ins.',n:'Acts before the Project Lead escalates — not after.'},
+      {r:'Intervene in at-risk projects: enter as a facilitator, not as a replacement for the Project Lead.',n:'The intervention is temporary and has an exit date.'},
+      {r:'Validate that the commercial → project handoff was done correctly before kick-off.',n:'A Project Lead without context is a risk before Day 1.'},
+      {r:'Approve the Go/No-go for client demos when there are team quality concerns.',n:'Veto authority on demos that do not meet the Andino standard.'},
+      {r:'Communicate delivery risks to the CEO with enough lead time to avoid commercial surprises.',n:'At least 5 business days of advance notice before a risk becomes visible to the client.'},
+    ]
+  },
+  {
+    icon:'🤖', color:'var(--neb)', title:'AI adoption & team maturity',
+    subtitle:'Ensuring Nébula and Claude Code are not optional — they are the default',
+    resp:[
+      {r:'Define and maintain the AI usage standard per project: what minimum percentage of tickets must use Nébula/Claude Code (target ≥80%).',n:'The number matters less than the habit. Without tracking, there is no adoption.'},
+      {r:'Audit the quality of each project\'s Context Engine at the close of each Bolt.',n:'An outdated Context Engine is AI without context — almost useless.'},
+      {r:'Manage the #ai-prompts channel on Teams: curate the best prompts, remove outdated ones, and push reuse across projects.',n:'A dead channel is the clearest symptom of low adoption.'},
+      {r:'Organize the monthly Mob AI Session per project and ensure outputs are documented.',n:'Without documentation, the learning dies with the session.'},
+      {r:'Identify which parts of the workflow are not using AI and design the intervention (prompt, workflow, training).',n:'Resistance is usually about tooling, not attitude.'},
+      {r:'Bring AI adoption metrics to the Monthly Portfolio Review as a trend, not just a snapshot.',n:'A downward trend for two consecutive Bolts requires immediate action.'},
+    ]
+  },
+  {
+    icon:'🏗️', color:'var(--sh)', title:'Operational framework & evolution',
+    subtitle:"Andino's playbook is not static — the Chief AI & Delivery makes it evolve",
+    resp:[
+      {r:'Update the operational framework (this document) at least once per quarter, based on Bolt Audits and leaders retros.',n:'Without updates, the framework becomes irrelevant in 6 months.'},
+      {r:'Propose and prioritize process changes in the quarterly Framework Evolution Sprint: what works, what to remove, what to add.',n:'Every change has an owner, purpose and success metric — or it doesn\'t make it in.'},
+      {r:'Document risk patterns identified across projects so other Project Leads can anticipate them.',n:'The learning from one project must benefit all others.'},
+      {r:'Keep working templates updated: Intent Document, Bolt Audit Report, Check-in template, escalation protocol.',n:'An outdated template generates confusion, not clarity.'},
+      {r:'Evaluate new AI tools or stack changes that could improve delivery — in collaboration with the CTO.',n:'Does not adopt tools without validation in a pilot project first.'},
+    ]
+  },
+  {
+    icon:'🤝', color:'var(--in)', title:'India team management',
+    subtitle:'The bridge between technical execution in India and strategic vision in Chile',
+    resp:[
+      {r:'Assign India Tech Leads and Devs to each new project, in coordination with the CTO — considering skill fit, current load and continuity.',n:'A bad assignment takes weeks to correct.'},
+      {r:'Monitor India team utilization: overload ≥90% is a quality risk, underutilization <70% is a retention risk.',n:'Target: 75–85% utilization per person.'},
+      {r:'Facilitate the monthly Tech Review with India Tech Leads — listen to their friction points and translate them into process improvements.',n:'India TLs are the most valuable technical signal source Andino has.'},
+      {r:'Manage priority conflicts between projects when two Project Leads compete for the same India capacity.',n:'The decision belongs to the Chief AI & Delivery, not to the Project Leads among themselves.'},
+      {r:'Participate in India technical hiring alongside the CTO: define the profile, review technical tests, validate cultural fit with the working model.',n:'Hire for the methodology, not just for the language.'},
+    ]
+  },
+  {
+    icon:'📊', color:'var(--com)', title:'Reporting & strategic visibility',
+    subtitle:'C-Level makes decisions with the information the Chief AI & Delivery provides',
+    resp:[
+      {r:'Preparar y presentar el Monthly Portfolio Review al C-Level: status per project, metric trends, risks and action proposals.',n:'Presenting is only 20%. The 80% is having interpreted the data correctly beforehand.'},
+      {r:'Generate proactive alerts to the CEO when a project risks impacting the client relationship — before the client reports it.',n:'A timely alert is a crisis that doesn\'t happen.'},
+      {r:'Maintain a record of Bolt Audits for all projects as institutional memory — accessible in Confluence.',n:'Without memory, Andino makes the same mistakes on every new project.'},
+      {r:'Report AI adoption metrics to C-Level in the Portfolio Review, with a cross-project comparison.',n:'Transparency across projects generates healthy internal competition.'},
+      {r:'Translate client feedback (NPS + demo comments) into process or product improvement opportunities.',n:'Client feedback is the most honest input Andino has.'},
+    ]
+  },
+];
+
+const respContainer=document.getElementById('resp-container');
+if(respContainer) renderRespDomains(respDomains, respContainer, true);
+
+/* ── CHIEF AI & DELIVERY ── */
+// Check-in form state
+const ciState={};
+function setCIField(proj,dim,val){
+  if(!ciState[proj])ciState[proj]={};
+  ciState[proj][dim]=val;
+  renderCIPreview(proj);
+}
+function renderCIPreview(proj){
+  const el=document.getElementById('ci-preview-'+proj);
+  if(!el)return;
+  const s=ciState[proj]||{};
+  const dims=['delivery','cliente','equipo','ia'];
+  const labels={delivery:'Delivery',cliente:'Client',equipo:'Team',ia:'AI'};
+  const colors={green:'var(--neb)',yellow:'var(--amb)',red:'#ef4444'};
+  const emojis={green:'🟢',yellow:'🟡',red:'🔴'};
+  let allFilled=dims.every(d=>s[d]&&s[d].semaforo);
+  el.innerHTML=dims.map(d=>{
+    if(!s[d]||!s[d].semaforo)return`<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;font-size:11px;color:var(--muted)">${labels[d]}: —</div>`;
+    return`<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;font-size:11px;color:${colors[s[d].semaforo]}">${emojis[s[d].semaforo]} ${labels[d]}${s[d].nota?': '+s[d].nota.slice(0,40)+(s[d].nota.length>40?'…':''):''}</div>`;
+  }).join('');
+}
+
+function submitCheckin(proj){
+  const s=ciState[proj]||{};
+  const dims=['delivery','cliente','equipo','ia'];
+  const missing=dims.filter(d=>!s[d]||!s[d].semaforo);
+  if(missing.length){alert('Please complete the status for: '+missing.join(', '));return;}
+  const el=document.getElementById('ci-form-'+proj);
+  const colors={green:'var(--neb)',yellow:'var(--amb)',red:'#ef4444'};
+  const emojis={green:'🟢',yellow:'🟡',red:'🔴'};
+  const labels={delivery:'Delivery',cliente:'Client',equipo:'Team',ia:'AI'};
+  el.innerHTML=`<div style="padding:20px;text-align:center">
+    <div style="font-size:24px;margin-bottom:8px">✅</div>
+    <div style="font-family:var(--font);font-weight:700;margin-bottom:4px">Check-in enviado</div>
+    <div style="font-size:12px;color:var(--muted)">Resumen del status de ${proj}:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;text-align:left">
+      ${dims.map(d=>`<div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid ${colors[s[d].semaforo]}">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">${labels[d]}</div>
+        <div style="font-size:13px;color:${colors[s[d].semaforo]}">${emojis[s[d].semaforo]} ${s[d].semaforo.toUpperCase()}</div>
+        ${s[d].nota?`<div style="font-size:11.5px;color:var(--mid);margin-top:4px">${s[d].nota}</div>`:''}
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+</script>
+
+<style>
+/* Chief AI & Delivery extra styles */
+.caid-instancia{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;margin-bottom:8px;
+  transition:border-color .2s;
+}
+.caid-instancia:hover{border-color:var(--border2);}
+.caid-inst-hdr{display:flex;align-items:flex-start;gap:14px;}
+.caid-inst-icon{
+  width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.caid-inst-title{font-size:13.5px;font-weight:600;margin-bottom:2px;letter-spacing:-.01em;}
+.caid-inst-meta{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.caid-inst-tags{display:flex;gap:6px;flex-wrap:wrap;}
+
+.flow-row{
+  display:flex;align-items:center;gap:0;
+  margin-bottom:24px;overflow-x:auto;padding-bottom:4px;
+}
+.flow-node{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 18px;
+  text-align:center;min-width:140px;flex-shrink:0;
+}
+.flow-node-icon{font-size:20px;margin-bottom:7px;}
+.flow-node-name{font-size:12px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;}
+.flow-node-sub{font-size:10.5px;color:var(--muted);line-height:1.45;}
+.flow-arrow{color:var(--dim);font-size:16px;margin:0 6px;flex-shrink:0;}
+
+.sem-selector{display:flex;gap:6px;margin-bottom:12px;}
+.sem-btn{
+  flex:1;padding:9px 6px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--border);background:var(--bg3);
+  cursor:pointer;text-align:center;font-size:11px;font-weight:600;
+  color:var(--muted);transition:all .15s;font-family:var(--font);
+}
+.sem-btn:hover{border-color:var(--border2);color:var(--text);}
+.sem-btn.sel-green{background:rgba(16,185,129,.1);border-color:var(--neb);color:var(--neb);}
+.sem-btn.sel-yellow{background:rgba(245,158,11,.1);border-color:var(--amb);color:var(--amb);}
+.sem-btn.sel-red{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red);}
+
+.ci-project-tab{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:8px;
+  transition:border-color .2s;
+}
+.ci-project-tab:hover{border-color:var(--border2);}
+.ci-proj-hdr{
+  display:grid;grid-template-columns:auto 1fr auto auto;
+  gap:12px;align-items:center;padding:14px 20px;
+  cursor:pointer;transition:background .15s;
+}
+.ci-proj-hdr:hover{background:rgba(255,255,255,.015);}
+.ci-proj-name{font-size:13.5px;font-weight:600;letter-spacing:-.01em;}
+.ci-proj-meta{font-size:11px;color:var(--muted);}
+.ci-proj-body{display:none;border-top:1px solid var(--border);}
+.ci-proj-body.open{display:block;}
+.ci-form-inner{padding:20px;}
+.ci-dim-block{margin-bottom:18px;}
+.ci-dim-label{
+  font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.ci-textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 13px;
+  color:var(--text);font-family:var(--font);font-size:13px;
+  resize:none;outline:none;transition:border-color .15s;line-height:1.55;
+}
+.ci-textarea:focus{border-color:var(--neb);}
+.ci-textarea::placeholder{color:var(--muted);}
+.ci-preview{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.ci-submit{
+  width:100%;padding:12px;
+  background:rgba(16,185,129,.1);
+  border:1px solid rgba(16,185,129,.25);
+  border-radius:var(--radius-sm);color:var(--neb);
+  font-family:var(--font);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;letter-spacing:.01em;
+}
+.ci-submit:hover{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.4);}
+
+.dash-proj-row{
+  display:grid;grid-template-columns:1fr 44px 44px 44px 44px;
+  gap:10px;align-items:center;padding:12px 16px;
+  border-bottom:1px solid var(--border);
+}
+.dash-proj-row:last-child{border-bottom:none;}
+.dash-proj-row.header{background:var(--bg3);border-bottom:1px solid var(--border2);}
+.dpname{font-size:13px;color:var(--text);font-weight:500;}
+.dpmeta{font-size:11px;color:var(--muted);}
+.dp-sem{
+  width:32px;height:32px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.dp-green{background:rgba(16,185,129,.1);}
+.dp-yellow{background:rgba(245,158,11,.1);}
+.dp-red{background:rgba(239,68,68,.1);}
+.dp-gray{background:var(--bg3);}
+
+.bolt-progress{background:var(--bg3);border-radius:100px;height:5px;overflow:hidden;margin-top:6px;}
+.bolt-progress-fill{height:100%;border-radius:100px;transition:width .4s;}
+</style>
+
+<!-- DESCRIPTORES DE CARGO -->
+<section class="section" id="sec-descriptores">
+  <p class="sec-title">Job Descriptions — Andino Labs</p>
+  <p class="sec-sub">Detailed description of each role: purpose, domain responsibilities, authority boundaries and success criteria. These job descriptions are each person's internal contract with the organization.</p>
+
+  <!-- SELECTOR DE ROL -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;" id="desc-selector">
+    <button class="desc-tab active" onclick="showDesc('caid',this)" style="padding:9px 16px;border-radius:8px;border:1.5px solid rgba(16,185,129,.3);background:rgba(16,185,129,.1);color:var(--neb);font-family:var(--font);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .2s;">🤖 Chief AI &amp; Delivery</button>
+    <button class="desc-tab" onclick="showDesc('pl',this)" style="padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg2);color:var(--muted);font-family:var(--font);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .2s;">🇨🇱 Project Lead</button>
+    <button class="desc-tab" onclick="showDesc('tl',this)" style="padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg2);color:var(--muted);font-family:var(--font);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .2s;">🇮🇳 India Tech Lead</button>
+    <button class="desc-tab" onclick="showDesc('dev',this)" style="padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg2);color:var(--muted);font-family:var(--font);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .2s;">🇮🇳 India Developer</button>
+  </div>
+
+  <!-- CHIEF AI & DELIVERY -->
+  <div id="desc-caid" class="desc-panel">
+    <div style="background:linear-gradient(135deg,rgba(16,185,129,.06),rgba(167,139,250,.04));border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:22px 24px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🤖</div>
+        <div>
+          <div style="font-family:var(--font);font-size:16px;font-weight:800;color:var(--neb);margin-bottom:2px;">Chief AI &amp; Delivery</div>
+          <div style="font-size:11.5px;color:var(--muted);">Unique role at Andino · Reports to CEO · Transversal across all projects and C-Level</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--mid);line-height:1.75;border-top:1px solid rgba(16,185,129,.15);padding-top:14px;">
+        The Chief AI &amp; Delivery does not manage a project — they manage the <em>system</em> that makes all projects work. Their job is to ensure Project Leads have what they need, that India is executing with quality, that AI is genuinely being used, and that the framework improves with each cycle. When something fails in a project, they are the first to know after the Project Lead, and the one who decides whether to escalate or resolve.
+      </div>
+    </div>
+    <div style="font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Responsibilities by Domain</div>
+    <div id="resp-container"></div>
+    <hr class="divider">
+    <p class="sec-title" style="font-size:17px;">What the Role Is NOT</p>
+    <div class="grid-2" style="margin-bottom:0;">
+      <div class="card" style="border-color:rgba(239,68,68,.2);">
+        <div class="card-title" style="color:#ef4444">🚫 Does NOT do this</div>
+        <ul class="card-list">
+          <li>Manage day-to-day of a project — that's the Project Lead</li>
+          <li>Review individual tickets or do code review — that's the India TL</li>
+          <li>Talk directly with the client without going through Chile Lead</li>
+          <li>Make scope decisions — that's the Project Lead with the client</li>
+          <li>Resolve technical implementation questions — that's the India TL</li>
+          <li>Micro-manage how India uses Nébula on every line of code</li>
+          <li>Escalate to CEO without having tried to solve the problem first</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(16,185,129,.2);">
+        <div class="card-title" style="color:var(--neb)">✅ DOES do this</div>
+        <ul class="card-list">
+          <li>Detect risk patterns before the Project Lead sees them</li>
+          <li>Intervene in projects showing deterioration signals — proactively</li>
+          <li>Ensure the framework evolves with each learning cycle</li>
+          <li>Bridge the technical (India) and the strategic (C-Level)</li>
+          <li>Push AI adoption without generating operational noise</li>
+          <li>Defend delivery quality when there is commercial pressure</li>
+          <li>Say "no" to the CEO when a timeline commitment is unrealistic</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT LEAD -->
+  <div id="desc-pl" class="desc-panel" style="display:none;">
+    <div style="background:linear-gradient(135deg,rgba(56,189,248,.06),rgba(16,185,129,.03));border:1px solid rgba(56,189,248,.2);border-radius:var(--radius);padding:22px 24px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(56,189,248,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🇨🇱</div>
+        <div>
+          <div style="font-family:var(--font);font-size:16px;font-weight:800;color:var(--cl);margin-bottom:2px;">Project Lead — Chile</div>
+          <div style="font-size:11.5px;color:var(--muted);">Project owner · Reports to Chief AI &amp; Delivery · Single interface with the client</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--mid);line-height:1.75;border-top:1px solid rgba(56,189,248,.15);padding-top:14px;">
+        The Project Lead is Andino's face to the client and the project's orchestrator. They understand the client's business better than anyone on the team, translate that context into a prioritized backlog, and ensure India has everything it needs to execute. They don't code — they lead. Their authority is over the what and the when; technical authority over the how belongs to the India Tech Lead.
+      </div>
+    </div>
+    <div id="resp-pl-container"></div>
+    <hr class="divider">
+    <div class="grid-2" style="margin-bottom:0;">
+      <div class="card" style="border-color:rgba(239,68,68,.2);">
+        <div class="card-title" style="color:#ef4444">🚫 Does NOT do this</div>
+        <ul class="card-list">
+          <li>Comprometer timelines sin validar capacidad con India primero</li>
+          <li>Abrir tickets sin acceptance criteria escritos y claros</li>
+          <li>Saltarse al India TL para hablar directamente con los devs</li>
+          <li>Comenzar a codificar antes de tener el Intent Document validado</li>
+          <li>Ocultar riesgos al Chief AI &amp; Delivery para "resolverlos solo"</li>
+          <li>Modificar el scope acordado sin registrarlo en Jira y notificar a India</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(56,189,248,.2);">
+        <div class="card-title" style="color:var(--cl)">✅ DOES do this</div>
+        <ul class="card-list">
+          <li>Escribe el Intent Document antes de cada kick-off de Bolt</li>
+          <li>Valida cada entregable contra acceptance criteria antes del demo</li>
+          <li>Sends the weekly check-in to the Chief AI &amp; Delivery every Friday</li>
+          <li>Escala riesgos de forma proactiva — no espera a que exploten</li>
+          <li>Gestiona las expectativas dthe client antes de que se generen</li>
+          <li>Defends the agreed scope against last-minute requests</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH LEAD INDIA -->
+  <div id="desc-tl" class="desc-panel" style="display:none;">
+    <div style="background:linear-gradient(135deg,rgba(244,114,182,.06),rgba(167,139,250,.03));border:1px solid rgba(244,114,182,.2);border-radius:var(--radius);padding:22px 24px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(244,114,182,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🇮🇳</div>
+        <div>
+          <div style="font-family:var(--font);font-size:16px;font-weight:800;color:var(--in);margin-bottom:2px;">Tech Lead — India</div>
+          <div style="font-size:11.5px;color:var(--muted);">Technical project owner · Reports to Chief AI &amp; Delivery · Primary interface with the Project Lead</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--mid);line-height:1.75;border-top:1px solid rgba(244,114,182,.15);padding-top:14px;">
+        The India Tech Lead is the technical head of the execution team. They make all architecture decisions, design the solution from the Intent Document, assign work to devs, do code review, and are the technical source of truth for the project. Their authority is over the how; authority over the what and priority belongs to Chile Lead. They are the only regular technical contact point with Chile Lead — devs do not go directly to Chile.
+      </div>
+    </div>
+    <div id="resp-tl-container"></div>
+    <hr class="divider">
+    <div class="grid-2" style="margin-bottom:0;">
+      <div class="card" style="border-color:rgba(239,68,68,.2);">
+        <div class="card-title" style="color:#ef4444">🚫 Does NOT do this</div>
+        <ul class="card-list">
+          <li>Tomar decisiones de scope o prioridad sin alinear con Chile Lead</li>
+          <li>Ignore a blocker for more than 2 hours without escalating it</li>
+          <li>Comenzar a implementar sin Intent Document validado</li>
+          <li>Contactar to the client directamente sin acuerdo con Chile Lead</li>
+          <li>Approve a PR without a real code review due to time pressure</li>
+          <li>Dejar el Context Engine desactualizado al cerrar el Bolt</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(244,114,182,.2);">
+        <div class="card-title" style="color:var(--in)">✅ DOES do this</div>
+        <ul class="card-list">
+          <li>Estimates honestly — gives ranges, doesn't promise exact numbers under pressure</li>
+          <li>Proposes alternative technical solutions when the original approach is not viable</li>
+          <li>Actualiza el Context Engine como parte de cada PR, no como tarea aparte</li>
+          <li>Prepares 3 technical friction points for the monthly Tech Review</li>
+          <li>Escalates technical blockers quickly — silence is not professionalism</li>
+          <li>Does code review that teaches, not just approves or rejects</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEVELOPER INDIA -->
+  <div id="desc-dev" class="desc-panel" style="display:none;">
+    <div style="background:linear-gradient(135deg,rgba(244,114,182,.04),rgba(56,189,248,.03));border:1px solid rgba(244,114,182,.15);border-radius:var(--radius);padding:22px 24px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(244,114,182,.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💻</div>
+        <div>
+          <div style="font-family:var(--font);font-size:16px;font-weight:800;color:var(--in);margin-bottom:2px;">Developer — India</div>
+          <div style="font-size:11.5px;color:var(--muted);">Technical executor · Reports to India Tech Lead · Operates autonomously within the Intent Document</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--mid);line-height:1.75;border-top:1px solid rgba(244,114,182,.12);padding-top:14px;">
+        The India Developer is the one who makes things happen. They implement with full technical autonomy within the scope defined in the Intent Document, use Nébula and Claude Code as default tools (not optional), proactively report progress and blockers, and contribute to technical documentation. Their usual channel is the India Tech Lead — they do not go directly to Chile Lead without prior agreement.
+      </div>
+    </div>
+    <div id="resp-dev-container"></div>
+    <hr class="divider">
+    <div class="grid-2" style="margin-bottom:0;">
+      <div class="card" style="border-color:rgba(239,68,68,.2);">
+        <div class="card-title" style="color:#ef4444">🚫 Does NOT do this</div>
+        <ul class="card-list">
+          <li>Asumir silenciosamente que entiende un ticket ambiguo — pregunta primero</li>
+          <li>Implementar sin leer el Intent Document del Bolt</li>
+          <li>Ignore a blocker for more than 2 hours without escalating to the TL</li>
+          <li>Close a ticket without tests and without technical documentation</li>
+          <li>Usar el stack o enfoque que le gusta sin consultar al TL</li>
+          <li>Skip the PR process due to time pressure</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(244,114,182,.2);">
+        <div class="card-title" style="color:var(--in)">✅ DOES do this</div>
+        <ul class="card-list">
+          <li>Uses Nébula and Claude Code on every ticket — documents how in the PR</li>
+          <li>Posts the async stand-up every day at 9:30 AM IST without exception</li>
+          <li>Escribe PRs con contexto suficiente para que el TL haga un review real</li>
+          <li>Updates the Context Engine when closing a ticket with relevant technical decisions</li>
+          <li>Pregunta en el canal of the project, no en DMs — el contexto beneficia a todo the team</li>
+          <li>Completes the good-first-issue on Day 1 of onboarding without waiting for help</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARCO DE SEGUIMIENTO DE PORTAFOLIO (at end of ceremonias via JS injection) -->
+<template id="tpl-portfolio-tracking">
+  <hr class="divider">
+  <p class="sec-title" style="font-size:17px;">Portfolio Tracking Framework</p>
+  <p class="sec-sub" style="margin-bottom:24px;">The lightweight mechanism through which the Chief AI &amp; Delivery maintains visibility across all parallel projects — without generating operational overhead.</p>
+
+  <div style="margin-bottom:28px;">
+    <div style="font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Weekly Information Flow</div>
+    <div class="flow-row">
+      <div class="flow-node" style="border-color:rgba(244,114,182,.25);">
+        <div class="flow-node-icon">🇮🇳</div>
+        <div class="flow-node-name" style="color:var(--in);">India TL</div>
+        <div class="flow-node-sub">Daily stand-up + Jira updated</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(56,189,248,.25);">
+        <div class="flow-node-icon">🇨🇱</div>
+        <div class="flow-node-name" style="color:var(--cl);">Project Lead</div>
+        <div class="flow-node-sub">Async check-in every Friday</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.04);">
+        <div class="flow-node-icon">🤖</div>
+        <div class="flow-node-name" style="color:var(--neb);">Chief AI &amp; Delivery</div>
+        <div class="flow-node-sub">Dashboard + action if risk</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(167,139,250,.25);">
+        <div class="flow-node-icon">🏛️</div>
+        <div class="flow-node-name" style="color:var(--sh);">C-Level</div>
+        <div class="flow-node-sub">Monthly Portfolio Review</div>
+      </div>
+    </div>
+    <div class="info-box" style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);margin-bottom:0;">
+      <strong style="color:var(--neb)">Core principle:</strong> The Chief AI &amp; Delivery doesn't ask for status — they receive it. The Project Lead is responsible for sending the check-in every Friday before 5:00 PM CLT. If it doesn't arrive, that is itself a risk signal and is escalated the next day.
+    </div>
+  </div>
+
+  <p style="font-family:var(--font);font-size:14px;font-weight:700;margin-bottom:14px;">Chief AI &amp; Delivery Instances</p>
+
+  <div class="caid-instancia">
+    <div class="caid-inst-hdr">
+      <div class="caid-inst-icon" style="background:rgba(16,185,129,.12);">📥</div>
+      <div style="flex:1">
+        <div class="caid-inst-title">1 · Weekly Check-in Review</div>
+        <div class="caid-inst-meta">Friday · Async · 20–30 min · Chief AI &amp; Delivery only</div>
+        <div style="font-size:12.5px;color:var(--mid);line-height:1.65;margin-bottom:10px;">Reviews all check-ins, updates the portfolio dashboard and classifies each project by risk level. If projects are yellow or red, schedules the unblocking call.</div>
+        <div class="caid-inst-tags"><span class="level-tag lv-emp">Async</span><span class="badge badge-neb">Input: check-ins</span><span class="badge badge-sh">Output: dashboard actualizado</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="caid-instancia">
+    <div class="caid-inst-hdr">
+      <div class="caid-inst-icon" style="background:rgba(251,191,36,.12);">⚡</div>
+      <div style="flex:1">
+        <div class="caid-inst-title">2 · Unblocking Call (only if risk)</div>
+        <div class="caid-inst-meta">On demand · &lt;24h from when risk appears · Sync 20–30 min</div>
+        <div style="font-size:12.5px;color:var(--mid);line-height:1.65;margin-bottom:10px;">Triggered by yellow or red signal. Not a status meeting — it's a focused conversation. The Chief AI &amp; Delivery enters with the diagnosis done and an action proposal.</div>
+        <div class="caid-inst-tags"><span class="level-tag lv-mix">On demand</span><span class="badge badge-amb">Trigger: signalro amarillo/rojo</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="caid-instancia">
+    <div class="caid-inst-hdr">
+      <div class="caid-inst-icon" style="background:rgba(56,189,248,.12);">📊</div>
+      <div style="flex:1">
+        <div class="caid-inst-title">3 · Bolt Audit (at the end of each Bolt)</div>
+        <div class="caid-inst-meta">Every 2 weeks · Post Bolt Review · Async 30 min</div>
+        <div style="font-size:12.5px;color:var(--mid);line-height:1.65;margin-bottom:10px;">Reviews completion rate, cycle time, AI usage rate, defect escape rate and Context Engine quality. Detects patterns across projects and feeds improvements into the framework.</div>
+        <div class="caid-inst-tags"><span class="level-tag lv-emp">Post-Bolt</span><span class="badge badge-neb">Output: Bolt Audit Report</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="caid-instancia">
+    <div class="caid-inst-hdr">
+      <div class="caid-inst-icon" style="background:rgba(167,139,250,.12);">🏛️</div>
+      <div style="flex:1">
+        <div class="caid-inst-title">4 · Monthly Portfolio Review (C-Level)</div>
+        <div class="caid-inst-meta">Monthly · First Thursday · Sync 90 min</div>
+        <div style="font-size:12.5px;color:var(--mid);line-height:1.65;margin-bottom:10px;">Presents portfolio status to C-Level: on-track vs. at-risk projects, metric trends, framework improvement proposals and decisions requiring approval.</div>
+        <div class="caid-inst-tags"><span class="level-tag lv-emp">C-Level</span><span class="badge badge-sh">Monthly</span><span class="badge badge-neb">Output: strategic decisions</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="caid-instancia">
+    <div class="caid-inst-hdr">
+      <div class="caid-inst-icon" style="background:rgba(251,146,60,.12);">🔧</div>
+      <div style="flex:1">
+        <div class="caid-inst-title">5 · Framework Evolution Sprint (quarterly)</div>
+        <div class="caid-inst-meta">Quarterly · Post leaders retro · Async + 1 x 2h working session</div>
+        <div style="font-size:12.5px;color:var(--mid);line-height:1.65;margin-bottom:10px;">Based on Bolt Audits and retros, proposes and documents framework updates. Every change has an owner, a purpose and a success metric. Communicated in #chile-india-ops on Teams.</div>
+        <div class="caid-inst-tags"><span class="level-tag lv-mix">Quarterly</span><span class="badge badge-sh">Output: playbook actualizado</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <p style="font-family:var(--font);font-size:14px;font-weight:700;margin-bottom:6px;">Weekly Check-in by Project</p>
+  <p style="font-size:13px;color:var(--mid);margin-bottom:18px;">The Project Lead completes this form <strong style="color:var(--text)">every Friday before 5:00 PM CLT</strong> and posts it in the project Teams channel. Takes less than 5 minutes.</p>
+  <div id="ci-projects-container"></div>
+
+  <hr class="divider">
+  <p style="font-family:var(--font);font-size:14px;font-weight:700;margin-bottom:6px;">Portfolio Dashboard — Chief AI &amp; Delivery View</p>
+  <p style="font-size:13px;color:var(--mid);margin-bottom:18px;">Consolidated view updated every Friday. 🟢 on-track · 🟡 attention · 🔴 active risk</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;">
+    <div class="dash-proj-row header">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Proyecto</div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--cl);text-align:center">📦</div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--com);text-align:center">👤</div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--sh);text-align:center">🤝</div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--neb);text-align:center">🤖</div>
+    </div>
+    <div id="dashboard-body"></div>
+  </div>
+  <div class="info-box" style="background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.2);margin-bottom:0;">
+    <strong style="color:var(--amb)">Automatic escalation rule:</strong> Any 🔴 red → unblocking call within &lt;24h. Two 🟡 yellow in the same project → treat as red risk. No check-in received → mark as 🔴 until update arrives.
+  </div>
+
+  <hr class="divider">
+  <p style="font-family:var(--font);font-size:14px;font-weight:700;margin-bottom:6px;">Bolt Audit Report — Template</p>
+  <p style="font-size:13px;color:var(--mid);margin-bottom:18px;">Se archiva en Confluence al finalizar cada Bolt. Alimenta el Monthly Portfolio Review y el Framework Evolution Sprint.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="card" style="border-color:rgba(16,185,129,.2);"><div class="card-title" style="color:var(--neb)">📊 Bolt Metrics</div><ul class="card-list"><li><strong style="color:var(--text)">Bolt completion rate</strong> — % Units delivered vs. committed</li><li><strong style="color:var(--text)">Average cycle time</strong> — days ticket created → Done</li><li><strong style="color:var(--text)">PR review time</strong> — average PR opened → approved</li><li><strong style="color:var(--text)">Defect escape rate</strong> — bugs post-demo dthe client</li><li><strong style="color:var(--text)">AI usage rate</strong> — % tickets with Nébula/Claude Code</li><li><strong style="color:var(--text)">Context Engine freshness</strong> — % docs updated</li></ul></div>
+    <div class="card" style="border-color:rgba(167,139,250,.2);"><div class="card-title" style="color:var(--sh)">🔍 Qualitative Analysis</div><ul class="card-list"><li><strong style="color:var(--text)">NPS dthe client</strong> — score post-demo + comentario principal</li><li><strong style="color:var(--text)">Chile–India friction</strong> — what required the most coordination</li><li><strong style="color:var(--text)">AI finding</strong> — what worked with Nébula, what didn't</li><li><strong style="color:var(--text)">Technical debt generated</strong> — open tickets at close</li><li><strong style="color:var(--text)">Next Bolt risk</strong> — signals to anticipate</li><li><strong style="color:var(--text)">Framework action</strong> — is there anything to change?</li></ul></div>
+  </div>
+  <div class="card" style="font-family:'DM Mono','Courier New',monospace;font-size:12px;line-height:1.85;border-color:rgba(16,185,129,.2);">
+    <div style="font-family:var(--font);font-size:12px;font-weight:700;color:var(--neb);margin-bottom:12px;">📋 BOLT AUDIT REPORT · [Project] · Bolt #N · [date]</div>
+    <div style="color:var(--muted)"># Metrics</div><div style="color:var(--mid);margin-bottom:10px;">Completion: __% &nbsp;|&nbsp; Cycle time: __d &nbsp;|&nbsp; PR review: __h &nbsp;|&nbsp; Defect escape: __ &nbsp;|&nbsp; AI usage: __%</div>
+    <div style="color:var(--muted)"># Status signals</div><div style="color:var(--mid);margin-bottom:10px;">Delivery: 🟢/🟡/🔴 &nbsp;|&nbsp; Cliente: 🟢/🟡/🔴 &nbsp;|&nbsp; Equipo: 🟢/🟡/🔴 &nbsp;|&nbsp; IA: 🟢/🟡/🔴</div>
+    <div style="color:var(--muted)"># Key finding</div><div style="color:var(--mid);margin-bottom:10px;">[The most important learning from this Bolt]</div>
+    <div style="color:var(--muted)"># Action for the next Bolt</div><div style="color:var(--mid);margin-bottom:10px;">[Owner] will [action] by [date]</div>
+    <div style="color:var(--muted)"># Escalate to Portfolio Review?</div><div style="color:var(--mid)">Yes / No — [brief description if Yes]</div>
+  </div>
+</template>
+
+<script>
+/* ── CHIEF AI & DELIVERY INTERACTIVE ── */
+
+const sampleProjects=[
+  {id:'proj-alpha',name:'Project Alpha',client:'FinTech CL',lead:'Ana Rodriguez',bolt:'Bolt #4',boltDay:7,total:10},
+  {id:'proj-beta',name:'Project Beta',client:'RetailCo USA',lead:'Carlos Munoz',bolt:'Bolt #2',boltDay:3,total:10},
+  {id:'proj-gamma',name:'Project Gamma',client:'EdTech LATAM',lead:'Sofia Vega',bolt:'Bolt #6',boltDay:9,total:10},
+  {id:'proj-delta',name:'Project Delta',client:'HealthTech USA',lead:'Martin Diaz',bolt:'Bolt #1',boltDay:5,total:10},
+];
+
+const dashData=[
+  {name:'Project Alpha',client:'FinTech CL',lead:'Ana R.',bolt:'Bolt #4',delivery:'green',client:'green',team:'yellow',ia:'green'},
+  {name:'Project Beta',client:'RetailCo USA',lead:'Carlos M.',bolt:'Bolt #2',delivery:'yellow',client:'green',team:'green',ia:'green'},
+  {name:'Project Gamma',client:'EdTech LATAM',lead:'Sofia V.',bolt:'Bolt #6',delivery:'green',client:'green',team:'green',ia:'yellow'},
+  {name:'Project Delta',client:'HealthTech USA',lead:'Martin D.',bolt:'Bolt #1',delivery:'red',client:'yellow',team:'green',ia:'green'},
+];
+
+// Render check-in forms
+const cic=document.getElementById('ci-projects-container');
+sampleProjects.forEach(p=>{
+  const pct=Math.round((p.boltDay/p.total)*100);
+  const d=document.createElement('div');
+  d.className='ci-project-tab';
+  d.innerHTML=`
+    <div class="ci-proj-hdr" onclick="togCI(this)">
+      <div style="font-size:16px;">📁</div>
+      <div>
+        <div class="ci-proj-name">${p.name}</div>
+        <div class="ci-proj-meta">${p.client} · ${p.lead} · ${p.bolt} — Day ${p.boltDay}/10</div>
+        <div style="margin-top:6px;max-width:200px;">
+          <div class="bolt-progress"><div class="bolt-progress-fill" style="width:${pct}%;background:${pct>=80?'var(--neb)':pct>=50?'var(--amb)':'var(--cl)'}"></div></div>
+        </div>
+      </div>
+      <div id="ci-mini-${p.id}" style="display:flex;gap:5px;align-items:center;"></div>
+      <span class="rarrow">›</span>
+    </div>
+    <div class="ci-proj-body" id="ci-form-${p.id}">
+      <div class="ci-form-inner">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Check-in weekly · ${p.name} · ${p.bolt}</div>
+
+        ${['delivery','cliente','equipo','ia'].map(dim=>{
+          const labels={delivery:{label:'📦 Delivery',hint:'Is the Bolt on track with the plan? Is there risk of completing the committed Units?'},
+            cliente:{label:'👤 Client',hint:'How is the relationship? Are there uncontrolled expectations or dissatisfaction signals?'},
+            equipo:{label:'🤝 Chile–India Team',hint:'Is coordination flowing? Are there frictions, communication blockers or availability issues?'},
+            ia:{label:'🤖 IA & Nébula',hint:'Is the team using Nébula/Claude Code? Is the Context Engine up to date?'}};
+          const l=labels[dim];
+          return`<div class="ci-dim-block">
+            <div class="ci-dim-label"><span style="color:var(--neb)">${l.label}</span></div>
+            <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">${l.hint}</div>
+            <div class="sem-selector">
+              <button class="sem-btn" onclick="selectSem('${p.id}','${dim}','green',this)">🟢 Verde<br><span style="font-size:9.5px;font-weight:400">On track</span></button>
+              <button class="sem-btn" onclick="selectSem('${p.id}','${dim}','yellow',this)">🟡 Yellow<br><span style="font-size:9.5px;font-weight:400">Attention</span></button>
+              <button class="sem-btn" onclick="selectSem('${p.id}','${dim}','red',this)">🔴 Rojo<br><span style="font-size:9.5px;font-weight:400">En riesgo</span></button>
+            </div>
+            <textarea class="ci-textarea" rows="2" placeholder="Brief context — what's happening? What do you need?" oninput="setNota('${p.id}','${dim}',this.value)"></textarea>
+          </div>`;
+        }).join('')}
+
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Vista previa del check-in</div>
+        <div class="ci-preview" id="ci-preview-${p.id}">
+          ${['delivery','cliente','equipo','ia'].map(d=>`<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;font-size:11px;color:var(--muted)">${d}: —</div>`).join('')}
+        </div>
+        <textarea class="ci-textarea" rows="2" placeholder="Main team next steps for the coming days..." style="margin-bottom:12px;"></textarea>
+        <button class="ci-submit" onclick="submitCheckin('${p.id}')">✉️ Enviar check-in al Chief AI &amp; Delivery</button>
+      </div>
+    </div>`;
+  cic.appendChild(d);
+});
+
+function selectSem(proj,dim,color,btn){
+  const container=btn.closest('.sem-selector');
+  container.querySelectorAll('.sem-btn').forEach(b=>{b.className='sem-btn';});
+  btn.classList.add('sel-'+color);
+  if(!ciState[proj])ciState[proj]={};
+  if(!ciState[proj][dim])ciState[proj][dim]={};
+  ciState[proj][dim].semaforo=color;
+  renderCIPreview(proj);
+  // update mini indicators
+  updateMiniIndicators(proj);
+}
+function setNota(proj,dim,val){
+  if(!ciState[proj])ciState[proj]={};
+  if(!ciState[proj][dim])ciState[proj][dim]={};
+  ciState[proj][dim].nota=val;
+  renderCIPreview(proj);
+}
+function updateMiniIndicators(proj){
+  const el=document.getElementById('ci-mini-'+proj);
+  if(!el)return;
+  const s=ciState[proj]||{};
+  const dims=['delivery','cliente','equipo','ia'];
+  const emojis={green:'🟢',yellow:'🟡',red:'🔴'};
+  el.innerHTML=dims.map(d=>s[d]&&s[d].semaforo?`<span style="font-size:12px">${emojis[s[d].semaforo]}</span>`:'').join('');
+}
+function togCI(hdr){
+  const b=hdr.nextElementSibling,a=hdr.querySelector('.rarrow');
+  b.classList.toggle('open');
+  a.style.transform=b.classList.contains('open')?'rotate(90deg)':'';
+}
+
+// Render dashboard
+const db=document.getElementById('dashboard-body');
+const semEmoji={green:'🟢',yellow:'🟡',red:'🔴',gray:'⬜'};
+const semClass={green:'dp-green',yellow:'dp-yellow',red:'dp-red',gray:'dp-gray'};
+dashData.forEach(p=>{
+  const hasRisk=[p.delivery,p.cliente,p.equipo,p.ia].some(s=>s==='red');
+  const hasAttn=[p.delivery,p.cliente,p.equipo,p.ia].filter(s=>s==='yellow').length>=2;
+  const row=document.createElement('div');
+  row.className='dash-proj-row';
+  if(hasRisk)row.style.background='rgba(239,68,68,.04)';
+  else if(hasAttn)row.style.background='rgba(251,191,36,.03)';
+  row.innerHTML=`
+    <div>
+      <div class="dpname">${p.name} ${hasRisk?'<span style="font-size:10px;background:rgba(239,68,68,.15);color:#ef4444;border-radius:4px;padding:1px 6px;margin-left:4px;">RISK</span>':hasAttn?'<span style="font-size:10px;background:rgba(251,191,36,.15);color:var(--amb);border-radius:4px;padding:1px 6px;margin-left:4px;">ATTENTION</span>':''}</div>
+      <div class="dpmeta">${p.client} · ${p.lead} · ${p.bolt}</div>
+    </div>
+    ${[p.delivery,p.cliente,p.equipo,p.ia].map(s=>`<div style="display:flex;justify-content:center;"><div class="dp-sem ${semClass[s]}">${semEmoji[s]}</div></div>`).join('')}`;
+  db.appendChild(row);
+});
+</script>
