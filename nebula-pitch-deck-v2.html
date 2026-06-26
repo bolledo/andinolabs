@@ -253,8 +253,20 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,56px);l
 .why .w b{color:var(--text);font-weight:600}
 
 /* ---------- team slide ---------- */
+.team-layout{display:grid;grid-template-columns:1.45fr 1fr;gap:22px;margin-top:30px;align-items:stretch}
+.block-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:14px}
+.founders{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.founder{border:1px solid var(--line);border-radius:14px;padding:18px 12px;background:var(--panel);text-align:center;display:flex;flex-direction:column;align-items:center}
+.founder .av{
+  width:50px;height:50px;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:19px;color:#fff;margin-bottom:11px;
+  background:linear-gradient(135deg,var(--magenta),var(--violet))
+}
+.founder .mn{font-family:var(--display);font-weight:600;font-size:16px}
+.founder .mr{font-family:var(--mono);font-size:10px;color:var(--violet-soft);letter-spacing:.06em;margin-top:5px;line-height:1.4}
 .team{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
 .member{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--panel)}
+.member.fill{display:flex;flex-direction:column;justify-content:center;background:linear-gradient(160deg,rgba(139,92,246,.1),rgba(228,114,240,.03))}
 .member .top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .member .av{
   width:52px;height:52px;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
@@ -322,7 +334,8 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,56px);l
 button:focus-visible,.edge:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
 
 @media (max-width:760px){
-  .c2,.c3,.stats,.market,.pricing,.metrics,.team,.compbar,.flow,.prod-feats,.sol-steps,.alloc,.repo-wrap,.leads-row{grid-template-columns:1fr}
+  .c2,.c3,.stats,.market,.pricing,.metrics,.team,.team-layout,.compbar,.flow,.prod-feats,.sol-steps,.alloc,.repo-wrap,.leads-row{grid-template-columns:1fr}
+  .founders{grid-template-columns:repeat(2,1fr)}
   .phase{grid-template-columns:1fr}
   .why{grid-template-columns:1fr}
   .fstep::after,.cb.win{transform:none}
@@ -352,11 +365,11 @@ button:focus-visible,.edge:focus-visible{outline:2px solid var(--violet-soft);ou
     <div class="slide-inner cover">
       <div class="cover-top reveal"><span class="orb"></span><span class="wordmark">NEBULA</span></div>
       <h1 class="reveal">Desarrollo de software<br><span class="grad">autónomo y agéntico</span></h1>
-      <div class="tag reveal">El sistema operativo del SDLC AI-native · Spin-off de Andino Labs</div>
+      <div class="tag reveal">El sistema operativo del SDLC AI-native</div>
       <p class="sub reveal">La plataforma multi-tenant que orquesta agentes a lo largo de las cuatro etapas del ciclo de vida del software —con calidad enterprise desde el primer commit y el humano como director de IA.</p>
       <div class="cover-people reveal">
-        <div class="p"><b>Diego</b><span>Founder &amp; Operator</span></div>
-        <div class="p"><b>Andino Labs</b><span>Bangalore · LATAM · US</span></div>
+        <div class="p"><b>Shab · Diego · Seba · Italo · Mauro</b><span>Founders</span></div>
+        <div class="p"><b>Andino Labs</b><span>Chile · LATAM · Bangalore · US</span></div>
       </div>
       <div class="cover-foot reveal"><span>Pitch deck</span><span>Confidencial</span><span>Santiago · 2026</span></div>
     </div>
@@ -548,33 +561,30 @@ button:focus-visible,.edge:focus-visible{outline:2px solid var(--violet-soft);ou
     <div class="slide-inner">
       <div class="eyebrow reveal">09 — Equipo <span class="placeholder">perfiles a completar</span></div>
       <h2 class="reveal">El equipo para construir esto</h2>
-      <div class="team reveal">
-        <div class="member">
-          <div class="top"><div class="av">D</div><div><div class="mn">Diego</div><div class="mr">Founder &amp; Operator</div></div></div>
-          <ul>
-            <li>Fundador y operador de Andino Labs</li>
-            <li>15+ años de experiencia combinada en ingeniería digital</li>
-            <li>Profundidad de dominio en retail / CPG</li>
-            <li>Lidera la expansión LATAM y US</li>
-          </ul>
+      <div class="team-layout reveal">
+        <div>
+          <div class="block-label">Founders</div>
+          <div class="founders">
+            <div class="founder"><div class="av">S</div><div class="mn">Shab</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">D</div><div class="mn">Diego</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">S</div><div class="mn">Seba</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">I</div><div class="mn">Italo</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">M</div><div class="mn">Mauro</div><div class="mr">Founder</div></div>
+          </div>
         </div>
-        <div class="member">
-          <div class="top"><div class="av">AL</div><div><div class="mn">Andino Labs</div><div class="mr">Engineering Core · Bangalore</div></div></div>
-          <ul>
-            <li>Pool de talento de ingeniería en Bangalore</li>
-            <li>Acceso al hub retail/CPG de India (40% de los retailers globales)</li>
-            <li>Expertise en arquitectura evolutiva, microservicios y modernización legacy</li>
-            <li>ADN global, ejecución LATAM</li>
-          </ul>
+        <div>
+          <div class="block-label">by</div>
+          <div class="member fill">
+            <div class="top"><div class="av">AL</div><div><div class="mn">Andino Labs</div><div class="mr">Digital Engineering · Chile · LATAM · Bangalore · US</div></div></div>
+            <ul>
+              <li>Pool de talento de ingeniería en Bangalore</li>
+              <li>Acceso al hub retail/CPG de India (40% de los retailers globales)</li>
+              <li>Arquitectura evolutiva, microservicios y modernización legacy</li>
+              <li>ADN global, ejecución LATAM</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="leads-row reveal">
-        <div class="leadc"><span class="ph">Discovery / Ops</span><b>Seba</b></div>
-        <div class="leadc"><span class="ph">Inception</span><b>Kotesh</b></div>
-        <div class="leadc"><span class="ph">Construction</span><b>Ganesan</b></div>
-        <div class="leadc"><span class="ph">Plataforma</span><b>Nebula Core</b></div>
-      </div>
-      <div class="team-foot reveal">Bangalore · Santiago · Leads especializados por fase del AI-DLC</div>
     </div>
   </section>
 
