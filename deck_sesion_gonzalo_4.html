@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andino Labs · Sesión Gonzalo Gebara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#0B1623;
+    --mid:#16314D;
+    --mid-2:#1E3E60;
+    --accent:#00C2CB;
+    --accent-soft:rgba(0,194,203,.12);
+    --ice:#9FC0DA;
+    --muted:#7C99B4;
+    --white:#F4FAFE;
+    --green:#00B894;
+    --amber:#F0A93B;
+    --orange:#FF7A5C;
+    --card:#13283F;
+    --line:rgba(159,192,218,.14);
+    --display:'Space Grotesk',sans-serif;
+    --mono:'Space Mono',monospace;
+    --body:'Inter',-apple-system,sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--dark);color:var(--white);font-family:var(--body)}
+  body{position:relative}
+
+  /* ── ambient backdrop ── */
+  .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;transition:transform 1.2s var(--ease),opacity 1.2s var(--ease)}
+  .orb.a{width:46vw;height:46vw;background:radial-gradient(circle,#0d6e74,transparent 70%);top:-14vw;right:-10vw}
+  .orb.b{width:38vw;height:38vw;background:radial-gradient(circle,#13355c,transparent 70%);bottom:-12vw;left:-8vw}
+
+  /* ── deck shell ── */
+  .deck{position:relative;z-index:1;height:100vh;width:100vw}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:6vh 7vw;opacity:0;visibility:hidden;
+    transform:translateY(28px) scale(.985);
+    transition:opacity .6s var(--ease),transform .7s var(--ease),visibility .6s;}
+  .slide.active{opacity:1;visibility:visible;transform:none;}
+  .slide.exit-up{transform:translateY(-28px) scale(.985);}
+
+  /* reveal children */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+  .slide.active .reveal{opacity:1;transform:none}
+  .slide.active .reveal{transition-delay:var(--d,0s)}
+
+  /* ── typography ── */
+  .eyebrow{font-family:var(--display);font-size:clamp(.62rem,1vw,.78rem);font-weight:600;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--accent)}
+  h1{font-family:var(--display);font-weight:700;line-height:1.02;letter-spacing:-.02em}
+  h2{font-family:var(--display);font-weight:600;line-height:1.08;letter-spacing:-.01em}
+  .lead{color:var(--ice);font-weight:400}
+  .muted{color:var(--muted)}
+
+  /* ── cover ── */
+  #s0{justify-content:center}
+  #s0 .kicker{margin-bottom:2.2vh}
+  #s0 h1{font-size:clamp(3.4rem,11vw,9rem);background:linear-gradient(120deg,#fff 30%,var(--accent));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  #s0 .sub{font-size:clamp(1.1rem,2.4vw,1.9rem);margin-top:1.6vh;color:var(--ice);font-family:var(--display);font-weight:400}
+  #s0 .rule{width:0;height:3px;background:var(--accent);margin:3vh 0 2.4vh;border-radius:2px;
+    transition:width .9s var(--ease) .5s}
+  #s0.active .rule{width:clamp(140px,22vw,300px)}
+  #s0 .meta{font-size:clamp(.85rem,1.4vw,1.05rem);color:var(--muted);letter-spacing:.02em}
+
+  /* ── section header ── */
+  .shead{display:flex;align-items:baseline;gap:1.1rem;margin-bottom:4vh;flex-wrap:wrap}
+  .shead .num{font-family:var(--display);font-weight:700;font-size:clamp(1rem,1.6vw,1.25rem);color:var(--accent)}
+  .shead h2{font-size:clamp(1.7rem,3.8vw,3rem)}
+  .shead .tag{margin-left:auto;font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+
+  /* ── generic card ── */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1.5rem 1.6rem;
+    transition:transform .4s var(--ease),border-color .4s var(--ease),box-shadow .4s var(--ease)}
+  .card:hover{transform:translateY(-4px);border-color:rgba(0,194,203,.4);box-shadow:0 18px 40px -20px rgba(0,194,203,.4)}
+
+  /* ── agenda ── */
+  .agenda-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+  .ag{display:grid;grid-template-columns:auto 1fr auto;gap:.2rem 1rem;align-items:center}
+  .ag .n{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,2.4vw,2rem);color:var(--accent);grid-row:span 2}
+  .ag .t{font-family:var(--display);font-weight:600;font-size:clamp(.95rem,1.5vw,1.15rem)}
+  .ag .time{font-size:.72rem;color:var(--muted);justify-self:end}
+  .ag .d{grid-column:2/4;font-size:.82rem;color:var(--muted);margin-top:.15rem}
+
+  /* ── clients ── */
+  .clients{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+  .cl .badge{display:inline-block;font-family:var(--display);font-size:.62rem;font-weight:600;letter-spacing:.12em;
+    padding:.3rem .7rem;border-radius:999px;margin-bottom:.9rem}
+  .cl h3{font-family:var(--display);font-weight:600;font-size:clamp(1.05rem,1.8vw,1.4rem);margin-bottom:.5rem}
+  .cl p{font-size:.83rem;color:var(--muted);line-height:1.45}
+  .stat{display:flex;align-items:baseline;gap:.7rem;margin-top:2.4vh}
+  .stat .big{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);color:var(--accent);line-height:1}
+  .stat .lbl{color:var(--muted);font-size:.95rem}
+
+  /* ── phases (producto) ── */
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
+  .ph{background:var(--mid);border-radius:14px;padding:1.1rem;text-align:center;border:1px solid transparent;
+    transition:transform .35s var(--ease),border-color .35s var(--ease)}
+  .ph:hover{transform:translateY(-4px)}
+  .ph.key{border-color:var(--accent)}
+  .ph .g{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,2.6vw,2rem);color:var(--accent)}
+  .ph .nm{font-size:.82rem;margin-top:.35rem;color:var(--white)}
+  .diffs{display:flex;flex-wrap:wrap;gap:1.4rem;margin-top:2.4vh}
+  .diff{display:flex;align-items:center;gap:.55rem;font-size:.85rem;color:var(--ice)}
+  .diff .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+
+  /* ── agentic lifecycle diagram ── */
+  .agldc{border:1px solid var(--line);border-radius:18px;padding:clamp(13px,1.5vw,18px);
+    background:linear-gradient(180deg,rgba(0,194,203,.05),rgba(159,192,218,.02))}
+  .agldc .bands{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+  .agldc .band{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;border-radius:8px;text-align:center;border:1px solid var(--line)}
+  .agldc .band.prod{background:rgba(159,192,218,.1);color:var(--ice)}
+  .agldc .band.eng{background:rgba(0,194,203,.1);color:var(--accent)}
+  .agldc .stages{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:7px}
+  .agldc .chev{padding:9px 22px;font-family:var(--display);font-weight:600;font-size:13.5px;color:#fff;text-align:center;
+    background:linear-gradient(90deg,rgba(159,192,218,.34),rgba(159,192,218,.14));
+    clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%)}
+  .agldc .chev.first{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%);padding-left:16px}
+  .agldc .chev.eng{background:linear-gradient(90deg,rgba(0,194,203,.34),rgba(0,194,203,.12))}
+  .agldc .subs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:9px}
+  .agldc .subgrp{display:flex;gap:5px}
+  .agldc .sub{flex:1;font-family:var(--mono);font-size:9.5px;letter-spacing:.01em;text-align:center;
+    padding:7px 4px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--muted);
+    line-height:1.2;display:flex;align-items:center;justify-content:center;min-height:34px}
+  .agldc .agentic{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:7px}
+  .agldc .agbox{padding:10px 8px;border-radius:10px;text-align:center;font-family:var(--display);font-weight:600;
+    font-size:12px;line-height:1.22;color:var(--white);
+    background:linear-gradient(135deg,rgba(0,194,203,.2),rgba(159,192,218,.1));border:1px solid var(--line)}
+  .agldc .core-band{margin-bottom:9px;border:1px dashed rgba(0,194,203,.5);border-radius:12px;padding:9px 16px;text-align:center;
+    background:radial-gradient(ellipse at 50% 0%,rgba(0,194,203,.16),transparent 75%)}
+  .agldc .core-band b{font-family:var(--display);font-size:13.5px}
+  .agldc .core-band span{display:block;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;margin-top:3px}
+  .agldc .tools{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .agldc .tool{font-family:var(--mono);font-size:10px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+
+  /* ── partnerships ── */
+  .partners{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+  .pt{display:flex;flex-direction:column}
+  .pt .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;gap:.6rem}
+  .pt .badge{font-family:var(--display);font-size:.6rem;font-weight:600;letter-spacing:.1em;padding:.28rem .65rem;border-radius:999px;white-space:nowrap}
+  .pt .chip{font-size:.62rem;color:var(--ice);background:rgba(159,192,218,.12);padding:.28rem .6rem;border-radius:999px;white-space:nowrap}
+  .pt h3{font-family:var(--display);font-weight:600;font-size:clamp(1.1rem,1.9vw,1.5rem);margin-bottom:.45rem}
+  .pt p{font-size:.82rem;color:var(--muted);line-height:1.45}
+
+  /* ── inversión ── */
+  .invest{display:grid;grid-template-columns:1fr 1.05fr;gap:1.6rem;align-items:start}
+  .deal{background:linear-gradient(160deg,#16314D,#0d2138);border:1px solid var(--line);border-radius:20px;padding:1.8rem}
+  .deal h3{font-family:var(--display);color:var(--accent);font-weight:600;font-size:1.15rem;margin-bottom:1.3rem}
+  .deal .line{display:flex;justify-content:space-between;padding:.62rem 0;border-bottom:1px solid rgba(159,192,218,.08);gap:1rem}
+  .deal .line:last-child{border-bottom:none;padding-bottom:0}
+  .deal .k{color:var(--muted);font-size:.86rem}
+  .deal .v{font-family:var(--display);font-weight:600;font-size:.9rem;text-align:right}
+  .ctx{display:flex;flex-direction:column;gap:.9rem;padding-top:1.8rem}
+  .ctx h3{font-family:var(--display);font-weight:600;font-size:1.15rem;color:var(--accent);margin-bottom:.5rem}
+  .ci{padding:1.2rem 1.3rem}
+  .ci .ct{font-family:var(--display);font-weight:600;font-size:1rem;margin-bottom:.4rem;display:flex;align-items:center;gap:.6rem}
+  .ci p{font-size:.82rem;color:var(--muted);line-height:1.45}
+  .ci .ic{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center;font-size:.95rem;flex:none}
+
+  /* ── spin-off ── */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:3vh}
+  .vs .box{background:var(--mid);border-radius:16px;padding:1.4rem 1.5rem;border:1px solid transparent}
+  .vs .box.us{border-color:var(--accent);background:linear-gradient(160deg,#16314D,#0f2941)}
+  .vs .lbl{font-family:var(--display);font-weight:600;font-size:.92rem;margin-bottom:.7rem;color:var(--muted)}
+  .vs .box.us .lbl{color:var(--accent)}
+  .vs p{font-size:.88rem;color:var(--white);line-height:1.5}
+  .strengths{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:2.6vh}
+  .st{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem}
+  .st .top{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
+  .st .g{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--accent)}
+  .st .t{font-family:var(--display);font-weight:600;font-size:1rem}
+  .st p{font-size:.76rem;color:var(--muted);line-height:1.4}
+  .raise{display:flex;align-items:center;gap:.6rem;background:var(--mid);border:1px solid var(--accent);
+    border-radius:14px;padding:1rem 1.4rem;font-size:1.02rem}
+  .raise b{font-family:var(--display)}
+  .raise .amt{font-family:var(--display);font-weight:700;color:var(--accent)}
+
+  /* ── cierre ── */
+  .close-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+  .col h3{font-family:var(--display);font-weight:600;font-size:clamp(1.15rem,2vw,1.5rem);margin-bottom:1.4rem}
+  .syn{display:flex;align-items:flex-start;gap:.9rem;background:var(--mid);border-radius:13px;padding:.95rem 1.1rem;margin-bottom:.8rem}
+  .syn .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);margin-top:.35rem;flex:none}
+  .syn .st-t{font-family:var(--display);font-weight:600;font-size:.95rem}
+  .syn p{font-size:.78rem;color:var(--muted);margin-top:.15rem}
+  .step{display:flex;align-items:center;gap:1rem;background:var(--mid);border-radius:13px;padding:.95rem 1.1rem;margin-bottom:.8rem}
+  .step .n{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--accent);width:1.6rem;flex:none}
+  .step .x{font-size:.9rem}
+
+  /* ── chrome: progress + nav + dots ── */
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:20;
+    transition:width .5s var(--ease);box-shadow:0 0 12px var(--accent)}
+  .dots{position:fixed;right:2.2vw;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.7rem;z-index:20}
+  .dots button{width:9px;height:9px;border-radius:50%;border:none;background:rgba(159,192,218,.3);cursor:pointer;
+    padding:0;transition:all .35s var(--ease)}
+  .dots button.on{background:var(--accent);transform:scale(1.5)}
+  .dots button:hover{background:var(--ice)}
+  .nav{position:fixed;bottom:2.4vh;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1rem;z-index:20}
+  .nav button{background:var(--card);border:1px solid var(--line);color:var(--white);width:42px;height:42px;
+    border-radius:50%;cursor:pointer;font-size:1.1rem;display:grid;place-items:center;
+    transition:all .3s var(--ease)}
+  .nav button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+  .nav button:disabled{opacity:.3;cursor:default}
+  .nav .count{font-family:var(--display);font-size:.85rem;color:var(--muted);min-width:3.5rem;text-align:center}
+  .hint{position:fixed;bottom:2.4vh;right:2.4vw;font-size:.72rem;color:var(--muted);z-index:20;opacity:.7}
+
+  @media (max-width:780px){
+    .slide{padding:7vh 6vw}
+    .agenda-grid,.clients,.phases,.partners,.invest,.vs,.strengths,.close-grid{grid-template-columns:1fr}
+    .agldc .bands,.agldc .stages,.agldc .subs,.agldc .agentic{grid-template-columns:1fr}
+    .agldc .chev{clip-path:none}
+    .dots{display:none}
+    .hint{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .slide,.reveal,.rule,.progress,.card,.ph,.dots button,.nav button{transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="ambient"><div class="orb a"></div><div class="orb b"></div></div>
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 0 · COVER -->
+  <section class="slide" id="s0">
+    <div class="kicker reveal" style="--d:.1s"><span class="eyebrow">Sesión de Advisory</span></div>
+    <h1 class="reveal" style="--d:.2s">Andino Labs</h1>
+    <div class="sub reveal" style="--d:.35s">Progreso · Clientes · Inversión</div>
+    <div class="rule"></div>
+    <div class="meta reveal" style="--d:.5s">29 de Junio, 2025 &nbsp;·&nbsp; Gonzalo Gebara</div>
+  </section>
+
+  <!-- 1 · AGENDA -->
+  <section class="slide" id="s1">
+    <div class="shead reveal"><span class="num">01</span><h2>Agenda</h2><span class="tag">60 minutos</span></div>
+    <div class="agenda-grid">
+      <div class="card ag reveal" style="--d:.05s"><span class="n">01</span><span class="t">Bienvenida y contexto</span><span class="time">5 min</span><span class="d">Propósito de la sesión y foco del día</span></div>
+      <div class="card ag reveal" style="--d:.1s"><span class="n">04</span><span class="t">Conversación de inversión</span><span class="time">12 min</span><span class="d">Propuesta activa y contexto de la ronda</span></div>
+      <div class="card ag reveal" style="--d:.15s"><span class="n">02</span><span class="t">Update de clientes</span><span class="time">10 min</span><span class="d">Nuevos contratos, pipeline activo y extensiones</span></div>
+      <div class="card ag reveal" style="--d:.2s"><span class="n">05</span><span class="t">Nebula Spin-off</span><span class="time">13 min</span><span class="d">Visión, posicionamiento y ronda de USD 2–4M</span></div>
+      <div class="card ag reveal" style="--d:.25s"><span class="n">03</span><span class="t">Producto y partnerships</span><span class="time">10 min</span><span class="d">Plataforma Nebula y ecosistema de partners</span></div>
+      <div class="card ag reveal" style="--d:.3s"><span class="n">06</span><span class="t">Sinergias y cierre</span><span class="time">10 min</span><span class="d">Áreas de colaboración y próximos pasos</span></div>
+    </div>
+  </section>
+
+  <!-- 2 · CLIENTES -->
+  <section class="slide" id="s2">
+    <div class="shead reveal"><span class="num">02</span><h2>Update de clientes</h2></div>
+    <div class="clients">
+      <div class="card cl reveal" style="--d:.05s"><span class="badge" style="background:rgba(0,184,148,.16);color:var(--green)">EXTENSIÓN</span><h3>Cencosud</h3><p>Extensión de contrato con incremento de equipo</p></div>
+      <div class="card cl reveal" style="--d:.1s"><span class="badge" style="background:var(--accent-soft);color:var(--accent)">EN EJECUCIÓN</span><h3>Builder</h3><p>Plan inicial acotado. Partner para soluciones de sellers</p></div>
+      <div class="card cl reveal" style="--d:.15s"><span class="badge" style="background:rgba(240,169,59,.16);color:var(--amber)">MVP</span><h3>Busko</h3><p>App «lo que buscas, te encuentra». Terminando MVP</p></div>
+      <div class="card cl reveal" style="--d:.2s"><span class="badge" style="background:rgba(0,184,148,.16);color:var(--green)">ESTABLE</span><h3>Angelis</h3><p>Cliente estable, relación en progreso</p></div>
+      <div class="card cl reveal" style="--d:.25s"><span class="badge" style="background:var(--accent-soft);color:var(--accent)">ACTIVO</span><h3>Territoria / MUT</h3><p>Asesoría en negocios digitales y tecnología</p></div>
+      <div class="card cl reveal" style="--d:.3s"><span class="badge" style="background:rgba(255,122,92,.16);color:var(--orange)">EN FIRMA</span><h3>Salcobrand</h3><p>En proceso de firma. Inicio tentativo: 15 Julio</p></div>
+      <div class="card cl reveal" style="--d:.35s"><span class="badge" style="background:rgba(124,153,180,.18);color:var(--ice)">CONTRATO DEUDA</span><h3>Serhafen</h3><p>Tras la quiebra de la empresa, logramos un contrato de deuda con ellos</p></div>
+    </div>
+    <div class="stat reveal" style="--d:.45s"><span class="big">7</span><span class="lbl">relaciones activas en el portafolio</span></div>
+  </section>
+
+  <!-- 3 · PRODUCTO -->
+  <section class="slide" id="s3">
+    <div class="shead reveal"><span class="num">03</span><h2>Plataforma Nebula AI</h2></div>
+    <p class="lead reveal" style="--d:.05s;margin-bottom:2.6vh;font-size:clamp(.95rem,1.6vw,1.2rem)">Ciclo de vida completo del desarrollo de software, potenciado por IA — un agente por fase sobre el mismo contexto, sin handoffs manuales</p>
+    <div class="agldc reveal" style="--d:.12s">
+      <div class="bands">
+        <div class="band prod">Producto</div>
+        <div class="band eng">Ingeniería</div>
+      </div>
+      <div class="stages">
+        <div class="chev first">Discovery</div>
+        <div class="chev">Inception</div>
+        <div class="chev eng">Construction</div>
+        <div class="chev eng">Operations</div>
+      </div>
+      <div class="subs">
+        <div class="subgrp"><div class="sub">Estrategia</div><div class="sub">Captura &amp; Síntesis</div></div>
+        <div class="subgrp"><div class="sub">Requerimientos</div><div class="sub">Historias</div><div class="sub">Backlog</div></div>
+        <div class="subgrp"><div class="sub">Build autónomo</div><div class="sub">Validación</div><div class="sub">QA</div></div>
+        <div class="subgrp"><div class="sub">Deploy</div><div class="sub">Observabilidad</div><div class="sub">Runbooks</div></div>
+      </div>
+      <div class="agentic">
+        <div class="agbox">Agentic Discovery &amp; Síntesis</div>
+        <div class="agbox">Agentic Story &amp; Backlog</div>
+        <div class="agbox">Agentic Code Gen &amp; Validación</div>
+        <div class="agbox">Agentic Ops &amp; Self-Healing</div>
+      </div>
+      <div class="core-band">
+        <b>Nebula · Desarrollo de Software Agéntico</b>
+        <span>Context Repository — memoria compartida entre todas las fases</span>
+      </div>
+      <div class="tools">
+        <span class="tool">Claude</span><span class="tool">GitHub</span><span class="tool">GitLab</span>
+        <span class="tool">Jira</span><span class="tool">Confluence</span><span class="tool">Figma</span>
+        <span class="tool">Terraform</span><span class="tool">ArgoCD</span><span class="tool">AWS</span>
+        <span class="tool">GCP</span><span class="tool">Azure</span><span class="tool">Grafana</span>
+      </div>
+    </div>
+    <div class="diffs">
+      <div class="diff reveal" style="--d:.3s"><span class="dot"></span>Multi-tenant nativo</div>
+      <div class="diff reveal" style="--d:.35s"><span class="dot"></span>LLM Router propio</div>
+      <div class="diff reveal" style="--d:.4s"><span class="dot"></span>Multi-cloud (Azure · GCP · AWS)</div>
+      <div class="diff reveal" style="--d:.45s"><span class="dot"></span>Integraciones enterprise</div>
+    </div>
+  </section>
+
+  <!-- 4 · PARTNERSHIPS -->
+  <section class="slide" id="s4">
+    <div class="shead reveal"><span class="num">04</span><h2>Partnerships &amp; ecosistema</h2></div>
+    <div class="partners">
+      <div class="card pt reveal" style="--d:.05s"><div class="row"><span class="badge" style="background:rgba(0,184,148,.16);color:var(--green)">PARTNER ACTIVO</span><span class="chip">Commerce</span></div><h3>commercetools</h3><p>Plataforma de commerce headless líder global. Partnership activo — canal de clientes enterprise.</p></div>
+      <div class="card pt reveal" style="--d:.12s"><div class="row"><span class="badge" style="background:rgba(240,169,59,.16);color:var(--amber)">EN PROCESO</span><span class="chip">CRM / Cloud</span></div><h3>Salesforce</h3><p>En proceso de certificación como partner. Acceso al ecosistema CRM/cloud más grande del mundo.</p></div>
+      <div class="card pt reveal" style="--d:.19s"><div class="row"><span class="badge" style="background:rgba(0,184,148,.16);color:var(--green)">PARTNER ACTIVO</span><span class="chip">AI / LLMs</span></div><h3>Anthropic</h3><p>Partners oficiales del creador de Claude. Acceso preferencial a modelos y roadmap de IA.</p></div>
+      <div class="card pt reveal" style="--d:.26s"><div class="row"><span class="badge" style="background:rgba(255,122,92,.16);color:var(--orange)">EN BÚSQUEDA</span><span class="chip">Search</span></div><h3>Algolia &amp; Constructor</h3><p>Explorando partnerships con las principales plataformas de search para e-commerce y retail.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 · INVERSIÓN -->
+  <section class="slide" id="s5">
+    <div class="shead reveal"><span class="num">05</span><h2>Conversación de inversión</h2></div>
+    <div class="invest">
+      <div class="deal reveal" style="--d:.05s">
+        <h3>Propuesta Berzo / Andino</h3>
+        <div class="line"><span class="k">Inversión</span><span class="v">USD 200.000</span></div>
+        <div class="line"><span class="k">Equity base</span><span class="v">3,0% post-money FD</span></div>
+        <div class="line"><span class="k">Earn-out director</span><span class="v">+2,0% a 9–12 meses</span></div>
+        <div class="line"><span class="k">Stretch BD</span><span class="v">hasta +8,0% (24 m)</span></div>
+        <div class="line"><span class="k">Berzo AI stake</span><span class="v">Andino 20% con vesting</span></div>
+        <div class="line"><span class="k">MRR p/ sueldo</span><span class="v">≥ USD 150K × 3 meses</span></div>
+      </div>
+      <div class="ctx">
+        <h3 class="reveal" style="--d:.1s">Contexto de la ronda</h3>
+        <div class="card ci reveal" style="--d:.18s"><div class="ct"><span class="ic">📈</span>Conversación activa</div><p>Propuesta no vinculante en evaluación; sujeta a due diligence y acuerdos definitivos.</p></div>
+        <div class="card ci reveal" style="--d:.26s"><div class="ct"><span class="ic">🎯</span>Objetivo de capital</div><p>Meta de ≥ USD 500K en 9–12 meses (incluye los USD 200K de esta propuesta).</p></div>
+        <div class="card ci reveal" style="--d:.34s"><div class="ct"><span class="ic">🗺️</span>Próximos pasos</div><p>Term sheet, constitución de HoldCo y mapeo de ronda en los próximos meses.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · SPIN-OFF -->
+  <section class="slide" id="s6">
+    <div class="shead reveal"><span class="num">06</span><h2>Nebula Spin-off</h2></div>
+    <p class="lead reveal" style="--d:.05s;margin-top:-2vh;margin-bottom:3vh;font-size:clamp(1.05rem,2.2vw,1.6rem);font-family:var(--display);color:var(--white)">El «Blitzy de Latinoamérica» con una mirada amplia del AI SDLC</p>
+    <div class="vs">
+      <div class="box reveal" style="--d:.1s"><div class="lbl">Blitzy · referente global</div><p>Profundidad en ejecución / construcción de código a escala enterprise. Foco en code legacy.</p></div>
+      <div class="box us reveal" style="--d:.18s"><div class="lbl">Nebula · nuestra apuesta</div><p>Mirada amplia del SDLC completo (8 fases), con foco en Latam y fortaleza en las puntas del ciclo.</p></div>
+    </div>
+    <div class="strengths">
+      <div class="st reveal" style="--d:.26s"><div class="top"><span class="g">①</span><span class="t">Discovery</span></div><p>Entrevistas estructuradas y captura de contexto de negocio</p></div>
+      <div class="st reveal" style="--d:.32s"><div class="top"><span class="g">③</span><span class="t">Inception</span></div><p>User stories, criterios de aceptación y backlog priorizado</p></div>
+      <div class="st reveal" style="--d:.38s"><div class="top"><span class="g">⑦</span><span class="t">Operations</span></div><p>Detección de anomalías, incident response y post-mortems</p></div>
+    </div>
+    <div class="raise reveal" style="--d:.46s"><b>Ronda objetivo:</b><span class="amt">USD 2–4 millones</span><span class="muted">para acelerar el spin-off</span></div>
+  </section>
+
+  <!-- 7 · CIERRE -->
+  <section class="slide" id="s7">
+    <div class="shead reveal"><span class="num">07</span><h2>Sinergias y cierre</h2></div>
+    <div class="close-grid">
+      <div class="col">
+        <h3 class="reveal" style="--d:.05s">Dónde vemos sinergias</h3>
+        <div class="syn reveal" style="--d:.12s"><span class="dot"></span><div><div class="st-t">Retail / FMCG</div><p>Grandes cadenas en Chile y Latam con necesidades de tech</p></div></div>
+        <div class="syn reveal" style="--d:.18s"><span class="dot"></span><div><div class="st-t">Gobierno corporativo</div><p>Empresas y boards donde Nebula AI pueda generar valor</p></div></div>
+        <div class="syn reveal" style="--d:.24s"><span class="dot"></span><div><div class="st-t">Ecosistema de inversión</div><p>Fondos y ángeles con tesis en B2B SaaS / AI</p></div></div>
+        <div class="syn reveal" style="--d:.3s"><span class="dot"></span><div><div class="st-t">Partners tecnológicos</div><p>Compañías complementarias en el ecosistema</p></div></div>
+      </div>
+      <div class="col">
+        <h3 class="reveal" style="--d:.1s">Próximos pasos</h3>
+        <div class="step reveal" style="--d:.18s"><span class="n">1</span><span class="x">Recoger feedback de la sesión</span></div>
+        <div class="step reveal" style="--d:.24s"><span class="n">2</span><span class="x">Dar seguimiento a temas de inversión</span></div>
+        <div class="step reveal" style="--d:.3s"><span class="n">3</span><span class="x">Compartir material actualizado</span></div>
+        <div class="step reveal" style="--d:.36s"><span class="n">4</span><span class="x">Agendar próxima sesión (Jul / Ago)</span></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- chrome -->
+<div class="dots" id="dots"></div>
+<div class="nav">
+  <button id="prev" aria-label="Anterior">‹</button>
+  <span class="count" id="count">1 / 8</span>
+  <button id="next" aria-label="Siguiente">›</button>
+</div>
+<div class="hint">← → para navegar</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const progress=document.getElementById('progress');
+  const count=document.getElementById('count');
+  const prevBtn=document.getElementById('prev');
+  const nextBtn=document.getElementById('next');
+  let cur=0, lock=false;
+
+  slides.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','Ir a sección '+(i+1));
+    b.addEventListener('click',()=>go(i));
+    dotsWrap.appendChild(b);
+  });
+  const dots=[...dotsWrap.children];
+
+  let unlockTimer=null;
+  function go(i){
+    if(i<0||i>=slides.length||i===cur||lock) return;
+    lock=true;
+    const prev=slides[cur];
+    const forward=i>cur;
+    prev.classList.remove('active');
+    if(forward){ prev.classList.add('exit-up'); }
+    else{ prev.classList.remove('exit-up'); }
+    cur=i;
+    requestAnimationFrame(()=>{
+      slides.forEach((s,idx)=>{ if(idx!==cur) s.classList.remove('exit-up'); });
+      slides[cur].classList.add('active');
+      update();
+      clearTimeout(unlockTimer);
+      unlockTimer=setTimeout(()=>{lock=false;},620);
+    });
+  }
+  function update(){
+    dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+    progress.style.width=((cur+1)/slides.length*100)+'%';
+    count.textContent=(cur+1)+' / '+slides.length;
+    prevBtn.disabled=cur===0;
+    nextBtn.disabled=cur===slides.length-1;
+  }
+
+  nextBtn.addEventListener('click',()=>go(cur+1));
+  prevBtn.addEventListener('click',()=>go(cur-1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1);}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+    if(e.key==='Home')go(0);
+    if(e.key==='End')go(slides.length-1);
+  });
+  // swipe
+  let tx=0;
+  document.addEventListener('touchstart',e=>tx=e.changedTouches[0].clientX,{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>55) go(cur+(dx<0?1:-1));
+  },{passive:true});
+
+  // init
+  slides[0].classList.add('active');
+  update();
+</script>
+</body>
+</html>
