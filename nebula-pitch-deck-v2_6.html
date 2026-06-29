@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebula — Pitch Deck · Andino Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#06070f;
+  --ink:#0b0d1c;
+  --panel:rgba(255,255,255,.035);
+  --panel-2:rgba(255,255,255,.06);
+  --line:rgba(160,150,255,.14);
+  --line-strong:rgba(160,150,255,.28);
+  --violet:#8b5cf6;
+  --violet-soft:#a78bfa;
+  --magenta:#e472f0;
+  --cyan:#34d6e6;
+  --text:#eceefb;
+  --muted:#9a9fbe;
+  --muted-2:#6f7494;
+  --good:#5ee0a0;
+  --warn:#ff7a8a;
+  --amber:#f5b942;
+  --display:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--body);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- ambient background ---------- */
+.stars{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 70% 65%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 88% 18%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1.5px 1.5px at 55% 12%, rgba(190,180,255,.45), transparent),
+    radial-gradient(1px 1px at 12% 70%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 33% 50%, rgba(255,255,255,.25), transparent);
+  opacity:.6;
+}
+.nebula{
+  position:fixed;z-index:0;pointer-events:none;filter:blur(80px);
+  opacity:.55;will-change:transform;
+}
+.nebula.a{width:60vw;height:60vw;left:-12vw;top:-18vw;
+  background:radial-gradient(circle at 50% 50%, rgba(228,114,240,.55), rgba(139,92,246,.25) 45%, transparent 70%);
+  animation:drift1 26s ease-in-out infinite;}
+.nebula.b{width:55vw;height:55vw;right:-14vw;bottom:-20vw;
+  background:radial-gradient(circle at 50% 50%, rgba(52,214,230,.3), rgba(139,92,246,.28) 50%, transparent 72%);
+  animation:drift2 32s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,4vw) scale(1.12)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-4vw) scale(1.1)}}
+
+/* ---------- deck shell ---------- */
+.deck{position:relative;z-index:2;height:100vh;width:100vw}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(28px,6vw,120px);
+  opacity:0;visibility:hidden;
+  transition:opacity .5s ease;
+  pointer-events:none;
+}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto}
+.slide-inner{width:100%;max-width:1180px;margin:0 auto}
+
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(18px)}
+.slide.active .reveal{animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+.slide.active .reveal:nth-child(1){animation-delay:.05s}
+.slide.active .reveal:nth-child(2){animation-delay:.13s}
+.slide.active .reveal:nth-child(3){animation-delay:.21s}
+.slide.active .reveal:nth-child(4){animation-delay:.29s}
+.slide.active .reveal:nth-child(5){animation-delay:.37s}
+.slide.active .reveal:nth-child(6){animation-delay:.45s}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+/* ---------- typography ---------- */
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--violet-soft);display:flex;align-items:center;gap:12px;margin-bottom:26px;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:linear-gradient(90deg,var(--magenta),var(--violet));}
+h1{font-family:var(--display);font-weight:600;line-height:1.04;letter-spacing:-.02em;}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,56px);line-height:1.05;letter-spacing:-.02em;margin-bottom:18px;}
+.lead{font-size:clamp(16px,1.6vw,21px);color:var(--muted);max-width:62ch;line-height:1.55;}
+.grad{background:linear-gradient(100deg,var(--magenta),var(--violet-soft) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+/* ---------- cover ---------- */
+.cover-top{display:flex;align-items:center;gap:16px;margin-bottom:8vh}
+.orb{
+  width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff, var(--magenta) 35%, var(--violet) 70%, #2a1b6b);
+  box-shadow:0 0 30px rgba(228,114,240,.6),0 0 60px rgba(139,92,246,.45);
+}
+.wordmark{font-family:var(--display);font-weight:700;font-size:clamp(18px,2vw,24px);letter-spacing:.32em;}
+.cover h1{font-size:clamp(46px,8.5vw,118px);}
+.cover .tag{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.6vw,34px);color:var(--text);margin-top:18px;letter-spacing:-.01em}
+.cover .sub{margin-top:26px;max-width:60ch;color:var(--muted);font-size:clamp(15px,1.5vw,19px);line-height:1.6}
+.cover-foot{display:flex;gap:28px;margin-top:7vh;font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--muted-2);text-transform:uppercase;flex-wrap:wrap}
+.cover-people{display:flex;gap:34px;margin-top:30px;flex-wrap:wrap}
+.cover-people .p{display:flex;flex-direction:column;gap:2px}
+.cover-people .p b{font-family:var(--display);font-weight:600;font-size:15px;color:var(--text)}
+.cover-people .p span{font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:.06em}
+
+/* ---------- generic blocks ---------- */
+.cols{display:grid;gap:clamp(16px,2vw,30px);margin-top:34px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:clamp(18px,2vw,28px);position:relative;overflow:hidden;
+}
+.card .num{font-family:var(--mono);font-size:12px;color:var(--violet-soft);letter-spacing:.1em}
+.card h3{font-family:var(--display);font-weight:600;font-size:clamp(17px,1.6vw,21px);margin:10px 0 8px}
+.card p{color:var(--muted);font-size:14.5px;line-height:1.55}
+.card .ico{font-size:22px;margin-bottom:6px;display:block}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.chip{
+  font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+  padding:8px 15px;border-radius:999px;border:1px solid var(--line-strong);
+  background:rgba(139,92,246,.08);color:var(--text);
+}
+
+/* ---------- problem stats slide ---------- */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+.stat{
+  border:1px solid var(--line);border-radius:16px;padding:26px 28px;background:var(--panel);
+  display:flex;gap:20px;align-items:flex-start;
+}
+.stat .si{font-size:26px;flex:0 0 auto;line-height:1;margin-top:2px}
+.stat .sv{font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,34px);line-height:1;color:var(--warn)}
+.stat .sl{color:var(--muted);font-size:14px;line-height:1.5;margin-top:9px}
+
+/* ---------- solution autopilot ---------- */
+.analogy{
+  margin-top:22px;border:1px dashed var(--line-strong);border-radius:14px;padding:18px 22px;
+  background:linear-gradient(90deg,rgba(228,114,240,.07),rgba(52,214,230,.05));
+  font-size:15.5px;color:var(--muted);line-height:1.55;
+}
+.analogy b{color:var(--text);font-weight:600}
+.sol-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.sol-step{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--panel);position:relative}
+.sol-step .sn{font-family:var(--mono);font-size:13px;color:var(--violet-soft);letter-spacing:.1em}
+.sol-step h3{font-family:var(--display);font-weight:600;font-size:20px;margin:10px 0 8px}
+.sol-step p{color:var(--muted);font-size:14px;line-height:1.5}
+
+/* ---------- product flow slide ---------- */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px;position:relative}
+.fstep{border:1px solid var(--line);border-radius:14px;padding:20px 18px;background:var(--panel);position:relative}
+.fstep .fn{font-family:var(--mono);font-size:11px;color:var(--violet-soft);letter-spacing:.1em}
+.fstep h3{font-family:var(--display);font-weight:600;font-size:18px;margin:7px 0 6px}
+.fstep p{color:var(--muted);font-size:12.5px;line-height:1.45}
+.fstep::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--violet-soft);font-size:18px;z-index:3}
+.fstep:last-child::after{display:none}
+.prod-feats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.pf{border:1px solid var(--line);border-radius:13px;padding:18px;background:var(--panel)}
+.pf .pi{font-size:20px;display:block;margin-bottom:8px}
+.pf b{font-family:var(--display);font-weight:600;font-size:15px;display:block;margin-bottom:4px}
+.pf span{color:var(--muted);font-size:12.5px;line-height:1.45}
+
+/* ---------- context repo diagram ---------- */
+.repo-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;margin-top:30px;align-items:center}
+.repo-diagram{position:relative;aspect-ratio:1/.82;display:flex;align-items:center;justify-content:center}
+.core{
+  width:42%;aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(circle at 40% 35%, rgba(228,114,240,.35), rgba(139,92,246,.18) 60%, transparent);
+  border:1px solid var(--line-strong);box-shadow:0 0 50px rgba(139,92,246,.35) inset;
+}
+.core b{font-family:var(--display);font-size:15px}
+.core span{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;margin-top:4px}
+.node{
+  position:absolute;font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+  padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--ink);
+}
+.node.n1{top:2%;left:50%;transform:translateX(-50%)}
+.node.n2{right:0;top:50%;transform:translateY(-50%)}
+.node.n3{bottom:2%;left:50%;transform:translateX(-50%)}
+.node.n4{left:0;top:50%;transform:translateY(-50%)}
+.repo-points{display:flex;flex-direction:column;gap:16px}
+.pt{display:flex;gap:13px;align-items:flex-start}
+.pt .d{width:7px;height:7px;border-radius:50%;background:var(--magenta);margin-top:7px;flex:0 0 auto;box-shadow:0 0 10px var(--magenta)}
+.pt p{color:var(--muted);font-size:15px;line-height:1.5}
+.pt b{color:var(--text);font-weight:600}
+
+/* ---------- market TAM/SAM/SOM ---------- */
+.market{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:34px;align-items:center}
+.tam-rings{position:relative;aspect-ratio:1;max-width:380px;margin:0 auto;width:100%}
+.ring{position:absolute;border-radius:50%;display:flex;align-items:flex-start;justify-content:center;border:1px solid var(--line-strong)}
+.ring .rt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;margin-top:12px;color:var(--muted)}
+.ring.tam{inset:0;background:radial-gradient(circle at 50% 120%,rgba(139,92,246,.16),transparent 60%)}
+.ring.sam{inset:22%;background:radial-gradient(circle at 50% 120%,rgba(228,114,240,.16),transparent 60%)}
+.ring.som{inset:44%;background:radial-gradient(circle at 50% 120%,rgba(52,214,230,.22),transparent 70%);align-items:center}
+.ring.som .rt{margin-top:0}
+.market-list{display:flex;flex-direction:column;gap:16px}
+.mrow{display:flex;gap:16px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:14px}
+.mrow:last-child{border-bottom:none}
+.mrow .mk{font-family:var(--mono);font-size:12px;letter-spacing:.12em;min-width:48px;color:var(--violet-soft)}
+.mrow .mv{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,30px);min-width:120px}
+.mrow .md{color:var(--muted);font-size:14px;line-height:1.45}
+.market-note{margin-top:24px;font-family:var(--mono);font-size:12.5px;color:var(--muted);line-height:1.5}
+.market-note b{color:var(--cyan)}
+
+/* ---------- business model pricing ---------- */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px;align-items:stretch}
+.price{border:1px solid var(--line);border-radius:18px;padding:28px 24px;background:var(--panel);position:relative;display:flex;flex-direction:column}
+.price.feat{border-color:var(--line-strong);background:linear-gradient(180deg,rgba(139,92,246,.12),rgba(228,114,240,.04))}
+.price .badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:5px 14px;border-radius:999px;background:linear-gradient(90deg,var(--magenta),var(--violet));color:#fff}
+.price .pname{font-family:var(--display);font-weight:600;font-size:18px;text-align:center}
+.price .pamt{font-family:var(--display);font-weight:700;font-size:clamp(30px,4vw,46px);text-align:center;margin:14px 0 2px;line-height:1}
+.price.feat .pamt{color:var(--amber)}
+.price:not(.feat) .pamt{color:var(--violet-soft)}
+.price .pterm{text-align:center;color:var(--muted-2);font-size:12.5px;margin-bottom:18px}
+.price ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.price li{color:var(--muted);font-size:13.5px;line-height:1.4;padding-left:22px;position:relative}
+.price li::before{content:"✓";position:absolute;left:0;color:var(--good);font-weight:600}
+.price-foot{margin-top:22px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+/* ---------- traction ---------- */
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.metric{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--panel)}
+.metric .v{font-family:var(--display);font-weight:700;font-size:clamp(34px,4.2vw,52px);line-height:1}
+.metric .l{color:var(--muted);font-size:13.5px;margin-top:10px;line-height:1.4}
+.quote{margin-top:26px;border-left:2px solid var(--violet);padding:6px 0 6px 20px;font-size:clamp(15px,1.7vw,19px);color:var(--text);font-style:italic;line-height:1.5;max-width:70ch}
+.quote span{display:block;margin-top:10px;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--muted-2);letter-spacing:.06em}
+
+/* ---------- competition slide ---------- */
+.compbar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px;align-items:end}
+.cb{border:1px solid var(--line);border-radius:13px;padding:18px 16px;background:var(--panel);text-align:center}
+.cb.win{border-color:var(--line-strong);background:linear-gradient(180deg,rgba(228,114,240,.16),rgba(139,92,246,.06));transform:translateY(-10px)}
+.cb .cbn{font-family:var(--display);font-weight:600;font-size:15px}
+.cb .cbt{font-family:var(--mono);font-size:10.5px;color:var(--muted-2);margin-top:6px;letter-spacing:.04em}
+.cb.win .cbn{color:var(--magenta)}
+.axis{display:flex;justify-content:space-between;margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:.08em}
+.why{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
+.why .w{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:var(--muted);line-height:1.45}
+.why .w::before{content:"→";color:var(--violet-soft);flex:0 0 auto}
+.why .w b{color:var(--text);font-weight:600}
+
+/* ---------- team slide ---------- */
+.team-layout{display:grid;grid-template-columns:1.45fr 1fr;gap:22px;margin-top:30px;align-items:stretch}
+.block-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:14px}
+.founders{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.founder{border:1px solid var(--line);border-radius:14px;padding:18px 12px;background:var(--panel);text-align:center;display:flex;flex-direction:column;align-items:center}
+.founder .av{
+  width:50px;height:50px;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:19px;color:#fff;margin-bottom:11px;
+  background:linear-gradient(135deg,var(--magenta),var(--violet))
+}
+.founder .mn{font-family:var(--display);font-weight:600;font-size:16px}
+.founder .mr{font-family:var(--mono);font-size:10px;color:var(--violet-soft);letter-spacing:.06em;margin-top:5px;line-height:1.4}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+.member{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--panel)}
+.member.fill{display:flex;flex-direction:column;justify-content:center;background:linear-gradient(160deg,rgba(139,92,246,.1),rgba(228,114,240,.03))}
+.member .top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.member .av{
+  width:52px;height:52px;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:18px;color:#fff;
+  background:linear-gradient(135deg,var(--magenta),var(--violet))
+}
+.member .mn{font-family:var(--display);font-weight:600;font-size:18px}
+.member .mr{font-family:var(--mono);font-size:11px;color:var(--violet-soft);letter-spacing:.06em;margin-top:2px}
+.member ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.member li{color:var(--muted);font-size:13.5px;line-height:1.45;padding-left:16px;position:relative}
+.member li::before{content:"·";position:absolute;left:2px;color:var(--violet-soft)}
+.team-foot{margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted-2);letter-spacing:.06em;text-align:center}
+.leads-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.leadc{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel);text-align:center}
+.leadc .ph{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);display:block;margin-bottom:6px}
+.leadc b{font-family:var(--display);font-weight:600;font-size:15px}
+
+/* ---------- GTM phases ---------- */
+.gtm{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.phase{border:1px solid var(--line);border-radius:16px;padding:22px 26px;background:var(--panel);display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center}
+.phase.now{border-color:var(--line-strong);background:linear-gradient(90deg,rgba(139,92,246,.12),transparent)}
+.phase .pl{display:flex;flex-direction:column;gap:6px}
+.phase .pp{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--violet-soft)}
+.phase .ph-t{font-family:var(--display);font-weight:600;font-size:19px;line-height:1.15}
+.phase .pi{display:flex;flex-wrap:wrap;gap:8px}
+.phase .pi span{font-family:var(--mono);font-size:11.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+
+/* ---------- the ask ---------- */
+.ask-amt{font-family:var(--display);font-weight:700;font-size:clamp(46px,7vw,92px);line-height:1;margin:8px 0 14px}
+.ask-sub{font-size:clamp(16px,1.8vw,21px);color:var(--muted);max-width:60ch;line-height:1.5}
+.alloc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+.al{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--panel)}
+.al .pct{font-family:var(--display);font-weight:700;font-size:clamp(28px,3.4vw,40px);line-height:1}
+.al .amt{font-family:var(--mono);font-size:12px;color:var(--violet-soft);margin-top:4px}
+.al b{display:block;font-family:var(--display);font-weight:600;font-size:15px;margin:14px 0 6px}
+.al p{color:var(--muted);font-size:13px;line-height:1.45}
+.ask-foot{margin-top:26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.ask-foot .step{padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text)}
+.ask-foot .sep{color:var(--violet-soft)}
+
+.placeholder{
+  display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--amber);border:1px solid rgba(245,185,66,.4);border-radius:6px;
+  padding:2px 7px;margin-left:8px;vertical-align:middle;background:rgba(245,185,66,.08)
+}
+
+/* ---------- product SDLC diagram (agldc) ---------- */
+.focus-line{
+  display:inline-flex;align-items:center;gap:10px;margin:2px 0 18px;
+  font-family:var(--mono);font-size:13px;letter-spacing:.02em;color:var(--text);
+  padding:8px 14px;border:1px solid var(--line-strong);border-radius:999px;
+  background:linear-gradient(90deg,rgba(228,114,240,.12),rgba(52,214,230,.08));
+}
+.focus-line .pulse{width:8px;height:8px;border-radius:50%;background:var(--magenta);box-shadow:0 0 12px var(--magenta);flex:0 0 auto}
+.agldc{
+  border:1px solid var(--line);border-radius:18px;padding:clamp(13px,1.5vw,20px);margin-top:18px;
+  background:linear-gradient(180deg,rgba(139,92,246,.05),rgba(255,255,255,.02));
+}
+.agldc .bands{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+.agldc .band{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;padding:6px 12px;border-radius:8px;text-align:center;border:1px solid var(--line)}
+.agldc .band.prod{background:rgba(228,114,240,.09);color:var(--magenta)}
+.agldc .band.eng{background:rgba(52,214,230,.08);color:var(--cyan)}
+.agldc .stages{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.agldc .chev{
+  padding:11px 22px;font-family:var(--display);font-weight:600;font-size:14px;color:#fff;text-align:center;
+  background:linear-gradient(90deg,rgba(139,92,246,.28),rgba(139,92,246,.12));
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%);
+}
+.agldc .chev.first{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%);padding-left:16px}
+.agldc .chev.eng{background:linear-gradient(90deg,rgba(52,214,230,.24),rgba(52,214,230,.09))}
+.agldc .subs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:11px}
+.agldc .subgrp{display:flex;gap:5px}
+.agldc .sub{
+  flex:1;font-family:var(--mono);font-size:10px;letter-spacing:.01em;text-align:center;
+  padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);
+  line-height:1.25;display:flex;align-items:center;justify-content:center;min-height:38px;
+}
+.agldc .agentic{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.agldc .agbox{
+  padding:12px 8px;border-radius:10px;text-align:center;font-family:var(--display);font-weight:600;
+  font-size:12.5px;line-height:1.25;color:var(--text);
+  background:linear-gradient(135deg,rgba(228,114,240,.2),rgba(139,92,246,.12));border:1px solid var(--line-strong);
+}
+.agldc .core-band{
+  margin-bottom:10px;border:1px dashed var(--line-strong);border-radius:12px;padding:11px 16px;text-align:center;
+  background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.2),transparent 75%);
+}
+.agldc .core-band b{font-family:var(--display);font-size:14px}
+.agldc .core-band span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.05em;margin-top:3px}
+.agldc .tools{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.agldc .tool{font-family:var(--mono);font-size:10.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+
+/* ---------- nav / chrome ---------- */
+.progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--magenta),var(--violet),var(--cyan));z-index:20;transition:width .4s ease;box-shadow:0 0 12px rgba(139,92,246,.6)}
+.chrome{position:fixed;z-index:20;bottom:24px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,48px);pointer-events:none}
+.counter{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--muted);pointer-events:auto}
+.counter .cur{color:var(--text)}
+.nav{display:flex;gap:10px;pointer-events:auto}
+.nav button{
+  width:42px;height:42px;border-radius:11px;border:1px solid var(--line-strong);
+  background:var(--panel);color:var(--text);cursor:pointer;font-size:17px;
+  display:flex;align-items:center;justify-content:center;transition:.2s
+}
+.nav button:hover{background:rgba(139,92,246,.18);border-color:var(--violet)}
+.nav button:disabled{opacity:.3;cursor:default}
+.brand-mini{position:fixed;top:22px;left:clamp(20px,4vw,48px);z-index:20;display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;letter-spacing:.24em;font-size:12px;color:var(--muted);pointer-events:none}
+.brand-mini .dot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--magenta) 40%,var(--violet) 75%);box-shadow:0 0 12px rgba(228,114,240,.6)}
+.edge{position:fixed;top:0;bottom:0;width:7%;z-index:15;cursor:pointer}
+.edge.l{left:0}.edge.r{right:0}
+
+button:focus-visible,.edge:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+
+@media (max-width:760px){
+  .c2,.c3,.stats,.market,.pricing,.metrics,.team,.team-layout,.compbar,.flow,.prod-feats,.sol-steps,.alloc,.repo-wrap,.leads-row{grid-template-columns:1fr}
+  .agldc .bands,.agldc .stages,.agldc .subs,.agldc .agentic{grid-template-columns:1fr}
+  .agldc .chev{clip-path:none}
+  .founders{grid-template-columns:repeat(2,1fr)}
+  .phase{grid-template-columns:1fr}
+  .why{grid-template-columns:1fr}
+  .fstep::after,.cb.win{transform:none}
+  .fstep::after{display:none}
+  .slide{padding:64px 22px 90px}
+  .repo-diagram,.tam-rings{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;animation:none!important}
+  .nebula{animation:none!important}
+  .slide{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="nebula a"></div>
+<div class="nebula b"></div>
+
+<div class="progress" id="progress"></div>
+<div class="brand-mini"><span class="dot"></span>NEBULA</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide active">
+    <div class="slide-inner cover">
+      <div class="cover-top reveal"><span class="orb"></span><span class="wordmark">NEBULA</span></div>
+      <h1 class="reveal">Desarrollo de software<br><span class="grad">autónomo y agéntico</span></h1>
+      <div class="tag reveal">El sistema operativo del SDLC AI-native</div>
+      <p class="sub reveal">La plataforma multi-tenant que orquesta agentes a lo largo de las cuatro etapas del ciclo de vida del software —con calidad enterprise desde el primer commit y el humano como director de IA.</p>
+      <div class="cover-people reveal">
+        <div class="p"><b>Shab · Diego · Seba · Italo · Mauro</b><span>Founders</span></div>
+        <div class="p"><b>Andino Labs</b><span>Chile · LATAM · Bangalore · US</span></div>
+      </div>
+      <div class="cover-foot reveal"><span>Pitch deck</span><span>Confidencial</span><span>Santiago · 2026</span></div>
+    </div>
+  </section>
+
+  <!-- 2 · EL PROBLEMA -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">01 — El problema</div>
+      <h2 class="reveal">El software enterprise es <span class="grad">caro, lento e impredecible</span></h2>
+      <p class="lead reveal">Y la adopción de IA, hoy, no lo resuelve: los equipos usan asistentes de forma individual, ganan fluidez y se estancan. El aprendizaje no se vuelve capacidad colectiva.</p>
+      <div class="stats reveal">
+        <div class="stat"><span class="si">⏱</span><div><div class="sv">18–24 meses</div><div class="sl">Duración promedio de un proyecto enterprise. Scope creep, retrabajo y entregas que se corren.</div></div></div>
+        <div class="stat"><span class="si">🔁</span><div><div class="sv">~80% repetitivo</div><div class="sl">Boilerplate, documentación, tests e integración. Humanos escribiendo lo que la máquina debería generar.</div></div></div>
+        <div class="stat"><span class="si">📉</span><div><div class="sv">Estancamiento L1</div><div class="sl">La mayoría de los equipos adopta IA a nivel individual y se queda ahí. Sin método compartido no hay escala.</div></div></div>
+        <div class="stat"><span class="si">🌎</span><div><div class="sv">LATAM desatendido</div><div class="sl">Ningún vendor regional ofrece una plataforma SDLC multi-agente integrada y desplegada dentro de la infraestructura del cliente.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · LA SOLUCIÓN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">02 — La solución</div>
+      <h2 class="reveal">Nebula: la plataforma de <span class="grad">desarrollo agéntico</span></h2>
+      <div class="analogy reveal">Piensa en Nebula como el <b>piloto automático del desarrollo de software</b>. El equipo dirige el despegue y el aterrizaje —arquitectura, alcance, criterio—. Nebula opera el 80% del trayecto: diseña, construye y sostiene.</div>
+      <div class="sol-steps reveal">
+        <div class="sol-step"><span class="sn">01</span><h3>Capturar</h3><p>La visión y los requerimientos entran en lenguaje natural. Nebula sintetiza contexto, historias y backlog accionable.</p></div>
+        <div class="sol-step"><span class="sn">02</span><h3>Generar</h3><p>Agentes especializados por fase generan código, tests e infraestructura production-ready sobre una memoria compartida.</p></div>
+        <div class="sol-step"><span class="sn">03</span><h3>Operar &amp; iterar</h3><p>Onboarding de codebases legacy, observabilidad y mejora continua. Operations realimenta a Discovery.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · EL PRODUCTO -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">03 — El producto</div>
+      <h2 class="reveal">Cómo funciona Nebula</h2>
+      <p class="lead reveal">Un agente especializado por fase, sobre el mismo contexto. Las salidas de cada etapa alimentan la siguiente sin reescritura manual.</p>
+      <div class="flow reveal">
+        <div class="fstep"><span class="fn">Fase 01</span><h3>Discovery</h3><p>Captura la visión y sintetiza el problema con mínima ambigüedad.</p></div>
+        <div class="fstep"><span class="fn">Fase 02</span><h3>Inception</h3><p>Convierte la visión en historias, criterios y backlog accionable.</p></div>
+        <div class="fstep"><span class="fn">Fase 03</span><h3>Construction</h3><p>Genera código enterprise-grade, tests y artefactos desplegables.</p></div>
+        <div class="fstep"><span class="fn">Fase 04</span><h3>Operations</h3><p>Sostiene infra, observabilidad y mejora continua del servicio.</p></div>
+      </div>
+      <div class="agldc reveal">
+        <div class="bands">
+          <div class="band prod">Producto</div>
+          <div class="band eng">Ingeniería</div>
+        </div>
+        <div class="stages">
+          <div class="chev first">Discovery</div>
+          <div class="chev">Inception</div>
+          <div class="chev eng">Construction</div>
+          <div class="chev eng">Operations</div>
+        </div>
+        <div class="subs">
+          <div class="subgrp"><div class="sub">Estrategia</div><div class="sub">Captura &amp; Síntesis</div></div>
+          <div class="subgrp"><div class="sub">Requerimientos</div><div class="sub">Historias</div><div class="sub">Backlog</div></div>
+          <div class="subgrp"><div class="sub">Build autónomo</div><div class="sub">Validación</div><div class="sub">QA</div></div>
+          <div class="subgrp"><div class="sub">Deploy</div><div class="sub">Observabilidad</div><div class="sub">Runbooks</div></div>
+        </div>
+        <div class="agentic">
+          <div class="agbox">Agentic Discovery &amp; Síntesis</div>
+          <div class="agbox">Agentic Story &amp; Backlog</div>
+          <div class="agbox">Agentic Code Gen &amp; Validación</div>
+          <div class="agbox">Agentic Ops &amp; Self-Healing</div>
+        </div>
+        <div class="core-band">
+          <b>Nebula · Desarrollo de Software Agéntico</b>
+          <span>Context Repository — memoria compartida entre todas las fases</span>
+        </div>
+        <div class="tools">
+          <span class="tool">Claude</span><span class="tool">GitHub</span><span class="tool">GitLab</span>
+          <span class="tool">Jira</span><span class="tool">Confluence</span><span class="tool">Figma</span>
+          <span class="tool">Terraform</span><span class="tool">ArgoCD</span><span class="tool">AWS</span>
+          <span class="tool">GCP</span><span class="tool">Azure</span><span class="tool">Grafana</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · CONTEXT REPOSITORY -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">04 — El diferenciador</div>
+      <h2 class="reveal">Context Repository: <span class="grad">la memoria compartida</span></h2>
+      <div class="repo-wrap">
+        <div class="repo-diagram reveal">
+          <div class="core"><b>Context<br>Repository</b><span>MEMORIA COMPARTIDA</span></div>
+          <div class="node n1">Discovery</div>
+          <div class="node n2">Inception</div>
+          <div class="node n3">Construction</div>
+          <div class="node n4">Operations</div>
+        </div>
+        <div class="repo-points reveal">
+          <div class="pt"><span class="d"></span><p><b>Núcleo multi-tenant nativo.</b> Un mismo control plane sirve a múltiples clientes en producción. Es lo que ninguna herramienta de fase única ofrece.</p></div>
+          <div class="pt"><span class="d"></span><p><b>El flywheel automatizado.</b> Captura señales de contexto, instrucción, workflow y fallas de cada sesión y las devuelve a los artefactos vivos del equipo.</p></div>
+          <div class="pt"><span class="d"></span><p><b>Memoria entre fases.</b> Las cuatro etapas operan sobre el mismo repositorio: cero handoffs manuales, cero pérdida de contexto.</p></div>
+          <div class="pt"><span class="d"></span><p><b>Context Engine (RAG).</b> Ingesta de codebase con re-indexado automático en cada merge de CI/CD.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · MERCADO -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">05 — El mercado <span class="placeholder">cifras a validar</span></div>
+      <h2 class="reveal">Un mercado grande y <span class="grad">desatendido en LATAM</span></h2>
+      <div class="market">
+        <div class="tam-rings reveal">
+          <div class="ring tam"><span class="rt">TAM</span></div>
+          <div class="ring sam"><span class="rt">SAM</span></div>
+          <div class="ring som"><span class="rt">SOM</span></div>
+        </div>
+        <div class="market-list reveal">
+          <div class="mrow"><span class="mk">TAM</span><span class="mv grad">$650B+</span><span class="md">Gasto global en desarrollo de software enterprise.</span></div>
+          <div class="mrow"><span class="mk">SAM</span><span class="mv grad">$40B</span><span class="md">Desarrollo de software custom en LATAM + US, empresas con equipos tech de 30+.</span></div>
+          <div class="mrow"><span class="mk">SOM</span><span class="mv grad">$1.5B</span><span class="md">Retail, CPG y servicios financieros en LATAM — el beachhead inicial de Andino Labs.</span></div>
+        </div>
+      </div>
+      <div class="market-note reveal">El mercado de generación de código con IA por sí solo se proyecta hacia <b>$51B al 2028</b>. Ningún competidor de Silicon Valley ataca LATAM enterprise en serio.</div>
+    </div>
+  </section>
+
+  <!-- 7 · MODELO DE NEGOCIO -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">06 — Modelo de negocio <span class="placeholder">precios a definir</span></div>
+      <h2 class="reveal">Programa integrado <span class="grad">con upside de plataforma</span></h2>
+      <div class="pricing">
+        <div class="price reveal">
+          <div class="pname">Diagnóstico + POC</div>
+          <div class="pamt">$50K</div>
+          <div class="pterm">término 2 meses</div>
+          <ul>
+            <li>Assessment de madurez FINOS (9 dimensiones)</li>
+            <li>Despliegue guiado de POC</li>
+            <li>Onboarding de un codebase</li>
+            <li>Demostrar ROI a escala acotada</li>
+          </ul>
+        </div>
+        <div class="price feat reveal">
+          <div class="badge">Recomendado</div>
+          <div class="pname">Programa 90 días</div>
+          <div class="pamt">$500K</div>
+          <div class="pterm">por año</div>
+          <ul>
+            <li>3 tracks: Técnico · Cultura · Consultoría</li>
+            <li>Nebula desplegado en infraestructura del cliente</li>
+            <li>AI-DLC en producción + rituales Mob</li>
+            <li>Feedback flywheel activado</li>
+          </ul>
+        </div>
+        <div class="price reveal">
+          <div class="pname">Enterprise</div>
+          <div class="pamt">$5M</div>
+          <div class="pterm">por año</div>
+          <ul>
+            <li>Despliegue org-wide multi-squad</li>
+            <li>AI Solutions Consultant dedicado</li>
+            <li>Forward Deployed Engineers</li>
+            <li>Gobernanza de modelos por cliente</li>
+          </ul>
+        </div>
+      </div>
+      <div class="price-foot reveal">Enterprise SaaS desplegado en cliente · sin entrenar sobre tu código · alineado a FINOS AI Readiness</div>
+    </div>
+  </section>
+
+  <!-- 8 · TRACCIÓN -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">07 — Tracción</div>
+      <h2 class="reveal">Ya corre en producción, <span class="grad">multi-tenant</span></h2>
+      <p class="lead reveal">Nebula nació como el IDP interno de Andino Labs. No es un concepto: opera para clientes reales sobre un mismo control plane.</p>
+      <div class="chips reveal">
+        <span class="chip">Andino</span><span class="chip">Salcobrand</span><span class="chip">Busko</span>
+        <span class="chip">Berzo AI</span><span class="chip">Angelis</span><span class="chip">Builder</span>
+      </div>
+      <div class="metrics reveal">
+        <div class="metric"><div class="v grad">+40%</div><div class="l">Velocidad de entrega objetivo al mes 3</div></div>
+        <div class="metric"><div class="v grad">−60%</div><div class="l">Tiempo en boilerplate y documentación</div></div>
+        <div class="metric"><div class="v grad">1 mes</div><div class="l">Al primer entregable concreto en producción</div></div>
+      </div>
+      <div class="quote reveal">Validado puertas adentro y en clientes reales antes de salir como producto al enterprise LATAM.<span>Andino Labs · operación multi-tenant en curso</span></div>
+    </div>
+  </section>
+
+  <!-- 9 · COMPETENCIA -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">08 — Competencia</div>
+      <h2 class="reveal">Más allá de los co-pilots: <span class="grad">una nueva categoría</span></h2>
+      <div class="compbar reveal">
+        <div class="cb"><div class="cbn">GitHub Copilot</div><div class="cbt">snippets · asistido</div></div>
+        <div class="cb"><div class="cbn">Cursor / ChatGPT</div><div class="cbt">archivos · asistido</div></div>
+        <div class="cb"><div class="cbn">Devin / Blitzy</div><div class="cbt">repos · una fase</div></div>
+        <div class="cb win"><div class="cbn">Nebula</div><div class="cbt">SDLC completo · multi-tenant</div></div>
+      </div>
+      <div class="axis reveal"><span>Dev-asistido · fase única</span><span>Autónomo · ciclo completo</span></div>
+      <div class="why reveal">
+        <div class="w"><span><b>Cuatro etapas</b> sobre un mismo Context Repository, no fragmentos sueltos.</span></div>
+        <div class="w"><span><b>Núcleo multi-tenant nativo</b> que ninguna herramienta de fase única ofrece.</span></div>
+        <div class="w"><span><b>AI Registry + LLM Management</b> propios: gobernanza de modelos por cliente.</span></div>
+        <div class="w"><span><b>Desplegado en la infra del cliente</b> —cloud y on-prem—, sin entrenar sobre su código.</span></div>
+        <div class="w"><span><b>LATAM-native</b>: idioma, contexto regional y entrega local.</span></div>
+        <div class="w"><span><b>Alineado a FINOS</b>: ancla de credibilidad para CTOs y compradores enterprise.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · EQUIPO -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">09 — Equipo <span class="placeholder">perfiles a completar</span></div>
+      <h2 class="reveal">El equipo para construir esto</h2>
+      <div class="team-layout reveal">
+        <div>
+          <div class="block-label">Founders</div>
+          <div class="founders">
+            <div class="founder"><div class="av">S</div><div class="mn">Shab</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">D</div><div class="mn">Diego</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">S</div><div class="mn">Seba</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">I</div><div class="mn">Italo</div><div class="mr">Founder</div></div>
+            <div class="founder"><div class="av">M</div><div class="mn">Mauro</div><div class="mr">Founder</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="block-label">by</div>
+          <div class="member fill">
+            <div class="top"><div class="av">AL</div><div><div class="mn">Andino Labs</div><div class="mr">Digital Engineering · Chile · LATAM · Bangalore · US</div></div></div>
+            <ul>
+              <li>Pool de talento de ingeniería en Bangalore</li>
+              <li>Acceso al hub retail/CPG de India (40% de los retailers globales)</li>
+              <li>Arquitectura evolutiva, microservicios y modernización legacy</li>
+              <li>ADN global, ejecución LATAM</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · GO-TO-MARKET -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">10 — Go-to-market</div>
+      <h2 class="reveal">Beachhead primero. <span class="grad">Luego expandir.</span></h2>
+      <div class="gtm">
+        <div class="phase now reveal">
+          <div class="pl"><span class="pp">Fase 1 · 2026</span><span class="ph-t">Beachhead LATAM</span></div>
+          <div class="pi"><span>Retail · CPG · servicios financieros</span><span>Pilotos enterprise</span><span>Probar +40% de velocidad</span><span>Onboarding de legacy</span><span>Casos de referencia</span></div>
+        </div>
+        <div class="phase reveal">
+          <div class="pl"><span class="pp">Fase 2 · 2027</span><span class="ph-t">Expansión enterprise</span></div>
+          <div class="pi"><span>Salida a US</span><span>Healthcare · manufactura · logística</span><span>Canales con SIs y agencias</span><span>Tier self-service para squads</span></div>
+        </div>
+        <div class="phase reveal">
+          <div class="pl"><span class="pp">Fase 3 · 2028+</span><span class="ph-t">Plataforma &amp; ecosistema</span></div>
+          <div class="pi"><span>Marketplace de agentes Nebula</span><span>API para toolchains enterprise</span><span>Mayor autonomía del ciclo</span><span>Expansión internacional</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · EL ASK -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow reveal">11 — El ask <span class="placeholder">monto a definir</span></div>
+      <h2 class="reveal" style="margin-bottom:6px">La ronda</h2>
+      <div class="ask-amt grad reveal">$XX M</div>
+      <p class="ask-sub reveal">Para llevar Nebula de plataforma interna validada a producto enterprise líder del SDLC AI-native en LATAM.</p>
+      <div class="alloc reveal">
+        <div class="al"><div class="pct grad">55%</div><div class="amt">~$X.X M</div><b>Ingeniería &amp; plataforma</b><p>Escalar Nebula: orquestación multi-agente, control plane, seguridad enterprise.</p></div>
+        <div class="al"><div class="pct grad">25%</div><div class="amt">~$X.X M</div><b>Go-to-market</b><p>Pilotos enterprise, ventas y red regional. Construir los casos de referencia del beachhead.</p></div>
+        <div class="al"><div class="pct grad">20%</div><div class="amt">~$X.X M</div><b>Operación &amp; talento</b><p>Equipo de delivery LATAM, AI Solutions Consultants y Forward Deployed Engineers.</p></div>
+      </div>
+      <div class="ask-foot reveal">
+        <span class="step">5 contratos enterprise</span><span class="sep">→</span>
+        <span class="step">Product-market fit en el beachhead</span><span class="sep">→</span>
+        <span class="step">Nebula v1.0</span>
+        <span style="margin-left:6px">· runway 18 meses</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="edge l" id="edgeL" tabindex="-1" aria-label="Anterior"></div>
+<div class="edge r" id="edgeR" tabindex="-1" aria-label="Siguiente"></div>
+
+<div class="chrome">
+  <div class="counter"><span class="cur" id="cur">01</span> / <span id="total">12</span></div>
+  <div class="nav">
+    <button id="prev" aria-label="Anterior">←</button>
+    <button id="next" aria-label="Siguiente">→</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides=[...document.querySelectorAll('.slide')];
+  const n=slides.length;
+  let i=0;
+  const cur=document.getElementById('cur');
+  const prog=document.getElementById('progress');
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  document.getElementById('total').textContent=String(n).padStart(2,'0');
+
+  function show(idx){
+    i=Math.max(0,Math.min(n-1,idx));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    cur.textContent=String(i+1).padStart(2,'0');
+    prog.style.width=((i+1)/n*100)+'%';
+    prev.disabled=i===0;
+    next.disabled=i===n-1;
+  }
+  function go(d){show(i+d)}
+
+  prev.addEventListener('click',()=>go(-1));
+  next.addEventListener('click',()=>go(1));
+  document.getElementById('edgeL').addEventListener('click',()=>go(-1));
+  document.getElementById('edgeR').addEventListener('click',()=>go(1));
+
+  window.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(1);}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1);}
+    else if(e.key==='Home'){show(0);}
+    else if(e.key==='End'){show(n-1);}
+  });
+
+  let x0=null;
+  window.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  window.addEventListener('touchend',e=>{
+    if(x0===null)return;
+    const dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50)go(dx<0?1:-1);
+    x0=null;
+  },{passive:true});
+
+  show(0);
+})();
+</script>
+</body>
+</html>
