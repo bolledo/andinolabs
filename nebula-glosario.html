@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebula — Glosario / Glossary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#06070f; --ink:#0b0d1c;
+  --panel:rgba(255,255,255,.035); --panel-2:rgba(255,255,255,.06);
+  --line:rgba(160,150,255,.14); --line-strong:rgba(160,150,255,.28);
+  --violet:#8b5cf6; --violet-soft:#a78bfa; --magenta:#e472f0; --cyan:#34d6e6;
+  --text:#eceefb; --muted:#9a9fbe; --muted-2:#6f7494; --amber:#f5b942;
+  --display:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh;position:relative;overflow-x:hidden}
+
+/* ambient */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 70% 65%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.5px 1.5px at 55% 12%, rgba(190,180,255,.45), transparent),
+    radial-gradient(1px 1px at 12% 70%, rgba(255,255,255,.3), transparent);}
+.neb{position:fixed;z-index:0;pointer-events:none;filter:blur(90px);opacity:.5}
+.neb.a{width:55vw;height:55vw;left:-14vw;top:-16vw;background:radial-gradient(circle at 50% 50%, rgba(228,114,240,.5), rgba(139,92,246,.22) 46%, transparent 70%)}
+.neb.b{width:52vw;height:52vw;right:-16vw;bottom:-20vw;background:radial-gradient(circle at 50% 50%, rgba(52,214,230,.28), rgba(139,92,246,.26) 50%, transparent 72%)}
+
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:clamp(28px,5vw,72px) clamp(20px,4vw,48px) 100px}
+
+/* header */
+header{margin-bottom:44px}
+.brandrow{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.orb{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #fff, var(--magenta) 35%, var(--violet) 70%, #2a1b6b);box-shadow:0 0 26px rgba(228,114,240,.55),0 0 50px rgba(139,92,246,.4);flex:0 0 auto}
+.wordmark{font-family:var(--display);font-weight:700;letter-spacing:.3em;font-size:15px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet-soft);display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.eyebrow::before{content:"";width:26px;height:1px;background:linear-gradient(90deg,var(--magenta),var(--violet))}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,52px);line-height:1.05;letter-spacing:-.02em}
+.grad{background:linear-gradient(100deg,var(--magenta),var(--violet-soft) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin-top:16px;color:var(--muted);font-size:clamp(15px,1.6vw,18px);line-height:1.55;max-width:62ch}
+
+.controls{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:30px}
+.toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;padding:4px;background:var(--panel);gap:2px}
+.toggle button{
+  font-family:var(--mono);font-size:12px;letter-spacing:.08em;font-weight:500;
+  padding:9px 20px;border:none;border-radius:999px;background:transparent;color:var(--muted);
+  cursor:pointer;transition:.22s;text-transform:uppercase
+}
+.toggle button.on{background:linear-gradient(90deg,var(--magenta),var(--violet));color:#fff;box-shadow:0 0 18px rgba(139,92,246,.45)}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted-2);letter-spacing:.08em}
+
+/* group */
+.group{margin-top:54px}
+.group-title{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.group-title .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent)}
+
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.term{
+  border:1px solid var(--line);border-radius:16px;padding:22px 24px;background:var(--panel);
+  position:relative;overflow:hidden;transition:border-color .22s,transform .22s
+}
+.term::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--magenta),var(--cyan));opacity:.5}
+.term:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.term h3{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.01em;margin-bottom:4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.term .alt{font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:.04em;font-weight:400}
+.term p{color:var(--muted);font-size:14.5px;line-height:1.55;margin-top:8px}
+.term p b{color:var(--text);font-weight:600}
+
+.foot{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted-2);letter-spacing:.04em;line-height:1.6}
+
+@media (max-width:720px){
+  .cards{grid-template-columns:1fr}
+  .controls{flex-direction:column;align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){
+  .term{transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="neb a"></div>
+<div class="neb b"></div>
+
+<div class="wrap">
+  <header>
+    <div class="brandrow"><span class="orb"></span><span class="wordmark">NEBULA</span></div>
+    <div class="eyebrow" data-i18n="eyebrow"></div>
+    <h1 data-i18n="title"></h1>
+    <p class="sub" data-i18n="sub"></p>
+    <div class="controls">
+      <div class="toggle" role="group" aria-label="Language">
+        <button id="btn-es" class="on" onclick="setLang('es')">Español</button>
+        <button id="btn-en" onclick="setLang('en')">English</button>
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+  </header>
+
+  <main id="glossary"></main>
+
+  <div class="foot" data-i18n="foot"></div>
+</div>
+
+<script>
+const UI = {
+  es:{
+    eyebrow:"Lenguaje común · Entendimiento compartido",
+    title:"Glosario de Nebula",
+    sub:"El vocabulario acordado del equipo para hablar de Nebula. Puede diferir de la industria — lo importante es que sea nuestro y consistente.",
+    foot:"Documento vivo · Andino Labs · Sujeto a iteración a medida que evoluciona la plataforma.",
+    count:t=>`${t} términos`
+  },
+  en:{
+    eyebrow:"Common language · Shared understanding",
+    title:"Nebula Glossary",
+    sub:"The team's agreed vocabulary for talking about Nebula. It may differ from the industry — what matters is that it's ours and consistent.",
+    foot:"Living document · Andino Labs · Subject to iteration as the platform evolves.",
+    count:t=>`${t} terms`
+  }
+};
+
+const GROUPS = [
+  {
+    title:{es:"Fundamentos",en:"Foundations"},
+    terms:[
+      {term:"Nebula", alt:{es:"North Star",en:"North Star"},
+        def:{es:`El sistema operativo del desarrollo AI-native. Una plataforma <b>multi-tenant</b> que orquesta agentes a lo largo de las 4 fases del ciclo de desarrollo, con calidad enterprise y el humano como director de la IA.`,
+             en:`The operating system for AI-native development. A <b>multi-tenant</b> platform that orchestrates agents across the 4 phases of the development lifecycle, with enterprise-grade quality and the human directing the AI.`}},
+      {term:"AI-DLC", alt:{es:"AI Development Life Cycle",en:"AI Development Life Cycle"},
+        def:{es:`El ciclo de vida del desarrollo de software aumentado con IA — el marco de las 4 fases (Discovery, Inception, Construction, Operations) sobre el que opera Nebula.`,
+             en:`The AI-augmented software development lifecycle — the 4-phase framework (Discovery, Inception, Construction, Operations) that Nebula operates on.`}}
+    ]
+  },
+  {
+    title:{es:"Jerarquía del sistema",en:"System hierarchy"},
+    terms:[
+      {term:"Fase", alt:{es:"Phase",en:""},
+        def:{es:`Una de las cuatro etapas del ciclo: <b>Discovery → Inception → Construction → Operations</b>. Son fijas y compartidas por todo Nebula.`,
+             en:`One of the four stages of the cycle: <b>Discovery → Inception → Construction → Operations</b>. Fixed and shared across all of Nebula.`}},
+      {term:"Módulo", alt:{es:"Module",en:""},
+        def:{es:`Una unidad funcional dentro de una fase (ej. creación de historias de usuario). Agrupa varios features y tiene un <b>input y un output</b> claros.`,
+             en:`A functional unit within a phase (e.g., user-story creation). It groups several features and has clear <b>input and output</b>.`}},
+      {term:"Feature", alt:{es:"",en:""},
+        def:{es:`Una capacidad concreta dentro de un módulo. Un módulo se compone de varios features, y cada feature puede apoyarse en uno o varios agentes.`,
+             en:`A concrete capability within a module. A module is made of several features, and each feature can rely on one or more agents.`}},
+      {term:"Agente", alt:{es:"Agent",en:""},
+        def:{es:`Un <b>job</b> que ejecuta un skill: toma un input, se comunica con un LLM y/o herramientas (MCP, GitHub…), realiza una tarea acotada y entrega un output. Tiene inicio y fin — no corre indefinidamente.`,
+             en:`A <b>job</b> that runs a skill: it takes an input, talks to an LLM and/or tools (MCP, GitHub…), performs a bounded task, and returns an output. It has a beginning and an end — it does not run indefinitely.`}},
+      {term:"Skill", alt:{es:"",en:""},
+        def:{es:`La definición (prompt + instrucciones + acciones) que un agente ejecuta. Los skills son <b>propios de Nebula</b> y reutilizables entre módulos.`,
+             en:`The definition (prompt + instructions + actions) that an agent executes. Skills are <b>Nebula-owned</b> and reusable across modules.`}},
+      {term:"Journey", alt:{es:"",en:""},
+        def:{es:`Un recorrido <b>end-to-end</b> que atraviesa varias fases y entrega valor completo a partir de un input. Son pocos (4-5 máx.) y los definimos nosotros. Usar un solo módulo <b>no</b> es un journey.`,
+             en:`An <b>end-to-end</b> path that spans several phases and delivers complete value from an input. They are few (4-5 max) and we define them. Using a single module is <b>not</b> a journey.`}}
+    ]
+  },
+  {
+    title:{es:"Arquitectura",en:"Architecture"},
+    terms:[
+      {term:"Context Repository", alt:{es:"",en:""},
+        def:{es:`La <b>memoria compartida</b> de Nebula. Almacena todos los artefactos (briefs, historias, código, runbooks) y los hace accesibles a todas las fases, eliminando los handoffs manuales. Se enriquece solo.`,
+             en:`Nebula's <b>shared memory</b>. It stores all artifacts (briefs, stories, code, runbooks) and makes them accessible across every phase, eliminating manual handoffs. It enriches itself.`}},
+      {term:"Control Plane", alt:{es:"",en:""},
+        def:{es:`El corazón de Nebula para el usuario: la interfaz gráfica más las APIs y la información que guarda. Es donde el usuario siempre interactúa, y el <b>núcleo multi-tenant</b>.`,
+             en:`Nebula's core for the user: the graphical interface plus the APIs and the data it stores. It's where the user always interacts, and the <b>multi-tenant core</b>.`}},
+      {term:"Argo Workflow", alt:{es:"",en:""},
+        def:{es:`El componente que <b>gestiona los workflows</b>: define qué pasos ocurren, en qué orden, cuándo esperar aprobaciones. El control plane le indica la estructura de pasos a ejecutar.`,
+             en:`The component that <b>manages workflows</b>: it defines which steps run, in what order, and when to wait for approvals. The control plane tells it the step structure to execute.`}},
+      {term:"LLM Gateway", alt:{es:"Bifrost",en:"Bifrost"},
+        def:{es:`La capa que <b>enruta cada tarea al mejor modelo</b> (Claude, GPT, Gemini, open-source) y esconde a los proveedores. Permite optimizar por costo o calidad. (Bifrost: el puente entre mundos en la mitología vikinga.)`,
+             en:`The layer that <b>routes each task to the best model</b> (Claude, GPT, Gemini, open-source) and abstracts the providers away. Lets you optimize for cost or quality. (Bifrost: the bridge between worlds in Norse mythology.)`}},
+      {term:"RAG", alt:{es:"Retrieval-Augmented Generation",en:"Retrieval-Augmented Generation"},
+        def:{es:`El mecanismo que <b>enriquece el contexto antes de llamar al LLM</b>: busca la información relevante en el repositorio y la adjunta, mejorando la calidad y reduciendo el gasto de tokens.`,
+             en:`The mechanism that <b>enriches context before calling the LLM</b>: it retrieves relevant information from the repository and attaches it, improving quality and reducing token spend.`}},
+      {term:"Vector Store", alt:{es:"Embeddings",en:"Embeddings"},
+        def:{es:`La base de datos vectorial (corazón del Context Repository) donde se guarda la información convertida en vectores (embeddings), para recuperarla por relevancia.`,
+             en:`The vector database (heart of the Context Repository) where information is stored as vectors (embeddings) so it can be retrieved by relevance.`}},
+      {term:"Multi-tenant", alt:{es:"Tenant",en:"Tenant"},
+        def:{es:`Arquitectura donde una misma plataforma sirve a múltiples clientes con <b>contexto aislado</b>. Un tenant es el espacio de un cliente (ej. las demos viven en el tenant de Andino hasta convertirse en cliente).`,
+             en:`Architecture where a single platform serves multiple clients with <b>isolated context</b>. A tenant is a client's space (e.g., demos live in Andino's tenant until they become a client).`}}
+    ]
+  },
+  {
+    title:{es:"Conceptos de producto",en:"Product concepts"},
+    terms:[
+      {term:"IDP", alt:{es:"Internal Developer Platform",en:"Internal Developer Platform"},
+        def:{es:`Plataforma interna de desarrollo. Nebula nació como el IDP interno de Andino y evoluciona hacia una plataforma de <b>orquestación de agentes</b>.`,
+             en:`Internal Developer Platform. Nebula started as Andino's internal IDP and is evolving into an <b>agent-orchestration</b> platform.`}},
+      {term:"Human in the loop", alt:{es:"HITL",en:"HITL"},
+        def:{es:`Punto donde una persona <b>valida o dirige</b> antes de continuar. El humano dirige; la IA genera. La validación es el nuevo cuello de botella del desarrollo con IA.`,
+             en:`A point where a person <b>validates or steers</b> before continuing. The human directs; AI generates. Validation is the new bottleneck of AI-driven development.`}},
+      {term:"Greenfield", alt:{es:"",en:""},
+        def:{es:`Crear un producto <b>nuevo desde cero</b> — sin código ni contexto previo. Se recorre el ciclo completo desde Discovery.`,
+             en:`Building a <b>brand-new product from scratch</b> — no prior code or context. The full cycle runs from Discovery.`}},
+      {term:"Brownfield", alt:{es:"",en:""},
+        def:{es:`<b>Evolucionar una aplicación existente</b>. Se onboardea e indexa el codebase, y se agregan features, se corrigen bugs o se mejora sobre ese contexto.`,
+             en:`<b>Evolving an existing application</b>. The codebase is onboarded and indexed, then features are added, bugs fixed, or improvements made on top of that context.`}},
+      {term:"Flavor", alt:{es:"",en:""},
+        def:{es:`Una variante del mismo journey según el segmento. El flavor <b>Startup es una versión light</b> del journey Enterprise (menos contexto, arranca desde el prototipo). Mismo ciclo, distinta profundidad.`,
+             en:`A variant of the same journey per segment. The <b>Startup flavor is a light version</b> of the Enterprise journey (less context, starts from the prototype). Same cycle, different depth.`}},
+      {term:"PBC", alt:{es:"Packaged Business Capability",en:"Packaged Business Capability"},
+        def:{es:`Capacidad de negocio empaquetada (ej. search, payment, checkout). Bloque reutilizable que Nebula <b>instala, orquesta e integra</b> en el ecosistema del cliente. Puede ser propio (que codeamos) o de terceros (que incorporamos).`,
+             en:`A packaged business capability (e.g., search, payment, checkout). A reusable block that Nebula <b>installs, orchestrates, and integrates</b> into the client's ecosystem. It can be owned (built by us) or third-party (integrated).`}},
+      {term:"DORA Metrics", alt:{es:"",en:""},
+        def:{es:`Métricas de rendimiento de entrega de software: <b>Deployment Frequency, Lead Time, Change Failure Rate</b> y Mean Time to Restore (MTTR).`,
+             en:`Software delivery performance metrics: <b>Deployment Frequency, Lead Time, Change Failure Rate</b>, and Mean Time to Restore (MTTR).`}},
+      {term:"Plumbing", alt:{es:"«Plomería»",en:"«Plumbing»"},
+        def:{es:`Todo el trabajo de <b>conexión, integración y orquestación</b> alrededor del código — antes y después de construir. Tesis: el valor ya no está en codear (commodity), sino en el plumbing y la validación.`,
+             en:`All the <b>connection, integration, and orchestration</b> work around the code — before and after building. Thesis: value is no longer in coding (a commodity) but in the plumbing and validation.`}},
+      {term:"Validación", alt:{es:"Validation",en:""},
+        def:{es:`Certificar que lo construido <b>funciona correctamente antes de producción</b>. Con múltiples agentes desarrollando en paralelo, la revisión manual deja de ser viable — es el nuevo bottleneck.`,
+             en:`Certifying that what's built <b>works correctly before production</b>. With multiple agents developing in parallel, manual review is no longer viable — it's the new bottleneck.`}},
+      {term:"Feedback Flywheel", alt:{es:"",en:""},
+        def:{es:`El ciclo por el cual el Context Repository <b>captura señales de cada sesión</b> (instrucciones, workflows, fallas) y las devuelve enriquecidas. Mientras más se usa, mejor se vuelve.`,
+             en:`The loop by which the Context Repository <b>captures signals from each session</b> (instructions, workflows, failures) and returns them enriched. The more it's used, the better it gets.`}}
+    ]
+  },
+  {
+    title:{es:"Estrategia",en:"Strategy"},
+    terms:[
+      {term:"Design Partner", alt:{es:"Venture Client",en:"Venture Client"},
+        def:{es:`Un cliente temprano que ve el valor, <b>acepta que el producto aún no está terminado</b> y co-construye contigo a cambio de un precio preferente garantizado. Reduce el riesgo y valida en el mercado real.`,
+             en:`An early client who sees the value, <b>accepts the product isn't finished</b>, and co-builds with you in exchange for a guaranteed preferential price. It de-risks and validates in the real market.`}},
+      {term:"Ubiquitous Language", alt:{es:"",en:""},
+        def:{es:`El <b>lenguaje común y consistente</b> que el equipo acuerda para comunicarse internamente. Puede diferir de la industria — lo importante es que sea nuestro y compartido.`,
+             en:`The <b>common, consistent language</b> the team agrees on for internal communication. It may differ from the industry — what matters is that it's ours and shared.`}}
+    ]
+  }
+];
+
+let LANG = 'es';
+
+function render(){
+  const t = UI[LANG];
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.innerHTML = t[el.dataset.i18n];
+  });
+  let total = 0;
+  const host = document.getElementById('glossary');
+  host.innerHTML = GROUPS.map(g=>{
+    const cards = g.terms.map(term=>{
+      total++;
+      const alt = term.alt && term.alt[LANG] ? `<span class="alt">${term.alt[LANG]}</span>` : '';
+      return `<article class="term"><h3>${term.term}${alt}</h3><p>${term.def[LANG]}</p></article>`;
+    }).join('');
+    return `<section class="group"><div class="group-title">${g.title[LANG]}<span class="rule"></span></div><div class="cards">${cards}</div></section>`;
+  }).join('');
+  document.getElementById('count').textContent = t.count(total);
+}
+
+function setLang(l){
+  LANG = l;
+  document.getElementById('btn-es').classList.toggle('on', l==='es');
+  document.getElementById('btn-en').classList.toggle('on', l==='en');
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
