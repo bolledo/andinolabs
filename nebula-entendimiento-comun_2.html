@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebula — Entendimiento Común</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#06070f; --ink:#0b0d1c;
+  --panel:rgba(255,255,255,.035); --panel-2:rgba(255,255,255,.06);
+  --line:rgba(160,150,255,.14); --line-strong:rgba(160,150,255,.28);
+  --violet:#8b5cf6; --violet-soft:#a78bfa; --magenta:#e472f0; --cyan:#34d6e6;
+  --text:#eceefb; --muted:#9a9fbe; --muted-2:#6f7494; --amber:#f5b942; --teal:#5fd0b0;
+  --display:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh;position:relative;overflow-x:hidden}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 70% 65%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.5px 1.5px at 55% 12%, rgba(190,180,255,.45), transparent),
+    radial-gradient(1px 1px at 12% 70%, rgba(255,255,255,.3), transparent);}
+.neb{position:fixed;z-index:0;pointer-events:none;filter:blur(90px);opacity:.5}
+.neb.a{width:55vw;height:55vw;left:-14vw;top:-16vw;background:radial-gradient(circle at 50% 50%, rgba(228,114,240,.5), rgba(139,92,246,.22) 46%, transparent 70%)}
+.neb.b{width:52vw;height:52vw;right:-16vw;bottom:-20vw;background:radial-gradient(circle at 50% 50%, rgba(52,214,230,.28), rgba(139,92,246,.26) 50%, transparent 72%)}
+
+.wrap{position:relative;z-index:2;max-width:1220px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(20px,4vw,48px) 100px}
+
+.brandrow{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.orb{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #fff, var(--magenta) 35%, var(--violet) 70%, #2a1b6b);box-shadow:0 0 26px rgba(228,114,240,.55),0 0 50px rgba(139,92,246,.4);flex:0 0 auto}
+.wordmark{font-family:var(--display);font-weight:700;letter-spacing:.3em;font-size:15px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet-soft);display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.eyebrow::before{content:"";width:26px;height:1px;background:linear-gradient(90deg,var(--magenta),var(--violet))}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,50px);line-height:1.05;letter-spacing:-.02em}
+.grad{background:linear-gradient(100deg,var(--magenta),var(--violet-soft) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin-top:16px;color:var(--muted);font-size:clamp(15px,1.6vw,18px);line-height:1.55;max-width:70ch}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:14px 0;margin-top:28px;background:linear-gradient(180deg,var(--void) 72%, transparent)}
+.nav .langtoggle{margin-left:auto}
+.nav button{font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:10px 20px;border:1px solid var(--line-strong);border-radius:999px;background:var(--panel);color:var(--muted);cursor:pointer;transition:.2s}
+.nav button.on{background:linear-gradient(90deg,var(--magenta),var(--violet));color:#fff;border-color:transparent;box-shadow:0 0 18px rgba(139,92,246,.4)}
+
+.section{display:none}
+.section.active{display:block}
+
+/* sub-toggle (lang / view) */
+.subctrl{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:24px 0 4px}
+.toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;padding:4px;background:var(--panel);gap:2px}
+.toggle button{font-family:var(--mono);font-size:12px;letter-spacing:.06em;font-weight:500;padding:9px 18px;border:none;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;transition:.22s}
+.toggle button.on{background:linear-gradient(90deg,var(--magenta),var(--violet));color:#fff;box-shadow:0 0 14px rgba(139,92,246,.4)}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted-2);letter-spacing:.06em}
+
+/* glossary */
+.group{margin-top:44px}
+.group-title{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.group-title .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent)}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.term{border:1px solid var(--line);border-radius:16px;padding:22px 24px;background:var(--panel);position:relative;overflow:hidden;transition:border-color .22s,transform .22s}
+.term::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--magenta),var(--cyan));opacity:.5}
+.term:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.term h3{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.01em;margin-bottom:4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.term .alt{font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:.04em;font-weight:400}
+.term p{color:var(--muted);font-size:14.5px;line-height:1.55;margin-top:8px}
+.term p b{color:var(--text);font-weight:600}
+
+/* SDLC overview diagram (agldc) */
+.agldc{border:1px solid var(--line);border-radius:18px;padding:clamp(13px,1.5vw,20px);margin-top:22px;background:linear-gradient(180deg,rgba(139,92,246,.05),rgba(255,255,255,.02))}
+.agldc .bands{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+.agldc .band{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;padding:6px 12px;border-radius:8px;text-align:center;border:1px solid var(--line)}
+.agldc .band.prod{background:rgba(228,114,240,.09);color:var(--magenta)}
+.agldc .band.eng{background:rgba(52,214,230,.08);color:var(--cyan)}
+.agldc .stages{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.agldc .chev{padding:11px 22px;font-family:var(--display);font-weight:600;font-size:14px;color:#fff;text-align:center;background:linear-gradient(90deg,rgba(139,92,246,.28),rgba(139,92,246,.12));clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%)}
+.agldc .chev.first{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%);padding-left:16px}
+.agldc .chev.eng{background:linear-gradient(90deg,rgba(52,214,230,.24),rgba(52,214,230,.09))}
+.agldc .subs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:11px}
+.agldc .subgrp{display:flex;gap:5px}
+.agldc .sub{flex:1;font-family:var(--mono);font-size:10px;letter-spacing:.01em;text-align:center;padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);line-height:1.25;display:flex;align-items:center;justify-content:center;min-height:38px}
+.agldc .agentic{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.agldc .agbox{padding:12px 8px;border-radius:10px;text-align:center;font-family:var(--display);font-weight:600;font-size:12.5px;line-height:1.25;color:var(--text);background:linear-gradient(135deg,rgba(228,114,240,.2),rgba(139,92,246,.12));border:1px solid var(--line-strong)}
+.agldc .core-band{margin-bottom:10px;border:1px dashed var(--line-strong);border-radius:12px;padding:11px 16px;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.2),transparent 75%)}
+.agldc .core-band b{font-family:var(--display);font-size:14px}
+.agldc .core-band span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.05em;margin-top:3px}
+.agldc .tools{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.agldc .tool{font-family:var(--mono);font-size:10.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+
+/* modules */
+.pdot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:9px;vertical-align:middle}
+.pdot.discovery{background:var(--cyan)} .pdot.inception{background:var(--violet)}
+.pdot.construction{background:var(--magenta)} .pdot.operations{background:var(--amber)} .pdot.transversal{background:var(--teal)}
+.phase-block{margin-top:38px}
+.phase-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.phase-name{font-family:var(--display);font-weight:600;font-size:23px;letter-spacing:-.01em}
+.phase-mission{color:var(--muted);font-size:14px}
+.phase-human{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;margin-left:auto}
+.pending-badge{font-family:var(--mono);font-size:10px;color:var(--amber);border:1px solid rgba(245,185,66,.3);background:rgba(245,185,66,.08);border-radius:6px;padding:4px 9px}
+.mod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.mod{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--panel)}
+.mod h4{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:6px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.mod p{color:var(--muted);font-size:13.5px;line-height:1.5}
+.modmeta{margin-top:11px;display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--muted)}
+.tag.out{color:var(--cyan);border-color:rgba(52,214,230,.3)}
+.tag.hitl{color:var(--violet-soft);border-color:rgba(139,92,246,.3)}
+.open-badge{font-family:var(--mono);font-size:9.5px;color:var(--amber);border:1px solid rgba(245,185,66,.32);border-radius:5px;padding:2px 7px}
+
+/* journeys */
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:22px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.lg{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted)}
+.lg .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.dot.discovery{background:var(--cyan)} .dot.inception{background:var(--violet)}
+.dot.construction{background:var(--magenta)} .dot.operations{background:var(--amber)}
+.dot.transversal{background:var(--teal)} .dot.step{background:var(--muted-2)}
+.jcards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}
+.jcard{border:1px solid var(--line);border-radius:18px;padding:24px 26px;background:var(--panel);position:relative;overflow:hidden;transition:border-color .22s,transform .22s}
+.jcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--magenta),var(--cyan));opacity:.55}
+.jcard:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.jhead{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
+.jbadge{font-family:var(--mono);font-weight:600;font-size:12px;letter-spacing:.06em;color:var(--void);background:linear-gradient(135deg,var(--magenta),var(--violet-soft));padding:5px 10px;border-radius:8px;flex:0 0 auto}
+.jtitle{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.01em;line-height:1.2;margin-top:1px}
+.jlabel{font-family:var(--mono);font-size:10.5px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 8px;white-space:nowrap;flex:0 0 auto}
+.frow{margin-top:13px}
+.flab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px}
+.roles{font-size:13.5px;color:var(--muted);line-height:1.5}
+.roles b{color:var(--text);font-weight:600}
+.iv{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2)}
+.iv .in{color:var(--muted);font-size:13.5px}.iv .arw{color:var(--magenta);font-weight:700}.iv .out{color:var(--text);font-weight:600;font-size:13.5px}
+.path{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;background:var(--panel);color:var(--text)}
+.chip .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.arrow{color:var(--muted-2);font-size:11px;padding:0 1px}
+.meta{display:flex;flex-direction:column;gap:9px;margin-top:15px;padding-top:14px;border-top:1px solid var(--line)}
+.mrow{font-size:12.5px;color:var(--muted);line-height:1.5}
+.mrow .k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-right:8px}
+.mrow b{color:var(--text);font-weight:600}
+.note{margin-top:12px;font-size:12px;color:var(--amber);background:rgba(245,185,66,.07);border:1px solid rgba(245,185,66,.22);border-radius:9px;padding:9px 12px;line-height:1.45}
+
+.foot{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted-2);letter-spacing:.04em;line-height:1.6}
+
+@media (max-width:820px){ .cards,.mod-grid,.jcards{grid-template-columns:1fr} .subctrl{flex-direction:column;align-items:flex-start} .agldc .bands,.agldc .stages,.agldc .subs,.agldc .agentic{grid-template-columns:1fr} .agldc .chev{clip-path:none} }
+@media (prefers-reduced-motion:reduce){ .term,.jcard{transition:none} html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="neb a"></div>
+<div class="neb b"></div>
+
+<div class="wrap">
+  <div class="brandrow"><span class="orb"></span><span class="wordmark">NEBULA</span></div>
+  <div class="eyebrow" id="hdr-eyebrow"></div>
+  <h1 id="hdr-title"></h1>
+  <p class="sub" id="hdr-sub"></p>
+
+  <nav class="nav">
+    <button id="nav-glosario" class="on" onclick="showSection('glosario')"></button>
+    <button id="nav-modulos" onclick="showSection('modulos')"></button>
+    <button id="nav-journeys" onclick="showSection('journeys')"></button>
+    <div class="toggle langtoggle" role="group" aria-label="Language">
+      <button id="btn-es" class="on" onclick="setLang('es')">Español</button>
+      <button id="btn-en" onclick="setLang('en')">English</button>
+    </div>
+  </nav>
+
+  <!-- GLOSARIO -->
+  <section id="sec-glosario" class="section active">
+    <div class="subctrl">
+      <div></div>
+      <div class="count" id="glo-count"></div>
+    </div>
+    <div id="glossary"></div>
+  </section>
+
+  <!-- MODULOS -->
+  <section id="sec-modulos" class="section">
+    <p class="sub" id="mod-intro" style="margin-top:22px"></p>
+
+    <div class="group-title" id="cycle-title" style="margin-top:30px"><span></span><span class="rule"></span></div>
+    <div class="agldc" id="sdlc"></div>
+
+    <div id="modules"></div>
+    <div class="note" id="mod-note" style="margin-top:26px"></div>
+  </section>
+
+  <!-- JOURNEYS -->
+  <section id="sec-journeys" class="section">
+    <div class="subctrl">
+      <div class="toggle" role="group" aria-label="Vista">
+        <button id="btn-esc" class="on" onclick="setView('esc')"></button>
+        <button id="btn-rol" onclick="setView('rol')"></button>
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div id="journeys" class="jcards"></div>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+/* ============ GLOSARIO ============ */
+const GROUPS = [
+  { title:{es:"Fundamentos",en:"Foundations"}, terms:[
+    {term:"Nebula", alt:{es:"North Star",en:"North Star"},
+      def:{es:`El sistema operativo del desarrollo AI-native. Una plataforma <b>multi-tenant</b> que orquesta agentes a lo largo de las 4 fases del ciclo de desarrollo, con calidad enterprise y el humano como director de la IA.`,
+           en:`The operating system for AI-native development. A <b>multi-tenant</b> platform that orchestrates agents across the 4 phases of the development lifecycle, with enterprise-grade quality and the human directing the AI.`}},
+    {term:"AI-DLC", alt:{es:"AI Development Life Cycle",en:"AI Development Life Cycle"},
+      def:{es:`El ciclo de vida del desarrollo de software aumentado con IA — el marco de las 4 fases (Discovery, Inception, Construction, Operations) sobre el que opera Nebula.`,
+           en:`The AI-augmented software development lifecycle — the 4-phase framework (Discovery, Inception, Construction, Operations) that Nebula operates on.`}}
+  ]},
+  { title:{es:"Jerarquía del sistema",en:"System hierarchy"}, terms:[
+    {term:"Fase", alt:{es:"Phase",en:""},
+      def:{es:`Una de las cuatro etapas del ciclo: <b>Discovery → Inception → Construction → Operations</b>. Son fijas y compartidas por todo Nebula.`,
+           en:`One of the four stages of the cycle: <b>Discovery → Inception → Construction → Operations</b>. Fixed and shared across all of Nebula.`}},
+    {term:"Módulo", alt:{es:"Module",en:""},
+      def:{es:`Una unidad funcional dentro de una fase (ej. creación de historias de usuario). Agrupa varios features y tiene un <b>input y un output</b> claros.`,
+           en:`A functional unit within a phase (e.g., user-story creation). It groups several features and has clear <b>input and output</b>.`}},
+    {term:"Feature", alt:{es:"",en:""},
+      def:{es:`Una capacidad concreta dentro de un módulo. Un módulo se compone de varios features, y cada feature puede apoyarse en uno o varios agentes.`,
+           en:`A concrete capability within a module. A module is made of several features, and each feature can rely on one or more agents.`}},
+    {term:"Agente", alt:{es:"Agent",en:""},
+      def:{es:`Un <b>job</b> que ejecuta un skill: toma un input, se comunica con un LLM y/o herramientas (MCP, GitHub…), realiza una tarea acotada y entrega un output. Tiene inicio y fin — no corre indefinidamente.`,
+           en:`A <b>job</b> that runs a skill: it takes an input, talks to an LLM and/or tools (MCP, GitHub…), performs a bounded task, and returns an output. It has a beginning and an end — it does not run indefinitely.`}},
+    {term:"Skill", alt:{es:"",en:""},
+      def:{es:`La definición (prompt + instrucciones + acciones) que un agente ejecuta. Los skills son <b>propios de Nebula</b> y reutilizables entre módulos.`,
+           en:`The definition (prompt + instructions + actions) that an agent executes. Skills are <b>Nebula-owned</b> and reusable across modules.`}},
+    {term:"Journey", alt:{es:"",en:""},
+      def:{es:`Un recorrido <b>end-to-end</b> que atraviesa varias fases y entrega valor completo a partir de un input. Son pocos (4-5 máx.) y los definimos nosotros. Usar un solo módulo <b>no</b> es un journey.`,
+           en:`An <b>end-to-end</b> path that spans several phases and delivers complete value from an input. They are few (4-5 max) and we define them. Using a single module is <b>not</b> a journey.`}}
+  ]},
+  { title:{es:"Arquitectura",en:"Architecture"}, terms:[
+    {term:"Context Repository", alt:{es:"",en:""},
+      def:{es:`La <b>memoria compartida</b> de Nebula. Almacena todos los artefactos (briefs, historias, código, runbooks) y los hace accesibles a todas las fases, eliminando los handoffs manuales. Se enriquece solo.`,
+           en:`Nebula's <b>shared memory</b>. It stores all artifacts (briefs, stories, code, runbooks) and makes them accessible across every phase, eliminating manual handoffs. It enriches itself.`}},
+    {term:"Control Plane", alt:{es:"",en:""},
+      def:{es:`El corazón de Nebula para el usuario: la interfaz gráfica más las APIs y la información que guarda. Es donde el usuario siempre interactúa, y el <b>núcleo multi-tenant</b>.`,
+           en:`Nebula's core for the user: the graphical interface plus the APIs and the data it stores. It's where the user always interacts, and the <b>multi-tenant core</b>.`}},
+    {term:"Argo Workflow", alt:{es:"",en:""},
+      def:{es:`El componente que <b>gestiona los workflows</b>: define qué pasos ocurren, en qué orden, cuándo esperar aprobaciones. El control plane le indica la estructura de pasos a ejecutar.`,
+           en:`The component that <b>manages workflows</b>: it defines which steps run, in what order, and when to wait for approvals. The control plane tells it the step structure to execute.`}},
+    {term:"LLM Gateway", alt:{es:"Bifrost",en:"Bifrost"},
+      def:{es:`La capa que <b>enruta cada tarea al mejor modelo</b> (Claude, GPT, Gemini, open-source) y esconde a los proveedores. Permite optimizar por costo o calidad. (Bifrost: el puente entre mundos en la mitología vikinga.)`,
+           en:`The layer that <b>routes each task to the best model</b> (Claude, GPT, Gemini, open-source) and abstracts the providers away. Lets you optimize for cost or quality. (Bifrost: the bridge between worlds in Norse mythology.)`}},
+    {term:"RAG", alt:{es:"Retrieval-Augmented Generation",en:"Retrieval-Augmented Generation"},
+      def:{es:`El mecanismo que <b>enriquece el contexto antes de llamar al LLM</b>: busca la información relevante en el repositorio y la adjunta, mejorando la calidad y reduciendo el gasto de tokens.`,
+           en:`The mechanism that <b>enriches context before calling the LLM</b>: it retrieves relevant information from the repository and attaches it, improving quality and reducing token spend.`}},
+    {term:"Vector Store", alt:{es:"Embeddings",en:"Embeddings"},
+      def:{es:`La base de datos vectorial (corazón del Context Repository) donde se guarda la información convertida en vectores (embeddings), para recuperarla por relevancia.`,
+           en:`The vector database (heart of the Context Repository) where information is stored as vectors (embeddings) so it can be retrieved by relevance.`}},
+    {term:"Multi-tenant", alt:{es:"Tenant",en:"Tenant"},
+      def:{es:`Arquitectura donde una misma plataforma sirve a múltiples clientes con <b>contexto aislado</b>. Un tenant es el espacio de un cliente (ej. las demos viven en el tenant de Andino hasta convertirse en cliente).`,
+           en:`Architecture where a single platform serves multiple clients with <b>isolated context</b>. A tenant is a client's space (e.g., demos live in Andino's tenant until they become a client).`}}
+  ]},
+  { title:{es:"Conceptos de producto",en:"Product concepts"}, terms:[
+    {term:"IDP", alt:{es:"Internal Developer Platform",en:"Internal Developer Platform"},
+      def:{es:`Plataforma interna de desarrollo. Nebula nació como el IDP interno de Andino y evoluciona hacia una plataforma de <b>orquestación de agentes</b>.`,
+           en:`Internal Developer Platform. Nebula started as Andino's internal IDP and is evolving into an <b>agent-orchestration</b> platform.`}},
+    {term:"Human in the loop", alt:{es:"HITL",en:"HITL"},
+      def:{es:`Punto donde una persona <b>valida o dirige</b> antes de continuar. Tres grados: <b>in-the-loop</b> (confirma cada paso), <b>on-the-loop</b> (controla y actúa sobre alertas), <b>out-of-the-loop</b> (autónomo). La validación es el nuevo cuello de botella.`,
+           en:`A point where a person <b>validates or steers</b> before continuing. Three degrees: <b>in-the-loop</b> (confirms each step), <b>on-the-loop</b> (monitors and acts on alerts), <b>out-of-the-loop</b> (autonomous). Validation is the new bottleneck.`}},
+    {term:"Greenfield", alt:{es:"",en:""},
+      def:{es:`Crear un producto <b>nuevo desde cero</b> — sin código ni contexto previo. Se recorre el ciclo completo desde Discovery.`,
+           en:`Building a <b>brand-new product from scratch</b> — no prior code or context. The full cycle runs from Discovery.`}},
+    {term:"Brownfield", alt:{es:"",en:""},
+      def:{es:`<b>Evolucionar una aplicación existente</b>. Se onboardea e indexa el codebase, y se agregan features, se corrigen bugs o se mejora sobre ese contexto.`,
+           en:`<b>Evolving an existing application</b>. The codebase is onboarded and indexed, then features are added, bugs fixed, or improvements made on top of that context.`}},
+    {term:"Flavor", alt:{es:"",en:""},
+      def:{es:`Una variante del mismo journey según el segmento. El flavor <b>Startup es una versión light</b> del journey Enterprise (menos contexto, arranca desde el prototipo). Mismo ciclo, distinta profundidad.`,
+           en:`A variant of the same journey per segment. The <b>Startup flavor is a light version</b> of the Enterprise journey (less context, starts from the prototype). Same cycle, different depth.`}},
+    {term:"PBC", alt:{es:"Packaged Business Capability",en:"Packaged Business Capability"},
+      def:{es:`Capacidad de negocio empaquetada (ej. search, payment, checkout). Bloque reutilizable que Nebula <b>instala, orquesta e integra</b> en el ecosistema del cliente. Puede ser propio (que codeamos) o de terceros (que incorporamos).`,
+           en:`A packaged business capability (e.g., search, payment, checkout). A reusable block that Nebula <b>installs, orchestrates, and integrates</b> into the client's ecosystem. It can be owned (built by us) or third-party (integrated).`}},
+    {term:"DORA Metrics", alt:{es:"",en:""},
+      def:{es:`Métricas de rendimiento de entrega de software: <b>Deployment Frequency, Lead Time, Change Failure Rate</b> y Mean Time to Restore (MTTR).`,
+           en:`Software delivery performance metrics: <b>Deployment Frequency, Lead Time, Change Failure Rate</b>, and Mean Time to Restore (MTTR).`}},
+    {term:"Plumbing", alt:{es:"«Plomería»",en:"«Plumbing»"},
+      def:{es:`Todo el trabajo de <b>conexión, integración y orquestación</b> alrededor del código — antes y después de construir. Tesis: el valor ya no está en codear (commodity), sino en el plumbing y la validación.`,
+           en:`All the <b>connection, integration, and orchestration</b> work around the code — before and after building. Thesis: value is no longer in coding (a commodity) but in the plumbing and validation.`}},
+    {term:"Validación", alt:{es:"Validation",en:""},
+      def:{es:`Certificar que lo construido <b>funciona correctamente antes de producción</b>. Con múltiples agentes desarrollando en paralelo, la revisión manual deja de ser viable — es el nuevo bottleneck.`,
+           en:`Certifying that what's built <b>works correctly before production</b>. With multiple agents developing in parallel, manual review is no longer viable — it's the new bottleneck.`}},
+    {term:"Feedback Flywheel", alt:{es:"",en:""},
+      def:{es:`El ciclo por el cual el Context Repository <b>captura señales de cada sesión</b> (instrucciones, workflows, fallas) y las devuelve enriquecidas. Mientras más se usa, mejor se vuelve.`,
+           en:`The loop by which the Context Repository <b>captures signals from each session</b> (instructions, workflows, failures) and returns them enriched. The more it's used, the better it gets.`}}
+  ]},
+  { title:{es:"Estrategia",en:"Strategy"}, terms:[
+    {term:"Design Partner", alt:{es:"Venture Client",en:"Venture Client"},
+      def:{es:`Un cliente temprano que ve el valor, <b>acepta que el producto aún no está terminado</b> y co-construye contigo a cambio de un precio preferente garantizado. Reduce el riesgo y valida en el mercado real.`,
+           en:`An early client who sees the value, <b>accepts the product isn't finished</b>, and co-builds with you in exchange for a guaranteed preferential price. It de-risks and validates in the real market.`}},
+    {term:"Ubiquitous Language", alt:{es:"",en:""},
+      def:{es:`El <b>lenguaje común y consistente</b> que el equipo acuerda para comunicarse internamente. Puede diferir de la industria — lo importante es que sea nuestro y compartido.`,
+           en:`The <b>common, consistent language</b> the team agrees on for internal communication. It may differ from the industry — what matters is that it's ours and shared.`}}
+  ]}
+];
+let LANG='es';
+function L(v){ return (v && typeof v==='object' && ('es' in v)) ? v[LANG] : v; }
+
+const T = {
+  es:{
+    eyebrow:`Lenguaje común · Modelo operativo`,
+    title:`<span class="grad">Entendimiento común</span> de Nebula`,
+    sub:`La fuente de verdad interna del producto: el vocabulario compartido, el mapa de módulos por fase y los journeys que los recorren. Documento vivo del equipo.`,
+    navGlos:`Glosario`, navMod:`Módulos por fase`, navJour:`Journeys`,
+    count:t=>`${t} términos`,
+    modIntro:`Las fases son conceptuales y agrupan módulos. Un módulo tiene input y output claros. El humano cambia de sombrero en cada fase: de facilitador a supervisor.`,
+    cycle:`Vista general del ciclo`,
+    modNote:`En definición: <b>Operations</b> (se completa por separado) · <b>Demo</b> y <b>Prototyping</b> como transversales (en discusión).`,
+    viewEsc:`Por escenario · 7`, viewRol:`Por rol · 6`,
+    legend:{discovery:`Discovery`,inception:`Inception`,construction:`Construction`,operations:`Operations`,transversal:`Transversal`,step:`Paso / salida`},
+    foot:`Documento vivo · Andino Labs · Glosario, módulos (sesión Jul-3) y journeys. El pitch deck se mantiene como documento aparte.`,
+    rolesLab:`Rol(es)`, ivLab:`Input → Valor`, pathLab:`Recorre`, composeLab:`Se compone de`, feedsLab:`Alimenta`,
+    openBadge:`en discusión`, pendingBadge:`en definición`,
+    diag:{ producto:`Producto`, ingenieria:`Ingeniería`,
+      stages:[`Discovery`,`Inception`,`Construction`,`Operations`],
+      subs:[[`Estrategia`,`Captura & Síntesis`],[`Requerimientos`,`Historias`,`Backlog`],[`Build autónomo`,`Validación`,`QA`],[`Deploy`,`Observabilidad`,`Runbooks`]],
+      agentic:[`Agentic Discovery & Síntesis`,`Agentic Story & Backlog`,`Agentic Code Gen & Validación`,`Agentic Ops & Self-Healing`],
+      coreTitle:`Nebula · Desarrollo de Software Agéntico`,
+      coreSub:`Context Repository — memoria compartida entre todas las fases` }
+  },
+  en:{
+    eyebrow:`Common language · Operating model`,
+    title:`Nebula's <span class="grad">common understanding</span>`,
+    sub:`The product's internal source of truth: the shared vocabulary, the module map by phase, and the journeys that traverse them. A living team document.`,
+    navGlos:`Glossary`, navMod:`Modules by phase`, navJour:`Journeys`,
+    count:t=>`${t} terms`,
+    modIntro:`Phases are conceptual and group modules. A module has clear input and output. The human changes hats in each phase: from facilitator to supervisor.`,
+    cycle:`Cycle overview`,
+    modNote:`In definition: <b>Operations</b> (completed separately) · <b>Demo</b> and <b>Prototyping</b> as cross-cutting modules (under discussion).`,
+    viewEsc:`By scenario · 7`, viewRol:`By role · 6`,
+    legend:{discovery:`Discovery`,inception:`Inception`,construction:`Construction`,operations:`Operations`,transversal:`Cross-cutting`,step:`Step / output`},
+    foot:`Living document · Andino Labs · Glossary, modules (Jul-3 session) and journeys. The pitch deck is kept as a separate document.`,
+    rolesLab:`Role(s)`, ivLab:`Input → Value`, pathLab:`Traverses`, composeLab:`Composed of`, feedsLab:`Feeds`,
+    openBadge:`under discussion`, pendingBadge:`in definition`,
+    diag:{ producto:`Product`, ingenieria:`Engineering`,
+      stages:[`Discovery`,`Inception`,`Construction`,`Operations`],
+      subs:[[`Strategy`,`Capture & Synthesis`],[`Requirements`,`Stories`,`Backlog`],[`Autonomous build`,`Validation`,`QA`],[`Deploy`,`Observability`,`Runbooks`]],
+      agentic:[`Agentic Discovery & Synthesis`,`Agentic Story & Backlog`,`Agentic Code Gen & Validation`,`Agentic Ops & Self-Healing`],
+      coreTitle:`Nebula · Agentic Software Development`,
+      coreSub:`Context Repository — shared memory across all phases` }
+  }
+};
+
+function renderGlossary(){
+  let total=0;
+  document.getElementById('glossary').innerHTML = GROUPS.map(g=>{
+    const cards = g.terms.map(t=>{
+      total++;
+      const alt = t.alt && t.alt[LANG] ? `<span class="alt">${t.alt[LANG]}</span>` : '';
+      return `<article class="term"><h3>${t.term}${alt}</h3><p>${t.def[LANG]}</p></article>`;
+    }).join('');
+    return `<section class="group"><div class="group-title">${g.title[LANG]}<span class="rule"></span></div><div class="cards">${cards}</div></section>`;
+  }).join('');
+  document.getElementById('glo-count').textContent = T[LANG].count(total);
+}
+
+/* ============ MODULOS ============ */
+const PHASES = [
+  { key:'discovery', name:{es:`Discovery`,en:`Discovery`}, mission:{es:`Entender el problema`,en:`Understand the problem`}, human:{es:`Humano: facilitador`,en:`Human: facilitator`}, modules:[
+    {n:'Capture', role:{es:`PM / PO`,en:`PM / PO`}, d:{es:`Captura, sintetiza y crea artefactos a partir de reuniones, documentos y fuentes conectadas.`,en:`Captures, synthesizes and creates artifacts from meetings, documents and connected sources.`}, out:{es:`Business Context · Customer Vision`,en:`Business Context · Customer Vision`}},
+    {n:'Product Catalog', role:{es:`Gestión`,en:`Management`}, d:{es:`Catálogo de aplicaciones y proyectos por tenant, con repos vinculados.`,en:`Catalog of applications and projects per tenant, with linked repos.`}, out:{es:`Visibilidad del tenant`,en:`Tenant visibility`}},
+    {n:'Tech Assessment', role:{es:`Architect / Tech Lead`,en:`Architect / Tech Lead`}, d:{es:`Analiza un codebase existente y devuelve recomendaciones (estilo Blitzy). La profundidad depende del tenant.`,en:`Analyzes an existing codebase and returns recommendations (Blitzy-style). Depth depends on the tenant.`}, out:{es:`Assessment técnico`,en:`Technical assessment`}}
+  ]},
+  { key:'inception', name:{es:`Inception`,en:`Inception`}, mission:{es:`Planificar la solución`,en:`Plan the solution`}, human:{es:`Humano: co-autor`,en:`Human: co-author`}, modules:[
+    {n:'User Stories', role:{es:`PM / PO`,en:`PM / PO`}, d:{es:`Crear épicas e historias, priorizar, refinar y crear bugs.`,en:`Create epics and stories, prioritize, refine and create bugs.`}, out:{es:`Backlog accionable`,en:`Actionable backlog`}},
+    {n:'Application Bootstrap', role:{es:`Tech Lead / DevOps`,en:`Tech Lead / DevOps`}, d:{es:`Crea el repo, los recursos cloud y la primera versión lista para construir.`,en:`Creates the repo, cloud resources and the first version ready to build on.`}, out:{es:`Repo + infra`,en:`Repo + infra`}},
+    {n:'Prototyping', role:{es:`UX / PM`,en:`UX / PM`}, d:{es:`Prototipo funcional para validar con el stakeholder antes de construir.`,en:`Functional prototype to validate with the stakeholder before building.`}, out:{es:`Prototipo validado`,en:`Validated prototype`}, open:true}
+  ]},
+  { key:'construction', name:{es:`Construction`,en:`Construction`}, mission:{es:`Construir y entregar`,en:`Build and deliver`}, human:{es:`Humano: AI Director`,en:`Human: AI Director`}, modules:[
+    {n:'Low-code', role:{es:`Dev`,en:`Dev`}, d:{es:`Fixes y bugs de bajo riesgo, desatendido. El humano solo revisa el PR.`,en:`Low-risk fixes and bugs, unattended. The human only reviews the PR.`}, out:{es:`PR`,en:`PR`}, hitl:`on / out-of-the-loop`},
+    {n:'Tech Copilot / Co-architect', role:{es:`Architect / Tech Lead`,en:`Architect / Tech Lead`}, d:{es:`Advisor de arquitectura, infra y solución durante la construcción.`,en:`Architecture, infra and solution advisor during construction.`}, out:{es:`Decisiones + infra`,en:`Decisions + infra`}},
+    {n:'Live Coding', role:{es:`Dev`,en:`Dev`}, d:{es:`El core feature en vivo, tipo IDE/Cursor incrustado. Ves qué pasa mientras se construye.`,en:`The core feature live, embedded IDE/Cursor-style. You see what happens as it is built.`}, out:{es:`Código`,en:`Code`}, hitl:`in-the-loop`},
+    {n:'Agentic Testing', role:{es:`QA`,en:`QA`}, d:{es:`Testing multi-escenario en ambientes efímeros y certificación pre-producción.`,en:`Multi-scenario testing in ephemeral environments and pre-production certification.`}, out:{es:`Suite + certificación`,en:`Suite + certification`}}
+  ]},
+  { key:'operations', name:{es:`Operations`,en:`Operations`}, mission:{es:`Operar y mejorar`,en:`Operate and improve`}, human:{es:`Humano: AI Supervisor`,en:`Human: AI Supervisor`}, pending:true, modules:[
+    {n:'Observability', d:{es:`Monitoreo proactivo y detección de fallas.`,en:`Proactive monitoring and fault detection.`}, out:{es:`Dashboards`,en:`Dashboards`}},
+    {n:'Auto-remediation', d:{es:`El agente propone y abre PRs de fix ante incidentes.`,en:`The agent proposes and opens fix PRs for incidents.`}, out:{es:`Fixes`,en:`Fixes`}},
+    {n:'Runbooks', d:{es:`Runbooks auto-generados e incident playbooks.`,en:`Auto-generated runbooks and incident playbooks.`}, out:{es:`Runbooks`,en:`Runbooks`}},
+    {n:'Cost optimization', d:{es:`Gestión de costos cloud y cuotas de LLM.`,en:`Cloud cost and LLM quota management.`}, out:{es:`Ahorro`,en:`Savings`}}
+  ]}
+];
+const TRANSVERSAL = { key:'transversal', name:{es:`Transversal`,en:`Cross-cutting`}, mission:{es:`Cruzan todas las fases`,en:`Cross all phases`}, modules:[
+  {n:'Context Repository', d:{es:`La memoria compartida (RAG + vector store) que enriquece cada fase. Renombrado desde «RAG and pipeline memory».`,en:`The shared memory (RAG + vector store) that enriches every phase. Renamed from "RAG and pipeline memory".`}, out:{es:`Contexto vivo`,en:`Live context`}},
+  {n:'Project Management', role:{es:`PMO / PM`,en:`PMO / PM`}, d:{es:`Gobernanza, reuniones con stakeholders, analytics, reportería y costos.`,en:`Governance, stakeholder meetings, analytics, reporting and costs.`}, out:{es:`Visibilidad + gobernanza`,en:`Visibility + governance`}},
+  {n:'Demo', d:{es:`Mostrar una versión del estado del desarrollo en cualquier fase.`,en:`Show a version of the development state in any phase.`}, out:{es:`Versión mostrable`,en:`Showable version`}, open:true},
+  {n:'Prototyping', d:{es:`Candidato a transversal: puede correr en cualquier fase, no solo en Inception.`,en:`Candidate for cross-cutting: can run in any phase, not only Inception.`}, open:true}
+]};
+function modCard(m){
+  const open = m.open ? `<span class="open-badge">${T[LANG].openBadge}</span>` : '';
+  const meta = [];
+  if(m.role) meta.push(`<span class="tag">${L(m.role)}</span>`);
+  if(m.hitl) meta.push(`<span class="tag hitl">${m.hitl}</span>`);
+  if(m.out) meta.push(`<span class="tag out">→ ${L(m.out)}</span>`);
+  return `<div class="mod"><h4>${m.n}${open}</h4><p>${L(m.d)}</p><div class="modmeta">${meta.join('')}</div></div>`;
+}
+function phaseBlock(p){
+  const pending = p.pending ? `<span class="pending-badge">${T[LANG].pendingBadge}</span>` : '';
+  return `<div class="phase-block">
+    <div class="phase-head">
+      <span class="phase-name"><span class="pdot ${p.key}"></span>${L(p.name)}</span>
+      <span class="phase-mission">${L(p.mission)}</span>
+      ${pending}
+      <span class="phase-human">${p.human?L(p.human):''}</span>
+    </div>
+    <div class="mod-grid">${p.modules.map(modCard).join('')}</div>
+  </div>`;
+}
+function renderModules(){
+  document.getElementById('modules').innerHTML = PHASES.map(phaseBlock).join('') + phaseBlock(TRANSVERSAL);
+}
+function renderDiagram(){
+  const d = T[LANG].diag;
+  const stages = `<div class="chev first">${d.stages[0]}</div><div class="chev">${d.stages[1]}</div><div class="chev eng">${d.stages[2]}</div><div class="chev eng">${d.stages[3]}</div>`;
+  const subs = d.subs.map(g=>`<div class="subgrp">${g.map(s=>`<div class="sub">${s}</div>`).join('')}</div>`).join('');
+  const agentic = d.agentic.map(a=>`<div class="agbox">${a}</div>`).join('');
+  const tools = ['Claude','GitHub','GitLab','Jira','Confluence','Figma','Terraform','ArgoCD','AWS','GCP','Azure','Grafana'].map(x=>`<span class="tool">${x}</span>`).join('');
+  document.getElementById('sdlc').innerHTML =
+    `<div class="bands"><div class="band prod">${d.producto}</div><div class="band eng">${d.ingenieria}</div></div>`+
+    `<div class="stages">${stages}</div>`+
+    `<div class="subs">${subs}</div>`+
+    `<div class="agentic">${agentic}</div>`+
+    `<div class="core-band"><b>${d.coreTitle}</b><span>${d.coreSub}</span></div>`+
+    `<div class="tools">${tools}</div>`;
+}
+
+/* ============ JOURNEYS ============ */
+const ESC = [
+  { id:'J1', title:{es:`Producto nuevo end-to-end · Greenfield`,en:`New product end-to-end · Greenfield`}, label:'journey-greenfield',
+    roles:{es:`<b>PO/PM</b> define · <b>UX</b> prototipa · <b>Architect/Tech Lead</b> arma · <b>Dev</b> construye · <b>DevOps/SRE</b> opera`,en:`<b>PO/PM</b> defines · <b>UX</b> prototypes · <b>Architect/Tech Lead</b> sets up · <b>Dev</b> builds · <b>DevOps/SRE</b> operates`},
+    inp:{es:`una idea desde cero`,en:`an idea from scratch`}, out:{es:`producto en producción`,en:`product in production`},
+    path:[['discovery','Capture'],['discovery','Product Catalog'],['inception','User Stories'],['inception','Application Bootstrap'],['inception','Prototyping'],['construction','Live Coding'],['construction','Agentic Testing'],['operations','Operations']],
+    hitl:{es:`facilitador → co-autor → AI Director → AI Supervisor (cambia por fase)`,en:`facilitator → co-author → AI Director → AI Supervisor (changes by phase)`}, compose:`RJ1 → RJ2 → RJ3 → RJ4 → RJ5` },
+  { id:'J2', title:{es:`Evolucionar una app existente · Brownfield`,en:`Evolve an existing app · Brownfield`}, label:'journey-brownfield',
+    roles:{es:`<b>PM / Tech Lead</b> · <b>Dev</b> (validador)`,en:`<b>PM / Tech Lead</b> · <b>Dev</b> (validator)`},
+    inp:{es:`app existente + un cambio deseado`,en:`existing app + a desired change`}, out:{es:`feature nuevo en producción`,en:`new feature in production`},
+    path:[['discovery','Tech Assessment'],['inception','User Stories'],['inception','Prototyping*'],['construction','Tech Copilot'],['construction','Live Coding / Low-code'],['construction','Agentic Testing'],['operations',{es:`Deploy incremental`,en:`Incremental deploy`}]],
+    hitl:{es:`on-the-loop en Low-code (solo ves el PR) · in-the-loop en core features`,en:`on-the-loop in Low-code (you only see the PR) · in-the-loop in core features`}, compose:{es:`RJ3 (entra por Tech Assessment) → RJ4`,en:`RJ3 (enters via Tech Assessment) → RJ4`} },
+  { id:'J3', title:{es:`Iniciativa de negocio → ejecución con visibilidad`,en:`Business initiative → execution with visibility`}, label:'journey-enterprise-orchestration',
+    roles:{es:`<b>PMO / Program Manager</b> · iniciador: <b>Business Owner</b> · consumidor: <b>C-level</b>`,en:`<b>PMO / Program Manager</b> · initiator: <b>Business Owner</b> · consumer: <b>C-level</b>`},
+    inp:{es:`una iniciativa multi-equipo`,en:`a multi-team initiative`}, out:{es:`business case + ejecución con visibilidad`,en:`business case + execution with visibility`},
+    path:[['discovery',{es:`Capture + fuentes`,en:`Capture + sources`}],['discovery','Product Catalog'],['inception',{es:`User Stories multi-equipo`,en:`User Stories multi-team`}],['construction',{es:`Construcción multi-equipo`,en:`Multi-team build`}],['transversal','Project Management'],['operations',{es:`Medición de impacto`,en:`Impact measurement`}]],
+    hitl:{es:`in-the-loop en priorización y gobernanza`,en:`in-the-loop in prioritization and governance`}, compose:{es:`RJ6 envolviendo RJ1 → RJ4 → RJ5`,en:`RJ6 wrapping RJ1 → RJ4 → RJ5`},
+    note:{es:`Abierto: ¿journey propio o la capa de visibilidad que envuelve a J1/J2?`,en:`Open: a journey of its own, or the visibility layer wrapping J1/J2?`} },
+  { id:'J4', title:{es:`Insight-a-decisión · «pregúntale a tu organización»`,en:`Insight-to-decision · "ask your organization"`}, label:'journey-insight-to-decision',
+    roles:{es:`<b>Business Owner / Product Director / C-level</b> (no técnico) — reemplaza al analista`,en:`<b>Business Owner / Product Director / C-level</b> (non-technical) — replaces the analyst`},
+    inp:{es:`una pregunta de negocio en lenguaje natural`,en:`a business question in natural language`}, out:{es:`artefacto: insight, business case, PR/FAQ`,en:`artifact: insight, business case, PR/FAQ`},
+    path:[['discovery',{es:`Capture + fuentes`,en:`Capture + sources`}],['transversal','Context Repository (RAG)'],['step',{es:`Salida: artefacto`,en:`Output: artifact`}]],
+    hitl:{es:`in-the-loop (valida el artefacto generado)`,en:`in-the-loop (validates the generated artifact)`}, compose:{es:`RJ6 + RJ2 (si deriva en prototipo)`,en:`RJ6 + RJ2 (if it leads to a prototype)`},
+    note:{es:`No necesariamente llega a Construction: el valor es el insight. El gancho enterprise más corto.`,en:`It does not necessarily reach Construction: the value is the insight. The shortest enterprise hook.`} },
+  { id:'J5', title:{es:`Modernización / migración de legacy`,en:`Legacy modernization / migration`}, label:'journey-legacy-modernization',
+    roles:`<b>CTO / VP Engineering / Enterprise Architect</b> · <b>SRE</b>`,
+    inp:{es:`un sistema legacy`,en:`a legacy system`}, out:{es:`sistema modernizado, menor deuda y riesgo`,en:`modernized system, less debt and risk`},
+    path:[['discovery',{es:`Tech Assessment profundo`,en:`Deep Tech Assessment`}],['inception','User Stories (refactor)'],['construction','Tech Copilot'],['construction','Live Coding'],['construction',{es:`Agentic Testing reforzado`,en:`Reinforced Agentic Testing`}],['operations',{es:`Deploy + monitoreo de paridad`,en:`Deploy + parity monitoring`}]],
+    hitl:{es:`AI Director con validación reforzada (mayor criticidad)`,en:`AI Director with reinforced validation (higher criticality)`}, compose:{es:`RJ3 (Tech Assessment profundo) → RJ4 → RJ5`,en:`RJ3 (Deep Tech Assessment) → RJ4 → RJ5`} },
+  { id:'J6', title:{es:`Certificación / validación pre-producción`,en:`Pre-production certification / validation`}, label:'journey-preprod-certification',
+    roles:{es:`<b>QA / Validation Lead</b> · aprobador: <b>PO</b> · <b>Dev</b>`,en:`<b>QA / Validation Lead</b> · approver: <b>PO</b> · <b>Dev</b>`},
+    inp:{es:`N features/PRs generados por agentes`,en:`N agent-generated features/PRs`}, out:{es:`pase a producción certificado`,en:`certified pass to production`},
+    path:[['construction','Agentic Testing'],['construction',{es:`Ambientes efímeros`,en:`Ephemeral environments`}],['step',{es:`HITL certifica`,en:`HITL certifies`}],['operations','Merge + deploy']],
+    hitl:{es:`in-the-loop (certificación humana antes de producción)`,en:`in-the-loop (human certification before production)`}, compose:{es:`RJ4 (tramo de validación) — transversal a todo journey de construcción`,en:`RJ4 (validation leg) — cross-cutting to every build journey`},
+    note:{es:`«El nuevo bottleneck» —la validación— vuelto journey. Depende de módulos aún no cerrados.`,en:`"The new bottleneck" —validation— turned into a journey. Depends on modules not yet closed.`} },
+  { id:'J7', title:{es:`Observabilidad y auto-remediación · Operations-first`,en:`Observability and auto-remediation · Operations-first`}, label:'journey-observability-remediation',
+    roles:{es:`<b>SRE / Ops</b> · aprobador: <b>Dev</b>`,en:`<b>SRE / Ops</b> · approver: <b>Dev</b>`},
+    inp:{es:`servicios en producción`,en:`services in production`}, out:{es:`fallas y vulnerabilidades detectadas y remediadas`,en:`faults and vulnerabilities detected and remediated`},
+    path:[['operations',{es:`Observabilidad proactiva`,en:`Proactive observability`}],['construction',{es:`Agente genera PR de fix`,en:`Agent generates fix PR`}],['step',{es:`HITL aprueba`,en:`HITL approves`}],['operations',{es:`Re-deploy + verificación`,en:`Re-deploy + verification`}]],
+    hitl:{es:`on-the-loop (alerta → el humano acciona) · out-of-the-loop en fixes triviales`,en:`on-the-loop (alert → the human acts) · out-of-the-loop for trivial fixes`}, compose:{es:`RJ5 (su recorrido natural)`,en:`RJ5 (its natural path)`},
+    note:{es:`Cierra el flywheel: Operations realimenta a Discovery. Operations en definición.`,en:`Closes the flywheel: Operations feeds back into Discovery. Operations in definition.`} }
+];
+const ROL = [
+  { id:'RJ1', title:{es:`De la visión al backlog priorizado`,en:`From vision to prioritized backlog`}, label:'role-po · role-pm',
+    roles:`<b>Product Owner / Product Manager</b>`, inp:{es:`una necesidad de negocio`,en:`a business need`}, out:{es:`backlog accionable, priorizado y validado`,en:`actionable, prioritized and validated backlog`},
+    path:[['discovery','Capture'],['discovery','Product Catalog'],['inception','User Stories']],
+    hitl:{es:`facilitador / co-autor (la IA genera drafts, el PO/PM aprueba)`,en:`facilitator / co-author (AI generates drafts, PO/PM approves)`}, feeds:`J1 · J2 · J3` },
+  { id:'RJ2', title:{es:`De la idea al prototipo validado`,en:`From idea to validated prototype`}, label:'role-ux',
+    roles:`<b>UX/UI</b> (+ PM)`, inp:{es:`contexto capturado`,en:`captured context`}, out:{es:`prototipo funcional validado con el stakeholder`,en:`functional prototype validated with the stakeholder`},
+    path:[['discovery','Capture'],['inception','Prototyping'],['transversal','Demo']],
+    hitl:{es:`co-autor`,en:`co-author`}, feeds:`J1 · J4` },
+  { id:'RJ3', title:{es:`Del assessment a la arquitectura lista`,en:`From assessment to ready architecture`}, label:'role-architect · role-tech-lead',
+    roles:`<b>Architect / Tech Lead</b>`, inp:{es:`un codebase o una definición`,en:`a codebase or a definition`}, out:{es:`repo + infra + decisiones de arquitectura listas`,en:`repo + infra + architecture decisions ready`},
+    path:[['discovery','Tech Assessment'],['inception','Application Bootstrap'],['construction','Tech Copilot']],
+    hitl:{es:`AI Director (revisa y aprueba propuestas de arquitectura/infra)`,en:`AI Director (reviews and approves architecture/infra proposals)`}, feeds:`J2 · J5` },
+  { id:'RJ4', title:{es:`De la historia al PR desplegado`,en:`From story to deployed PR`}, label:'role-dev',
+    roles:`<b>Developer</b>`, inp:{es:`una historia refinada`,en:`a refined story`}, out:{es:`código en producción`,en:`code in production`},
+    path:[['inception','User Stories'],['construction','Live Coding'],['construction','Low-code'],['construction','Agentic Testing'],['operations','Deploy']],
+    hitl:{es:`in-the-loop (core, Live Coding) · on-the-loop (Low-code) · out-of-the-loop (fixes desatendidos)`,en:`in-the-loop (core, Live Coding) · on-the-loop (Low-code) · out-of-the-loop (unattended fixes)`}, feeds:`J1 · J2 · J6` },
+  { id:'RJ5', title:{es:`Del bootstrap a la operación estable`,en:`From bootstrap to stable operation`}, label:'role-devops-sre',
+    roles:`<b>DevOps / SRE</b>`, inp:{es:`una app lista para desplegar`,en:`an app ready to deploy`}, out:{es:`servicio operando, monitoreado y auto-remediado`,en:`service running, monitored and auto-remediated`},
+    path:[['inception','Application Bootstrap'],['construction','CI/CD'],['operations',{es:`Observabilidad`,en:`Observability`}],['operations','Runbooks'],['operations',{es:`Auto-remediación`,en:`Auto-remediation`}]],
+    hitl:{es:`AI Supervisor (valida runbooks generados, decide escalamientos)`,en:`AI Supervisor (validates generated runbooks, decides escalations)`}, feeds:`J7` },
+  { id:'RJ6', title:{es:`De la iniciativa a la visibilidad y la decisión`,en:`From initiative to visibility and decision`}, label:'role-pmo · role-pm',
+    roles:`<b>PMO / Program Manager</b> (+ Business Owner)`, inp:{es:`una iniciativa o pregunta de negocio`,en:`an initiative or business question`}, out:{es:`visibilidad transversal, business case, impacto`,en:`cross-cutting visibility, business case, impact`},
+    path:[['transversal',{es:`Project Management (cruza todas las fases)`,en:`Project Management (crosses all phases)`}]],
+    hitl:{es:`in-the-loop en decisiones de priorización y gobernanza`,en:`in-the-loop in prioritization and governance decisions`}, feeds:`J3 · J4` }
+];
+let VIEW='esc';
+function pathHTML(path){
+  return path.map((it,i)=>{
+    const lbl = L(it[1]);
+    const chip = `<span class="chip"><span class="dot ${it[0]}"></span>${lbl}</span>`;
+    return i<path.length-1 ? chip+'<span class="arrow">→</span>' : chip;
+  }).join('');
+}
+function jCard(j){
+  const relLabel = VIEW==='esc' ? T[LANG].composeLab : T[LANG].feedsLab;
+  const relVal = VIEW==='esc' ? L(j.compose) : L(j.feeds);
+  const note = j.note ? `<div class="note">${L(j.note)}</div>` : '';
+  return `<article class="jcard">
+    <div class="jhead">
+      <div style="display:flex;gap:12px;align-items:flex-start"><span class="jbadge">${j.id}</span><span class="jtitle">${L(j.title)}</span></div>
+      <span class="jlabel">${j.label}</span>
+    </div>
+    <div class="frow"><div class="flab">${T[LANG].rolesLab}</div><div class="roles">${L(j.roles)}</div></div>
+    <div class="frow"><div class="flab">${T[LANG].ivLab}</div><div class="iv"><span class="in">${L(j.inp)}</span><span class="arw">→</span><span class="out">${L(j.out)}</span></div></div>
+    <div class="frow"><div class="flab">${T[LANG].pathLab}</div><div class="path">${pathHTML(j.path)}</div></div>
+    <div class="meta"><div class="mrow"><span class="k">HITL</span>${L(j.hitl)}</div><div class="mrow"><span class="k">${relLabel}</span><b>${relVal}</b></div></div>
+    ${note}
+  </article>`;
+}
+function renderJourneys(){ document.getElementById('journeys').innerHTML = (VIEW==='esc'?ESC:ROL).map(jCard).join(''); }
+function setView(v){VIEW=v;document.getElementById('btn-esc').classList.toggle('on',v==='esc');document.getElementById('btn-rol').classList.toggle('on',v==='rol');renderJourneys();}
+
+/* ============ UI / LANG ============ */
+function renderUI(){
+  const t=T[LANG];
+  document.documentElement.lang=LANG;
+  document.getElementById('hdr-eyebrow').textContent=t.eyebrow;
+  document.getElementById('hdr-title').innerHTML=t.title;
+  document.getElementById('hdr-sub').textContent=t.sub;
+  document.getElementById('nav-glosario').textContent=t.navGlos;
+  document.getElementById('nav-modulos').textContent=t.navMod;
+  document.getElementById('nav-journeys').textContent=t.navJour;
+  document.getElementById('mod-intro').textContent=t.modIntro;
+  document.querySelector('#cycle-title span:first-child').textContent=t.cycle;
+  document.getElementById('mod-note').innerHTML=t.modNote;
+  document.getElementById('btn-esc').textContent=t.viewEsc;
+  document.getElementById('btn-rol').textContent=t.viewRol;
+  document.getElementById('foot').textContent=t.foot;
+  const lg=t.legend;
+  document.getElementById('legend').innerHTML =
+    `<span class="lg"><span class="dot discovery"></span>${lg.discovery}</span>`+
+    `<span class="lg"><span class="dot inception"></span>${lg.inception}</span>`+
+    `<span class="lg"><span class="dot construction"></span>${lg.construction}</span>`+
+    `<span class="lg"><span class="dot operations"></span>${lg.operations}</span>`+
+    `<span class="lg"><span class="dot transversal"></span>${lg.transversal}</span>`+
+    `<span class="lg"><span class="dot step"></span>${lg.step}</span>`;
+}
+function setLang(l){
+  LANG=l;
+  document.getElementById('btn-es').classList.toggle('on',l==='es');
+  document.getElementById('btn-en').classList.toggle('on',l==='en');
+  renderUI(); renderGlossary(); renderDiagram(); renderModules(); renderJourneys();
+}
+
+/* ============ NAV ============ */
+function showSection(s){
+  ['glosario','modulos','journeys'].forEach(x=>{
+    document.getElementById('sec-'+x).classList.toggle('active', x===s);
+    document.getElementById('nav-'+x).classList.toggle('on', x===s);
+  });
+  window.scrollTo({top:0,behavior:'auto'});
+}
+
+setLang('es');
+
+</script>
+</body>
+</html>
