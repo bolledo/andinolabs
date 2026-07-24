@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta de Partnership — Espacio Regenera</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --verde:    #2D4A3E;
+    --verde-md: #3D6B59;
+    --verde-cl: #7AAB8A;
+    --crema:    #F5EFE0;
+    --crema-md: #EDE4CC;
+    --tierra:   #8B6F47;
+    --tierra-cl:#C4A882;
+    --oscuro:   #1C2B24;
+    --blanco:   #FDFAF4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--oscuro);
+    line-height: 1.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--verde);
+    color: var(--crema);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 6vw 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(122,171,138,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--verde-cl);
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(42px, 7vw, 88px);
+    line-height: 1.05;
+    max-width: 14ch;
+    margin-bottom: 32px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--verde-cl);
+  }
+  .hero-sub {
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: 300;
+    max-width: 52ch;
+    color: var(--crema-md);
+    line-height: 1.75;
+    margin-bottom: 56px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .hero-stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: var(--blanco);
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--verde-cl);
+    letter-spacing: 0.05em;
+    margin-top: 6px;
+  }
+  .hero-divider { width: 1px; background: rgba(122,171,138,0.3); }
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 6vw;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--verde-cl);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--verde-cl);
+  }
+
+  /* ── SECCIONES ── */
+  section { padding: 100px 6vw; }
+  section:nth-child(odd):not(.hero) { background: var(--blanco); }
+  section:nth-child(even):not(.hero) { background: var(--crema); }
+
+  .sec-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--tierra);
+    margin-bottom: 16px;
+  }
+  .sec-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.15;
+    color: var(--verde);
+    max-width: 22ch;
+    margin-bottom: 20px;
+  }
+  .sec-body {
+    font-size: 16px;
+    font-weight: 300;
+    max-width: 60ch;
+    color: #4a5f55;
+    line-height: 1.85;
+    margin-bottom: 56px;
+  }
+
+  /* ── DIAGNÓSTICO ── */
+  .diag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    border: 1px solid var(--crema-md);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .diag-card {
+    background: var(--blanco);
+    padding: 32px 28px;
+    position: relative;
+  }
+  .diag-card:not(:last-child) { border-right: 1px solid var(--crema-md); }
+  .diag-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 44px;
+    color: var(--verde);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .diag-unit {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--tierra);
+    letter-spacing: 0.05em;
+  }
+  .diag-label {
+    font-size: 13px;
+    color: #6b8075;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .diag-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--verde-cl);
+  }
+
+  /* ── OPORTUNIDAD ── */
+  .opp-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 700px) { .opp-layout { grid-template-columns: 1fr; } }
+  .opp-highlight {
+    background: var(--verde);
+    color: var(--crema);
+    border-radius: 16px;
+    padding: 48px 40px;
+  }
+  .opp-highlight h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--verde-cl);
+    margin-bottom: 16px;
+  }
+  .opp-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(52px, 8vw, 80px);
+    line-height: 1;
+    color: var(--blanco);
+    margin-bottom: 8px;
+  }
+  .opp-explain {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--verde-cl);
+    line-height: 1.7;
+    margin-top: 16px;
+  }
+  .opp-points {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .opp-point {
+    padding: 24px 28px;
+    background: var(--blanco);
+    border-radius: 10px;
+    border-left: 3px solid var(--verde-cl);
+  }
+  .opp-point-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--verde);
+    margin-bottom: 6px;
+  }
+  .opp-point-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: #5a7060;
+    line-height: 1.6;
+  }
+
+  /* ── MODELO FINANCIERO ── */
+  .model-section { background: var(--verde) !important; color: var(--crema); }
+  .model-section .sec-title { color: var(--crema); }
+  .model-section .sec-body { color: var(--verde-cl); }
+  .model-section .sec-eyebrow { color: var(--tierra-cl); }
+
+  .scenarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .scenario-card {
+    border-radius: 12px;
+    padding: 32px 24px;
+    border: 1px solid rgba(122,171,138,0.2);
+    position: relative;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    cursor: default;
+  }
+  .scenario-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--verde-cl);
+  }
+  .scenario-card.base { background: rgba(255,255,255,0.05); }
+  .scenario-card.highlight { background: rgba(122,171,138,0.12); border-color: rgba(122,171,138,0.4); }
+  .scenario-card.strong { background: rgba(122,171,138,0.22); border-color: var(--verde-cl); }
+
+  .sc-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--verde-cl);
+    margin-bottom: 20px;
+  }
+  .sc-total {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--blanco);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .sc-sub { font-size: 12px; color: rgba(245,239,224,0.5); margin-bottom: 24px; }
+
+  .sc-split {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(122,171,138,0.2);
+  }
+  .sc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .sc-row-label { color: rgba(245,239,224,0.6); font-weight: 300; }
+  .sc-row-val { font-weight: 500; color: var(--blanco); }
+  .sc-row-val.accent { color: var(--verde-cl); font-weight: 600; }
+
+  .model-note {
+    background: rgba(122,171,138,0.1);
+    border: 1px solid rgba(122,171,138,0.25);
+    border-radius: 10px;
+    padding: 24px 28px;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--verde-cl);
+    line-height: 1.7;
+    max-width: 70ch;
+  }
+  .model-note strong { color: var(--blanco); font-weight: 500; }
+
+  /* ── PLAN DE ACCIÓN ── */
+  .etapas {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .etapas::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 31px;
+    width: 1px;
+    background: var(--crema-md);
+  }
+  .etapa {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 32px;
+    align-items: start;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--crema-md);
+  }
+  .etapa:last-child { border-bottom: none; }
+  .etapa-num {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--verde);
+    color: var(--crema);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .etapa-num.free { background: var(--verde-cl); color: var(--verde); }
+  .etapa-content { padding-top: 10px; }
+  .etapa-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tierra);
+    margin-bottom: 10px;
+  }
+  .etapa-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--verde);
+    margin-bottom: 12px;
+  }
+  .etapa-text {
+    font-size: 15px;
+    font-weight: 300;
+    color: #4a5f55;
+    line-height: 1.8;
+    max-width: 60ch;
+    margin-bottom: 20px;
+  }
+  .etapa-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .etapa-item {
+    background: var(--crema-md);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--verde-md);
+  }
+
+  /* ── POR QUÉ NOSOTROS ── */
+  .nosotros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .nosotros-card {
+    background: var(--crema);
+    border-radius: 12px;
+    padding: 36px 28px;
+    border: 1px solid var(--crema-md);
+  }
+  .nosotros-icon {
+    width: 44px; height: 44px;
+    background: var(--verde);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .nosotros-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--verde-cl); stroke-width: 1.5; stroke-linecap: round; }
+  .nosotros-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    color: var(--verde);
+    margin-bottom: 10px;
+  }
+  .nosotros-card p {
+    font-size: 14px;
+    font-weight: 300;
+    color: #5a7060;
+    line-height: 1.75;
+  }
+
+  /* ── CTA / CIERRE ── */
+  .cta-section {
+    background: var(--oscuro) !important;
+    color: var(--crema);
+    text-align: center;
+  }
+  .cta-section .sec-title {
+    color: var(--blanco);
+    max-width: 100%;
+    margin: 0 auto 20px;
+  }
+  .cta-section .sec-body {
+    color: rgba(245,239,224,0.6);
+    max-width: 50ch;
+    margin: 0 auto 48px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--verde-cl);
+    color: var(--verde);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 16px 40px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .cta-btn:hover { background: var(--crema); }
+
+  .footer {
+    background: var(--oscuro);
+    padding: 24px 6vw;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-left {
+    font-size: 12px;
+    color: rgba(245,239,224,0.35);
+  }
+  .footer-right {
+    font-size: 12px;
+    color: rgba(245,239,224,0.35);
+  }
+
+  @media (max-width: 600px) {
+    .hero-stats { gap: 28px; }
+    .hero-divider { display: none; }
+    .etapas::before { display: none; }
+    .etapa { grid-template-columns: 1fr; }
+    .etapa-num { margin-bottom: -20px; }
+    .diag-card:not(:last-child) { border-right: none; border-bottom: 1px solid var(--crema-md); }
+    .diag-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scenario-card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Propuesta de Partnership — 2025</p>
+  <h1>Crecer lo que ya <em>funciona.</em></h1>
+  <p class="hero-sub">
+    Espacio Regenera lleva siete años construyendo algo real. Esta propuesta no plantea reinventarlo — plantea liberar el potencial que ya está ahí, en el canal que hoy crece solo en temporada alta.
+  </p>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-val">$800M</div>
+      <div class="hero-stat-label">Venta anual CLP</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div>
+      <div class="hero-stat-val">25%</div>
+      <div class="hero-stat-label">E-commerce promedio</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div>
+      <div class="hero-stat-val">35%</div>
+      <div class="hero-stat-label">E-commerce en peak</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div>
+      <div class="hero-stat-val">$80M</div>
+      <div class="hero-stat-label">Diferencia visible al año</div>
+    </div>
+  </div>
+  <p class="scroll-hint">Ver propuesta</p>
+</section>
+
+<!-- DIAGNÓSTICO -->
+<section>
+  <p class="sec-eyebrow">El negocio hoy</p>
+  <h2 class="sec-title">Un negocio rentable con capacidad digital sin explotar</h2>
+  <p class="sec-body">
+    Con siete años de operación, Regenera llegó a la rentabilidad por pura convicción. Lo que sigue es escalar sin perder lo que lo hace especial — y el canal digital es la palanca más directa para eso.
+  </p>
+  <div class="diag-grid">
+    <div class="diag-card">
+      <div class="diag-accent"></div>
+      <div class="diag-num">$800M</div>
+      <div class="diag-unit">CLP / año</div>
+      <div class="diag-label">Venta anual total entre tienda física y e-commerce</div>
+    </div>
+    <div class="diag-card">
+      <div class="diag-accent"></div>
+      <div class="diag-num">$600M</div>
+      <div class="diag-unit">CLP / año</div>
+      <div class="diag-label">Tienda física — 75% del negocio. Base sólida y estable</div>
+    </div>
+    <div class="diag-card">
+      <div class="diag-accent"></div>
+      <div class="diag-num">$200M</div>
+      <div class="diag-unit">CLP / año</div>
+      <div class="diag-label">E-commerce promedio anual — 25% del total actualmente</div>
+    </div>
+    <div class="diag-card">
+      <div class="diag-accent"></div>
+      <div class="diag-num">$280M</div>
+      <div class="diag-unit">CLP / año</div>
+      <div class="diag-label">E-commerce en períodos peak — el propio negocio ya lo demostró</div>
+    </div>
+  </div>
+</section>
+
+<!-- OPORTUNIDAD -->
+<section>
+  <p class="sec-eyebrow">La oportunidad</p>
+  <h2 class="sec-title">$80M ya probados, esperando ser el nuevo promedio</h2>
+  <p class="sec-body">
+    El argumento no es especulativo. En períodos de peak el canal digital de Regenera alcanza el 35% de la venta total. La brecha con el promedio anual del 25% son $80M CLP. Esa diferencia ya existe, ya sucedió — solo que de forma estacional.
+  </p>
+  <div class="opp-layout">
+    <div class="opp-highlight">
+      <h3>La brecha que prueba todo</h3>
+      <div class="opp-big">$80M</div>
+      <div class="diag-unit" style="color:var(--tierra-cl)">CLP / año</div>
+      <p class="opp-explain">
+        Es la diferencia entre el 25% promedio y el 35% peak del canal digital — sin nueva infraestructura, sin abrir tiendas, sin cambiar el modelo. El propio negocio ya generó esa cifra en temporada alta. El objetivo inicial es hacer de eso el nuevo piso.
+      </p>
+    </div>
+    <div class="opp-points">
+      <div class="opp-point">
+        <div class="opp-point-title">El canal digital ya tiene demanda real</div>
+        <div class="opp-point-text">No es un canal por construir desde cero. Ya vende ~$16,7M/mes en promedio. El trabajo es elevar la consistencia, no crear el hábito.</div>
+      </div>
+      <div class="opp-point">
+        <div class="opp-point-title">El sitio y el marketing no acompañan la demanda</div>
+        <div class="opp-point-text">El e-commerce actual no comunica bien lo que ofrece. Fotos, fichas, UX y campañas están todos por debajo del nivel del producto.</div>
+      </div>
+      <div class="opp-point">
+        <div class="opp-point-title">La tienda física es el mejor activo de marketing</div>
+        <div class="opp-point-text">Quienes pasan por la tienda ya conocen y confían en los productos. Convertir esa experiencia física en hábito digital es el puente más directo al crecimiento.</div>
+      </div>
+      <div class="opp-point">
+        <div class="opp-point-title">Logística como palanca, no como techo</div>
+        <div class="opp-point-text">El 65% del resultado en e-commerce depende de la operación logística. Ordenar el picking, despacho e inventario es condición necesaria para sostener el crecimiento.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELO FINANCIERO -->
+<section class="model-section">
+  <p class="sec-eyebrow">Modelo financiero</p>
+  <h2 class="sec-title">Cómo se divide el crecimiento</h2>
+  <p class="sec-body">
+    La base que construiste en siete años es tuya. Esta propuesta opera exclusivamente sobre el incremento — lo que crezcamos juntos a partir de hoy.
+  </p>
+
+  <div class="scenarios">
+    <div class="scenario-card base">
+      <div class="sc-tag">Hoy · Base protegida</div>
+      <div class="sc-total">$800M</div>
+      <div class="sc-sub">Venta total anual · E-comm $200M</div>
+      <div class="sc-split">
+        <div class="sc-row">
+          <span class="sc-row-label">Regenera</span>
+          <span class="sc-row-val">todo</span>
+        </div>
+        <div class="sc-row">
+          <span class="sc-row-label">Banda</span>
+          <span class="sc-row-val">$0</span>
+        </div>
+        <div class="sc-row" style="margin-top:8px; padding-top:8px; border-top: 1px solid rgba(122,171,138,0.15);">
+          <span class="sc-row-label">Fase</span>
+          <span class="sc-row-val accent">Assessment</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-card highlight">
+      <div class="sc-tag">Meta inicial · Peak como promedio</div>
+      <div class="sc-total">$880M</div>
+      <div class="sc-sub">E-comm sube a $280M · +$80M increm.</div>
+      <div class="sc-split">
+        <div class="sc-row">
+          <span class="sc-row-label">Regenera</span>
+          <span class="sc-row-val">+$40M</span>
+        </div>
+        <div class="sc-row">
+          <span class="sc-row-label">Banda</span>
+          <span class="sc-row-val accent">+$40M</span>
+        </div>
+        <div class="sc-row" style="margin-top:8px; padding-top:8px; border-top: 1px solid rgba(122,171,138,0.15);">
+          <span class="sc-row-label">Incremental</span>
+          <span class="sc-row-val accent">$80M · 50/50</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-card highlight">
+      <div class="sc-tag">Escenario 2 · 2× e-commerce</div>
+      <div class="sc-total">$1.000M</div>
+      <div class="sc-sub">E-comm sube a $400M · +$200M increm.</div>
+      <div class="sc-split">
+        <div class="sc-row">
+          <span class="sc-row-label">Regenera</span>
+          <span class="sc-row-val">+$100M</span>
+        </div>
+        <div class="sc-row">
+          <span class="sc-row-label">Banda</span>
+          <span class="sc-row-val accent">+$100M</span>
+        </div>
+        <div class="sc-row" style="margin-top:8px; padding-top:8px; border-top: 1px solid rgba(122,171,138,0.15);">
+          <span class="sc-row-label">Incremental</span>
+          <span class="sc-row-val accent">$200M · 50/50</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-card strong">
+      <div class="sc-tag">Escenario 3 · 3× e-commerce</div>
+      <div class="sc-total">$1.200M</div>
+      <div class="sc-sub">E-comm sube a $600M · +$400M increm.</div>
+      <div class="sc-split">
+        <div class="sc-row">
+          <span class="sc-row-label">Regenera</span>
+          <span class="sc-row-val">+$200M</span>
+        </div>
+        <div class="sc-row">
+          <span class="sc-row-label">Banda</span>
+          <span class="sc-row-val accent">+$200M</span>
+        </div>
+        <div class="sc-row" style="margin-top:8px; padding-top:8px; border-top: 1px solid rgba(122,171,138,0.15);">
+          <span class="sc-row-label">Incremental</span>
+          <span class="sc-row-val accent">$400M · 50/50</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="model-note">
+    <strong>La lógica del modelo:</strong> Lo que construiste en siete años no se toca. El acuerdo es simple — todo lo que el canal digital genere <em>por encima</em> del estado actual se reparte en partes iguales. Si el negocio no crece, no ganamos nada. Nuestra ganancia es consecuencia directa de la tuya.
+  </div>
+
+  <!-- PROYECCIÓN 5 AÑOS -->
+  <div style="margin-top: 56px;">
+    <p style="font-size:11px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--tierra-cl); margin-bottom:16px;">Proyección a 5 años · Tienda + E-commerce</p>
+    <h3 style="font-family:'DM Serif Display',serif; font-size:clamp(22px,3vw,34px); color:var(--blanco); margin-bottom:8px;">De $800M a $4.000M en venta total</h3>
+    <p style="font-size:14px; font-weight:300; color:var(--verde-cl); max-width:60ch; line-height:1.75; margin-bottom:40px;">Crecimiento anual compuesto de ~38% sobre el negocio completo. El incremental acumulado en cinco años es de $3.200M CLP — la mitad para Regenera, la mitad para la banda.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:32px;">
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(122,171,138,0.15); border-radius:10px; padding:20px 16px; text-align:center;">
+        <div style="font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:rgba(122,171,138,0.5); margin-bottom:14px;">Año 1</div>
+        <div style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--blanco); line-height:1; margin-bottom:4px;">$1.100M</div>
+        <div style="font-size:11px; color:rgba(245,239,224,0.4); margin-bottom:16px;">+$300M vs hoy</div>
+        <div style="border-top:1px solid rgba(122,171,138,0.15); padding-top:12px;">
+          <div style="font-size:11px; color:rgba(245,239,224,0.5); margin-bottom:4px;">Cada parte</div>
+          <div style="font-size:15px; font-weight:600; color:var(--verde-cl);">+$150M</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(122,171,138,0.07); border:1px solid rgba(122,171,138,0.2); border-radius:10px; padding:20px 16px; text-align:center;">
+        <div style="font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:rgba(122,171,138,0.6); margin-bottom:14px;">Año 2</div>
+        <div style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--blanco); line-height:1; margin-bottom:4px;">$1.600M</div>
+        <div style="font-size:11px; color:rgba(245,239,224,0.4); margin-bottom:16px;">+$800M vs hoy</div>
+        <div style="border-top:1px solid rgba(122,171,138,0.15); padding-top:12px;">
+          <div style="font-size:11px; color:rgba(245,239,224,0.5); margin-bottom:4px;">Cada parte</div>
+          <div style="font-size:15px; font-weight:600; color:var(--verde-cl);">+$400M</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(122,171,138,0.1); border:1px solid rgba(122,171,138,0.25); border-radius:10px; padding:20px 16px; text-align:center;">
+        <div style="font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--verde-cl); margin-bottom:14px;">Año 3</div>
+        <div style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--blanco); line-height:1; margin-bottom:4px;">$2.400M</div>
+        <div style="font-size:11px; color:rgba(245,239,224,0.4); margin-bottom:16px;">+$1.600M vs hoy</div>
+        <div style="border-top:1px solid rgba(122,171,138,0.15); padding-top:12px;">
+          <div style="font-size:11px; color:rgba(245,239,224,0.5); margin-bottom:4px;">Cada parte</div>
+          <div style="font-size:15px; font-weight:600; color:var(--verde-cl);">+$800M</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(122,171,138,0.14); border:1px solid rgba(122,171,138,0.3); border-radius:10px; padding:20px 16px; text-align:center;">
+        <div style="font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--verde-cl); margin-bottom:14px;">Año 4</div>
+        <div style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--blanco); line-height:1; margin-bottom:4px;">$3.100M</div>
+        <div style="font-size:11px; color:rgba(245,239,224,0.4); margin-bottom:16px;">+$2.300M vs hoy</div>
+        <div style="border-top:1px solid rgba(122,171,138,0.15); padding-top:12px;">
+          <div style="font-size:11px; color:rgba(245,239,224,0.5); margin-bottom:4px;">Cada parte</div>
+          <div style="font-size:15px; font-weight:600; color:var(--verde-cl);">+$1.150M</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(122,171,138,0.2); border:1px solid var(--verde-cl); border-radius:10px; padding:20px 16px; text-align:center; position:relative;">
+        <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--verde-cl); color:var(--verde); font-size:9px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:20px; white-space:nowrap;">Meta</div>
+        <div style="font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--verde-cl); margin-bottom:14px;">Año 5</div>
+        <div style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--blanco); line-height:1; margin-bottom:4px;">$4.000M</div>
+        <div style="font-size:11px; color:rgba(245,239,224,0.4); margin-bottom:16px;">+$3.200M vs hoy</div>
+        <div style="border-top:1px solid rgba(122,171,138,0.2); padding-top:12px;">
+          <div style="font-size:11px; color:rgba(245,239,224,0.5); margin-bottom:4px;">Cada parte</div>
+          <div style="font-size:15px; font-weight:600; color:var(--verde-cl);">+$1.600M</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Barra de progreso visual -->
+    <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:24px 28px; border:1px solid rgba(122,171,138,0.15);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:12px; color:rgba(245,239,224,0.5); font-weight:300;">$800M — Hoy</span>
+        <span style="font-size:12px; color:var(--verde-cl); font-weight:500;">Incremental acumulado a 5 años: <strong style="color:var(--blanco);">$3.200M CLP</strong></span>
+        <span style="font-size:12px; color:var(--verde-cl); font-weight:500;">$4.000M — Año 5</span>
+      </div>
+      <div style="height:8px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden;">
+        <div style="height:100%; width:20%; background:rgba(122,171,138,0.35); border-radius:4px;"></div>
+      </div>
+      <div style="margin-top:8px;">
+        <span style="font-size:10px; color:rgba(245,239,224,0.3);">Base actual · 20% de la meta a 5 años</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN DE ACCIÓN -->
+<section>
+  <p class="sec-eyebrow">Plan de acción</p>
+  <h2 class="sec-title">Tres etapas, sin quemar etapas</h2>
+  <p class="sec-body">
+    Empezamos por entender el negocio antes de mover nada. El crecimiento sin orden es ruido.
+  </p>
+  <div class="etapas">
+    <div class="etapa">
+      <div class="etapa-num free">1</div>
+      <div class="etapa-content">
+        <div class="etapa-tag">Sin costo · Diagnóstico</div>
+        <h3 class="etapa-title">Assessment operacional inicial</h3>
+        <p class="etapa-text">
+          Antes de proponer cualquier cambio, nos sentamos con el negocio tal como está. Levantamos costos reales, lógica de inventario, flujo de despacho, performance del canal digital y estructura de precios. El resultado es un mapa claro de dónde está el dinero y dónde se está escapando.
+        </p>
+        <div class="etapa-items">
+          <span class="etapa-item">Auditoría e-commerce</span>
+          <span class="etapa-item">Análisis de costos</span>
+          <span class="etapa-item">Revisión logística</span>
+          <span class="etapa-item">Mapa de oportunidades</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="etapa">
+      <div class="etapa-num">2</div>
+      <div class="etapa-content">
+        <div class="etapa-tag">Intervención operacional · Base del negocio</div>
+        <h3 class="etapa-title">Ordenar la operación y la logística</h3>
+        <p class="etapa-text">
+          Con el mapa del assessment en mano, intervenimos la operación interna. El objetivo es construir una base sólida antes de escalar el canal digital — porque crecer sobre desorden solo amplifica los problemas. Esto incluye el flujo de inventario, la lógica de despacho, los procesos de picking y la estructura de costos que hoy presiona los precios hacia arriba.
+        </p>
+        <div class="etapa-items">
+          <span class="etapa-item">Orden de inventario</span>
+          <span class="etapa-item">Flujo de despacho</span>
+          <span class="etapa-item">Proceso de picking</span>
+          <span class="etapa-item">Estructura de costos</span>
+          <span class="etapa-item">Layout de tienda</span>
+          <span class="etapa-item">Staffing eficiente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="etapa">
+      <div class="etapa-num">3</div>
+      <div class="etapa-content">
+        <div class="etapa-tag">Intervención activa · Canal digital</div>
+        <h3 class="etapa-title">Transformar el canal digital en un motor real</h3>
+        <p class="etapa-text">
+          Con la operación ordenada, intervenimos el e-commerce de fondo. Esto incluye el sitio, las fichas de producto, las campañas y la estrategia de contenido. El objetivo concreto: llevar el 25% promedio al 35% que el negocio ya demostró ser capaz de generar.
+        </p>
+        <div class="etapa-items">
+          <span class="etapa-item">Rediseño web y UX</span>
+          <span class="etapa-item">Fotografía de productos</span>
+          <span class="etapa-item">Campañas pagas</span>
+          <span class="etapa-item">SEO y contenido orgánico</span>
+          <span class="etapa-item">Email marketing</span>
+          <span class="etapa-item">RRSS estratégicas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="etapa">
+      <div class="etapa-num">4</div>
+      <div class="etapa-content">
+        <div class="etapa-tag">Largo plazo · Expansión</div>
+        <h3 class="etapa-title">Escalar el modelo probado</h3>
+        <p class="etapa-text">
+          Una vez que el canal digital opere de forma sostenida y la logística esté afinada, el paso natural es crecer hacia nuevas zonas — ya sea con dark stores, nuevas tiendas físicas o un modelo de franquicia. El e-commerce actúa como sensor de demanda: sabemos exactamente dónde abrir antes de invertir.
+        </p>
+        <div class="etapa-items">
+          <span class="etapa-item">Dark stores regionales</span>
+          <span class="etapa-item">Expansión física basada en datos</span>
+          <span class="etapa-item">Modelo franquicia</span>
+          <span class="etapa-item">Nuevas categorías de producto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUÉ NOSOTROS -->
+<section>
+  <p class="sec-eyebrow">Por qué con nosotros</p>
+  <h2 class="sec-title">No somos una agencia. Somos co-dueños del resultado.</h2>
+  <p class="sec-body">
+    La diferencia con contratar un servicio externo es que aquí nuestra ganancia depende directamente de la tuya. No cobramos si no creces.
+  </p>
+  <div class="nosotros-grid">
+    <div class="nosotros-card">
+      <div class="nosotros-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h4>Skin in the game</h4>
+      <p>Nuestro modelo de compensación es 100% variable. Si el canal digital no crece, no ganamos. Eso cambia el tipo de conversaciones que tenemos.</p>
+    </div>
+    <div class="nosotros-card">
+      <div class="nosotros-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>
+      </div>
+      <h4>Foco en lo digital</h4>
+      <p>Canal digital, operación logística y marketing de performance. Es donde tenemos experiencia real y donde el impacto es más rápido de medir.</p>
+    </div>
+    <div class="nosotros-card">
+      <div class="nosotros-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h4>Respeto por lo construido</h4>
+      <p>Siete años de trabajo tienen valor. La propuesta parte desde ese respeto: no tocamos la base, proponemos crecer lo que ya existe.</p>
+    </div>
+    <div class="nosotros-card">
+      <div class="nosotros-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h4>Medición en tiempo real</h4>
+      <p>Todo lo que hagamos tiene métricas claras desde el día uno. Tráfico, conversión, costo por adquisición, revenue por canal. Sin cajas negras.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <p class="sec-eyebrow" style="color: var(--tierra-cl);">El próximo paso</p>
+  <h2 class="sec-title">Empezamos con un diagnóstico inicial</h2>
+  <p class="sec-body">
+    Sin compromisos, sin contratos. Nos metemos al negocio, entendemos los números reales y te presentamos un mapa de lo que encontramos. A partir de ahí, decidimos juntos si tiene sentido seguir.
+  </p>
+  <a href="#" class="cta-btn">Agendar el assessment</a>
+</section>
+
+<footer class="footer">
+  <span class="footer-left">Propuesta confidencial · Espacio Regenera · 2025</span>
+  <span class="footer-right">Modelo 50/50 sobre el incremental</span>
+</footer>
+
+</body>
+</html>
