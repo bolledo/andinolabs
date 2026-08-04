@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kick-off · Fase 0 · MUT Territoria</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:      #1B2A4A;
+    --sand:      #F5F0E8;
+    --cream:     #FDFCFA;
+    --gold:      #C4A35A;
+    --slate:     #3D5278;
+    --muted:     #8A8F9B;
+    --border:    #DDD8CE;
+    --tag-bg:    #EBE5D8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 48px 64px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .header-left {}
+  .header-brand {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: #fff;
+    line-height: 1.15;
+    font-weight: 400;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .header-meta {
+    text-align: right;
+  }
+  .header-meta-item {
+    margin-bottom: 8px;
+  }
+  .header-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    display: block;
+  }
+  .header-meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 960px; margin: 0 auto; padding: 56px 64px; }
+
+  /* ── SECTION LABEL ── */
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 28px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── AGENDA ── */
+  .agenda-items { display: flex; flex-direction: column; gap: 0; }
+  .agenda-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px;
+    gap: 0 32px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .agenda-item:first-child { border-top: 1px solid var(--border); }
+  .agenda-time {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--slate);
+    padding-top: 2px;
+  }
+  .agenda-content {}
+  .agenda-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .agenda-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .agenda-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--tag-bg);
+    color: var(--slate);
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 4px;
+    white-space: nowrap;
+  }
+  .agenda-tag.action { background: #EBF0F7; color: var(--navy); }
+  .agenda-tag.info   { background: var(--tag-bg); color: var(--slate); }
+  .agenda-tag.close  { background: #F7F3EB; color: var(--gold); }
+
+  /* ── EQUIPOS ── */
+  .teams-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .team-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+  }
+  .team-box-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .team-member {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .team-member:last-child { border-bottom: none; }
+  .team-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .team-avatar.gold { background: var(--gold); }
+  .team-avatar.slate { background: var(--slate); }
+  .team-name { font-size: 14px; font-weight: 500; color: var(--navy); }
+  .team-role { font-size: 12px; color: var(--muted); }
+
+  /* ── PLAN DE PROYECTO ── */
+  .plan-phases { display: flex; flex-direction: column; gap: 0; }
+  .plan-phase {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .plan-phase:first-child { border-top: 1px solid var(--border); }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .phase-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .phase-badge.p1 { background: var(--navy); }
+  .phase-badge.p2 { background: var(--slate); }
+  .phase-badge.p3 { background: var(--gold); }
+  .phase-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--navy);
+  }
+  .phase-weeks {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .phase-weeks strong { color: var(--gold); }
+
+  .week-rows { display: flex; flex-direction: column; gap: 0; }
+  .week-row {
+    display: grid;
+    grid-template-columns: 52px 1fr 140px 140px;
+    gap: 0 20px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+    align-items: center;
+  }
+  .week-row:last-child { border-bottom: none; }
+  .wr-week {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate);
+  }
+  .wr-task { font-size: 14px; color: var(--navy); }
+  .wr-owner {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .wr-deliverable {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--slate);
+  }
+
+  .week-row-header {
+    display: grid;
+    grid-template-columns: 52px 1fr 140px 140px;
+    gap: 0 20px;
+    padding: 8px 0 12px;
+  }
+  .wrh { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+  /* ── HITOS ── */
+  .milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .milestone-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .milestone-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    font-style: italic;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .milestone-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .milestone-amount {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .milestone-timing {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── NECESITAMOS DE MUT ── */
+  .needs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .need-item {
+    background: var(--sand);
+    border-radius: 8px;
+    padding: 20px 24px;
+    border-left: 3px solid var(--gold);
+  }
+  .need-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .need-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: var(--navy);
+    padding: 32px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .doc-footer-brand {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+  }
+  .doc-footer-brand strong { color: var(--gold); }
+  .doc-footer-note {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.06em;
+  }
+
+  @media print {
+    .page { padding: 40px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-brand">Andinolabs · MUT Territoria</div>
+    <h1 class="header-title">Reunión de<br>Coordinación<br><em>Kick-off</em></h1>
+  </div>
+  <div class="header-meta">
+    <div class="header-meta-item">
+      <span class="header-meta-label">Fecha</span>
+      <span class="header-meta-value">Junio 2026</span>
+    </div>
+    <div class="header-meta-item">
+      <span class="header-meta-label">Participantes MUT</span>
+      <span class="header-meta-value">Paloma · Max</span>
+    </div>
+    <div class="header-meta-item">
+      <span class="header-meta-label">Participantes Andinolabs</span>
+      <span class="header-meta-value">Diego Rebolledo</span>
+    </div>
+    <div class="header-meta-item">
+      <span class="header-meta-label">Proyecto</span>
+      <span class="header-meta-value">Fase 0 · Diagnóstico de Datos</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- AGENDA -->
+  <div class="section-eyebrow">Agenda de hoy</div>
+  <h2 class="section-title">Cómo vamos a usar esta hora</h2>
+
+  <div class="agenda-items">
+
+    <div class="agenda-item">
+      <div class="agenda-time">00:00</div>
+      <div class="agenda-content">
+        <div class="agenda-name">Bienvenida y contexto</div>
+        <div class="agenda-desc">Recapitulamos brevemente el alcance acordado del Fase 0 y confirmamos entendimiento compartido del objetivo.</div>
+        <span class="agenda-tag info">Contexto</span>
+      </div>
+      <div><span style="font-size:12px;color:var(--muted)">5 min</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">00:05</div>
+      <div class="agenda-content">
+        <div class="agenda-name">Presentación del equipo Andinolabs</div>
+        <div class="agenda-desc">Quién hace qué en este proyecto: roles, responsabilidades y punto de contacto principal.</div>
+        <span class="agenda-tag info">Equipo</span>
+      </div>
+      <div><span style="font-size:12px;color:var(--muted)">5 min</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">00:10</div>
+      <div class="agenda-content">
+        <div class="agenda-name">Plan de proyecto: semana a semana</div>
+        <div class="agenda-desc">Revisamos juntos el cronograma de las 6 semanas, los hitos clave y cómo nos coordinaremos en el camino.</div>
+        <span class="agenda-tag info">Plan</span>
+      </div>
+      <div><span style="font-size:12px;color:var(--muted)">15 min</span></div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">00:25</div>
+      <div class="agenda-content">
+        <div class="agenda-name">Lo que necesitamos de Territoria</div>
+        <div class="agenda-desc">Información, accesos, contrapartes y disponibilidad. Dejamos claro qué requerimos en cada fase para no frenar el avance.</div>
+        <span class="agenda-tag action">Acción requerida</span>
+      </div>
+      <div><span style="font-size:12px;color:var(--muted)">15 min</span></div>
+    </div>
+
+
+    <div class="agenda-item">
+      <div class="agenda-time">00:40</div>
+      <div class="agenda-content">
+        <div class="agenda-name">Preguntas, acuerdos y próximos pasos</div>
+        <div class="agenda-desc">Cerramos con una lista de compromisos concretos: quién hace qué y para cuándo.</div>
+        <span class="agenda-tag close">Cierre</span>
+      </div>
+      <div><span style="font-size:12px;color:var(--muted)">20 min</span></div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- EQUIPOS -->
+  <div class="section-eyebrow">Equipos del proyecto</div>
+  <h2 class="section-title">Quién es quién</h2>
+
+  <div class="teams-grid">
+    <div class="team-box">
+      <div class="team-box-label">Andinolabs</div>
+      <div class="team-member">
+        <div class="team-avatar">DR</div>
+        <div>
+          <div class="team-name">Diego Rebolledo</div>
+          <div class="team-role">Contraparte oficial · Dirección estratégica</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar slate">C</div>
+        <div>
+          <div class="team-name">Carlos</div>
+          <div class="team-role">Project Manager · Coordinación semana a semana</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar slate">Cr</div>
+        <div>
+          <div class="team-name">Cris</div>
+          <div class="team-role">UX Researcher · Customer journey &amp; entrevistas</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar slate">Sh</div>
+        <div>
+          <div class="team-name">Shab</div>
+          <div class="team-role">CTO</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar slate">I</div>
+        <div>
+          <div class="team-name">Italo</div>
+          <div class="team-role">Co-founder · Negocios Digitales</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar slate">M</div>
+        <div>
+          <div class="team-name">Mauro</div>
+          <div class="team-role">Co-founder · Producto</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-box">
+      <div class="team-box-label">MUT · Territoria</div>
+      <div class="team-member">
+        <div class="team-avatar gold">P</div>
+        <div>
+          <div class="team-name">Paloma</div>
+          <div class="team-role">Gerente General · Contraparte principal</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar gold">M</div>
+        <div>
+          <div class="team-name">Max</div>
+          <div class="team-role">Gerente de Administración y Finanzas · Contraparte principal</div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="team-avatar" style="background:#BFC5D0">?</div>
+        <div>
+          <div class="team-name">Equipo operacional</div>
+          <div class="team-role">A confirmar — quiénes participan en entrevistas S1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PLAN DE PROYECTO -->
+  <div class="section-eyebrow">Plan de proyecto</div>
+  <h2 class="section-title">8 semanas, tres fases</h2>
+
+  <div class="plan-phases">
+
+    <!-- FASE 1 -->
+    <div class="plan-phase">
+      <div class="phase-header">
+        <div class="phase-badge p1">1</div>
+        <div>
+          <div class="phase-name">Inmersión &amp; Diagnóstico</div>
+          <div class="phase-weeks"><strong>Semanas 1 – 2</strong> &nbsp;·&nbsp; Entender qué existe hoy</div>
+        </div>
+      </div>
+
+      <div class="week-row-header">
+        <div class="wrh">Semana</div>
+        <div class="wrh">Actividad</div>
+        <div class="wrh">Responsable</div>
+        <div class="wrh">Entregable</div>
+      </div>
+      <div class="week-rows">
+        <div class="week-row">
+          <div class="wr-week">S1</div>
+          <div class="wr-task">Kick-off: alineamiento de objetivos y alcance</div>
+          <div class="wr-owner">Carlos + Diego</div>
+          <div class="wr-deliverable">Acta de inicio</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S1</div>
+          <div class="wr-task">Entrevistas stakeholders (Paloma, Max, operaciones)</div>
+          <div class="wr-owner">Carlos + Cris</div>
+          <div class="wr-deliverable">Hallazgos entrevistas</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S1–S2</div>
+          <div class="wr-task">Inventario y evaluación de fuentes de datos actuales (ventas, tráfico, RRSS, ticketing, POS de arrendatarios)</div>
+          <div class="wr-owner">Italo + Mauro</div>
+          <div class="wr-deliverable">Mapa de fuentes de datos</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S2</div>
+          <div class="wr-task">Mapeo del customer journey del visitante MUT (quién llega, cómo, cuándo, con qué frecuencia)</div>
+          <div class="wr-owner">Cris + Italo</div>
+          <div class="wr-deliverable">Journey map AS-IS</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S2</div>
+          <div class="wr-task">Benchmark industria: casos similares de captura de datos</div>
+          <div class="wr-owner">Mauro</div>
+          <div class="wr-deliverable">Informe benchmark</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="plan-phase">
+      <div class="phase-header">
+        <div class="phase-badge p2">2</div>
+        <div>
+          <div class="phase-name">Análisis &amp; Oportunidades</div>
+          <div class="phase-weeks"><strong>Semanas 3 – 5</strong> &nbsp;·&nbsp; Identificar brechas y posibilidades</div>
+        </div>
+      </div>
+
+      <div class="week-row-header">
+        <div class="wrh">Semana</div>
+        <div class="wrh">Actividad</div>
+        <div class="wrh">Responsable</div>
+        <div class="wrh">Entregable</div>
+      </div>
+      <div class="week-rows">
+        <div class="week-row">
+          <div class="wr-week">S3</div>
+          <div class="wr-task">Análisis de brechas y priorización de datos críticos</div>
+          <div class="wr-owner">Italo + Carlos</div>
+          <div class="wr-deliverable">Matriz de brechas</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S3</div>
+          <div class="wr-task">Evaluación mecanismos de captura (app, wifi, loyalty, tótem)</div>
+          <div class="wr-owner">Mauro + Carlos</div>
+          <div class="wr-deliverable">Opciones de captura</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S4</div>
+          <div class="wr-task">Casos de uso de datos priorizados por valor de negocio</div>
+          <div class="wr-owner">Carlos + Italo</div>
+          <div class="wr-deliverable">Mapa de oportunidades</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S5</div>
+          <div class="wr-task">Validación intermedia con Paloma y Max — ¿estamos respondiendo las preguntas correctas?</div>
+          <div class="wr-owner">Diego + equipo</div>
+          <div class="wr-deliverable">Minuta de validación</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="plan-phase">
+      <div class="phase-header">
+        <div class="phase-badge p3">3</div>
+        <div>
+          <div class="phase-name">Roadmap &amp; Business Case</div>
+          <div class="phase-weeks"><strong>Semanas 6 – 8</strong> &nbsp;·&nbsp; Diseñar el camino hacia adelante</div>
+        </div>
+      </div>
+
+      <div class="week-row-header">
+        <div class="wrh">Semana</div>
+        <div class="wrh">Actividad</div>
+        <div class="wrh">Responsable</div>
+        <div class="wrh">Entregable</div>
+      </div>
+      <div class="week-rows">
+        <div class="week-row">
+          <div class="wr-week">S6</div>
+          <div class="wr-task">Construcción del roadmap digital por fases y horizonte (Quick Wins 2026, Fase 1 digital 2027, horizonte 2028)</div>
+          <div class="wr-owner">Carlos + Mauro</div>
+          <div class="wr-deliverable">Roadmap priorizado</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S7</div>
+          <div class="wr-task">Business case: hipótesis de retorno y métricas de éxito</div>
+          <div class="wr-owner">Carlos + Italo</div>
+          <div class="wr-deliverable">Modelo de business case</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S7</div>
+          <div class="wr-task">Recomendación de equipo y modelo de gobernanza digital</div>
+          <div class="wr-owner">Diego + Carlos</div>
+          <div class="wr-deliverable">Plan organizacional</div>
+        </div>
+        <div class="week-row">
+          <div class="wr-week">S8</div>
+          <div class="wr-task">Consolidación de entregables y presentación ejecutiva</div>
+          <div class="wr-owner">Equipo completo</div>
+          <div class="wr-deliverable">Presentación final</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <hr class="divider">
+
+  <!-- LO QUE NECESITAMOS -->
+  <div class="section-eyebrow">Lo que necesitamos de Territoria</div>
+  <h2 class="section-title">Para arrancar esta semana</h2>
+
+  <div class="needs-grid">
+    <div class="need-item">
+      <div class="need-title">Contraparte operacional confirmada</div>
+      <div class="need-desc">¿Hay alguien del equipo de operaciones o administración que participe en las entrevistas de la Semana 1? Necesitamos agendarlas antes del viernes.</div>
+    </div>
+    <div class="need-item">
+      <div class="need-title">Acceso a datos existentes</div>
+      <div class="need-desc">Reportes de tráfico, ventas por arrendatario, RRSS analytics, datos de ticketing o cualquier fuente de información sobre visitantes que ya tengan.</div>
+    </div>
+    <div class="need-item">
+      <div class="need-title">Canal de comunicación preferido</div>
+      <div class="need-desc">¿WhatsApp, email o Teams? Queremos asegurar que cualquier consulta o bloqueo se resuelva rápido durante el proyecto.</div>
+    </div>
+    <div class="need-item">
+      <div class="need-title">Disponibilidad Paloma y Max — S1 y S4</div>
+      <div class="need-desc">Una sesión de ~90 min en Semana 1 para entrevistas iniciales y otra en Semana 4 para validación intermedia.</div>
+    </div>
+    <div class="need-item">
+      <div class="need-title">Acceso al espacio físico MUT</div>
+      <div class="need-desc">Para que Cris pueda hacer observación de campo del customer journey. Una visita en días de alta y baja afluencia idealmente.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="doc-footer-brand"><strong>andinolabs</strong> &nbsp;·&nbsp; Diagnóstico de Datos Fase Cero &nbsp;·&nbsp; MUT Territoria</div>
+  <div class="doc-footer-note">Confidencial · Junio 2026</div>
+</div>
+
+</body>
+</html>
